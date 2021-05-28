@@ -1,0 +1,49 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": [
+    "dist/",
+    "node_modules/"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "no-use-before-define": 0,
+    "radix": 0,
+    "eol-last": ["error", "always"],
+    "semi": 0,
+    "quotes": ["error", "double"],
+    "@typescript-eslint/semi": ["error"],
+    "comma-dangle": ["error", "always-multiline"],
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/no-unused-vars": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/no-angle-bracket-type-assertion": 0,
+    "@typescript-eslint/consistent-type-assertions": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-empty-function": 0
+  },
+  "overrides": [
+    {
+      "files": "**/*.js",
+      "rules": {
+        "@typescript-eslint/no-var-requires": 0
+      }
+    }
+  ]
+}

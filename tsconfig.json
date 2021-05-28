@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2018",
+    "sourceMap": true,
+    "lib": ["ES2018"],
+  },
+  "exclude": ["dist"]
+}
