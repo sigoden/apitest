@@ -1,0 +1,7 @@
+{
+  herokuBoot: { @describe("heroku boot") @timeout(60000)
+    req: {
+        url: "/_heroku"
+    }
+  }
+}

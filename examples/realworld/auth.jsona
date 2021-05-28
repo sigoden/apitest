@@ -1,0 +1,89 @@
+{
+  registerJohn: { @describe("register john") @mixin("register")
+    req: {
+      body: {
+        user: {
+          email: `"john" + randomString(4) + "@jacob.com"`, @eval
+          password: "johnnyjacob", @eval
+          username: `"john" + randomString(4)` @eval
+        }
+      }
+    },
+    res: {
+      200: {
+        user: {
+          email: "req.body.user.email", @query
+          username: "req.body.user.username", @query
+          token: "", @exist
+        }
+      }
+    }
+  },
+  loginJonh: { @describe("login john") @mixin("login")
+    req: {
+      body: {
+        user: {
+          email: "${registerJohn.req.body.user.email}", @eval
+          password: "${registerJohn.req.body.user.password}", @eval
+        }
+      }
+    },
+    res: {
+      200: {
+        user: {
+          email: "", @exist
+          username: "", @exist
+          token: "", @exist
+        }
+      }
+    }
+  },
+  getUser1: { @describe("current user") @mixin("getUser")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${loginJohn.res.body.user.token}` @eval
+      }
+    },
+    res: {
+      200: {
+        user: {
+          email: "", @exist
+          username: "", @exist
+          token: "", @exist
+        }
+      }
+    }
+  },
+  updateUser1: { @describe("update user") @mixin("updateUser")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${loginJohn.res.body.user.token}` @eval
+      },
+      body: {
+        user: {
+          email: `"john" + randomString(4) + "@jacob.com"`, @eval
+        }
+      }
+    },
+    res: {
+      200: {
+        user: {
+          email: "", @exist
+          username: "", @exist
+          token: "", @exist
+        }
+      }
+    }
+  },
+  registerTom: { @describe("register tom") @mixin("register")
+    req: {
+      body: {
+        user: {
+          email: `"tom" + randomString(4) + "@jacob.com"`, @eval
+          password: "tomnyjacob", 
+          username: `"tom" + randomString(4)`, @eval
+        }
+      }
+    }
+  }
+}

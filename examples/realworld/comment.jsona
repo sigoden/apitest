@@ -1,0 +1,53 @@
+{
+  listCommentsForActicle1: { @describe("all comments for article") @mixin("listCommentsForActicle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      },
+    },
+    res: {
+      200: {
+        comments: [],
+      }
+    }
+  },
+  createCommentTrainDragon: { @describe("create comments") @mixin("createComment")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      },
+      body: {
+        comment: {
+          body: "Thank you so much!",
+        }
+      }
+    },
+    res: {
+      200: {
+        comment: {
+          id: 0, @exist
+          body: "req.body.comment.body", @query
+          createdAt: "", @exist
+          author: "", @exist
+        }
+      }
+    }
+  },
+  deleteComment1: { @describe("delete comments") @mixin("deleteComment")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+        id: "${createCommentTrainDragon.res.body.comment.id}", @eval
+      },
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "register": {
+    "req": {
+      "method": "post",
+      "url": "/users"
+    }
+  },
+  "login": {
+    "req": {
+      "method": "post",
+      "url": "/users/login"
+    }
+  },
+  "getUser": {
+    "req": {
+      "url": "/user"
+    }
+  },
+  "updateUser": {
+    "req": {
+      "method": "put",
+      "url": "/user"
+    }
+  },
+  "getFeed": {
+    "req": {
+      "url": "/articles/feed"
+    }
+  },
+  "listArticles": {
+    "req": {
+      "url": "/articles"
+    }
+  },
+  "createArticle": {
+    "req": {
+      "method": "post",
+      "url": "/articles"
+    }
+  },
+  "getArticle": {
+    "req": {
+      "url": "/articles/{slug}"
+    }
+  },
+  "updateArticle": {
+    "req": {
+      "method": "put",
+      "url": "/articles/{slug}"
+    }
+  },
+  "favoriteArticle": {
+    "req": {
+      "method": "post",
+      "url": "/articles/{slug}/favorite"
+    }
+  },
+  "unfavoriteArticle": {
+    "req": {
+      "method": "delete",
+      "url": "/articles/{slug}/favorite"
+    }
+  },
+  "listCommentsForActicle": {
+    "req": {
+      "url": "/articles/{slug}/comments"
+    }
+  },
+  "createComment": {
+    "req": {
+      "method": "post",
+      "url": "/articles/{slug}/comments"
+    }
+  },
+  "deleteComment": {
+    "req": {
+      "method": "delete",
+      "url": "/articles/{slug}/comments/{id}"
+    }
+  },
+  "getProfile": {
+    "req": {
+      "url": "/profiles/{id}"
+    }
+  },
+  "followProfile": {
+    "req": {
+      "method": "post",
+      "url": "/profiles/{id}/follow"
+    }
+  },
+  "unfollowProfile": {
+    "req": {
+      "method": "delete",
+      "url": "/profiles/{id}/follow"
+    }
+  },
+  "listTags": {
+    "req": {
+      "url": "/tags"
+    }
+  },
+  "deleteArticle": {
+    "req": {
+      "method": "delete",
+      "url": "/articles/{slug}"
+    }
+  }
+}

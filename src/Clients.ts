@@ -4,7 +4,11 @@ export default class Clients {
   constructor() {
 
   }
-  public async addClient(anno: JsonaAnnotation) {
+  public addClient(anno: JsonaAnnotation) {
 
+  }
+  public existsClient(name: string): boolean {
+    // TODO
+    return true;
   }
 }

@@ -1,0 +1,16 @@
+{
+  deleteArticle1: { @describe("remove article") @mixin("deleteArticle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      }
+    },
+    res: {
+      204: { @partial
+      }
+    }
+  }
+}

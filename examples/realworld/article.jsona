@@ -1,0 +1,244 @@
+{
+  createArticleTrainDragon: { @describe("create article") @mixin("createArticle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      body: {
+        article: {
+          title: "How to train your dragon",
+          description: "Ever wonder how?",
+          body: "Very carefully",
+          tagList: ["dragons", "training"],
+        }
+      }
+    },
+    res: {
+      200: {
+        article: {
+          slug: "/^how-to-train-your-dragon/.test($)", @eval
+          title: "req.body.article.title", @query
+          description: "req.body.article.description", @query
+          body: "req.body.article.body", @query
+          createdAt: "", @exist
+          updatedAt: "", @exist
+          tagList: ["dragons", "training"],
+          favorited: false,
+          favoritesCount: 0,
+          author: { @partial
+            username: "auth.registerJohn.req.body.user.username", @query
+            image: "", @exist
+            following: false,
+          }
+        }
+      }
+    }
+  },
+  getArticle1: { @describe("single article by slug") @mixin("getArticle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      }
+    },
+    res: {
+      200: {
+        article: {
+          slug: "/^how-to-train-your-dragon/.test($)", @eval
+          title: "createArticleTrainDragon.req.body.article.title", @query
+          description: "createArticleTrainDragon.req.body.article.description", @query
+          body: "createArticleTrainDragon.req.body.article.body", @query
+          createdAt: "", @exist
+          updatedAt: "", @exist
+          tagList: ["dragons", "training"],
+          favorited: false,
+          favoritesCount: 0,
+          author: { @partial
+            username: "auth.registerJohn.req.body.user.username", @query
+            image: "", @exist
+            following: false,
+          }
+        }
+      }
+    }
+  },
+  updateArticleTrainDragon: { @describe("update article") @mixin("updateArticle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      },
+      body: {
+        article: {
+          body: "With two hands"
+        }
+      }
+    },
+    res: {
+      200: {
+        article: { @partial
+          body: "req.body.article.body", @query
+        }
+      }
+    }
+  },
+  favoriteArticle1: { @describe("favorite article") @mixin("favoriteArticle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      },
+    },
+    res: {
+      200: {
+        article: { @partial
+          favorited: true,
+          favoritesCount: 1,
+        }
+      }
+    }
+  },
+  unfavoriteArticle1: { @describe("unfavorite article") @mixin("unfavoriteArticle")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+      },
+    },
+    res: {
+      200: {
+        article: { @partial
+          favorited: false,
+          favoritesCount: 0,
+        }
+      }
+    }
+  },
+  listArticlesWithAuth: { @describe("article with auth") @group
+    listArticles1: { @describe("all articles") @mixin("listArticles")
+      req: {
+        headers: {
+          Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        }
+      },
+      res: {
+        200: {
+          articles: [ @partial
+            { @partial
+              slug: "/^how-to-train-your-dragon/.test($)", @eval
+            }
+          ],
+          articlesCount: 0, @exist
+        }
+      }
+    },
+    listArticles2: { @describe("articles by author") @mixin("listArticles")
+      req: {
+        headers: {
+          Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        },
+        query: {
+          author: "${auth.registerJohn.req.body.user.username}", @eval
+        }
+      },
+      res: {
+        200: { @partial
+          articlesCount: 1
+        }
+      }
+    },
+    listArticles3: { @describe("articles favorited by username") @mixin("listArticles")
+      req: {
+        headers: {
+          Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        },
+        query: {
+          favorited: true
+        }
+      },
+      res: {
+        200: { @partial
+          articles: [],
+          articlesCount: 0
+        }
+      }
+    },
+    listArticles4: { @describe("articles by tag") @mixin("listArticles")
+      req: {
+        headers: {
+          Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        },
+        query: {
+          tag: "dragons"
+        }
+      },
+    },
+  },
+  listArticlesWithoutAuth: { @describe("all articles") @group
+    listArticles1: { @describe("all articles") @mixin("listArticles")
+      res: {
+        200: {
+          articles: [ @partial
+            {
+              slug: "createArticleTrainDragon.res.body.article.slug", @query
+              title: "createArticleTrainDragon.res.body.article.title", @query
+              description: "createArticleTrainDragon.res.body.article.description", @query
+              body: "createArticleTrainDragon.res.body.article.body", @query
+              createdAt: 0, @exist
+              updatedAt: 0, @exist
+              tagList: ['dragons', 'training'],
+              favorited: false,
+              favoritesCount: 0,
+              author: { @partial
+                username: "auth.registerJohn.req.body.user.username", @query
+                image: "", @exist
+                following: false,
+              },
+              articlesCount: 3, @exist
+            }
+          ]
+        }
+      }
+    }
+  },
+  articleFeed: { @describe("article feed") @group
+    getFeed1: { @describe("john feed") @mixin("getFeed")
+      req: {
+        headers: {
+          Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        },
+      },
+      res: {
+        200: {
+          articles: [],
+          articlesCount: 0,
+        }
+      }
+    },
+    getFeed2: { @describe("tom feed") @mixin("getFeed")
+      req: {
+        headers: {
+          Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        },
+      },
+      res: {
+        200: {
+          articles: [
+            { @partial
+              slug: "/^how-to-train-your-dragon/.test($)", @test
+            }
+          ],
+          articlesCount: 1,
+        }
+      }
+    }
+  }
+}

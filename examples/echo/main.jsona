@@ -1,0 +1,39 @@
+{
+  case1: { @describe("echo get")
+    req: {
+      url: "https://postman-echo.com/get",
+      query: {
+        foo1: "bar1",
+        foo2: "bar2",
+      },
+    },
+    res: {
+      200: {
+        url: "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
+        headers: {}, @exist
+        args: {
+          foo1: "bar1",
+          foo2: "Bar2",
+        },
+      }
+    }
+  },
+  case2: { @describe("echo post")
+    req: {
+      url: "https://postman-echo.com/post",
+      method: "post",
+      body: {
+        foo1: "bar1",
+        foo2: "Bar2",
+      }
+    },
+    res:{
+      200: { @partial
+        json: {
+          foo1: "bar1",
+          foo2: "Bar2",
+        }
+      }
+    }
+  }
+}

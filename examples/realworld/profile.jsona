@@ -1,0 +1,84 @@
+{
+  getProfile1: { @describe("get profile") @mixin("getProfile")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        id: "${auth.loginJohn.res.body.user.username}", @eval
+      }
+    },
+    res: {
+      200: {
+        profile: {
+          username: "req.params.id", @query
+          image: "", @exist
+          following: false,
+        }
+      }
+    }
+  },
+  followProfile1: { @describe("follow profile") @mixin("followProfile")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+      },
+      params: {
+        id: "${auth.loginJohn.res.body.user.username}", @eval
+      },
+      body: {
+        user: {
+          email: "john@jacob.com"
+        }
+      }
+    },
+    res: {
+      200: {
+        profile: {
+          username: "req.params.id", @query
+          image: "", @exist
+          following: true,
+        }
+      }
+    }
+  },
+  unfollowProfile1: { @describe("unfollow profile") @mixin("unfollowProfile")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginTom.res.body.user.token}` @eval
+      },
+      params: {
+        id: "${auth.loginJohn.res.body.user.username}", @eval
+      },
+    },
+    res: {
+      200: {
+        profile: { @partial
+          following: false,
+        }
+      }
+    }
+  },
+  followProfile2: { @describe("follow profile agagin") @mixin("followProfile")
+    req: {
+      headers: {
+        Authorization: `"Token " + ${auth.loginTom.res.body.user.token}` @eval
+      },
+      params: {
+        id: "${auth.loginJohn.res.body.user.username}", @eval
+      },
+      body: {
+        user: {
+          email: "john@jacob.com"
+        }
+      }
+    },
+    res: {
+      200: {
+        profile: { @partial
+          following: true,
+        }
+      }
+    }
+  },
+}

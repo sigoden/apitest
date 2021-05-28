@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import { parse, parseAsJSON } from "jsona-js";
 import Cases from "./Cases";
-import { JsonaAnnotation } from "./types";
+import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "./types";
 import Clients from "./Clients";
 import { toPosString } from "./utils";
 
@@ -11,11 +11,11 @@ export default class Runner {
   private env: string;
   private cases: Cases;
   private clients: Clients;
-  private mixin: any;
+  private modules: [string, JsonaProperty[]][] = [];
+  private mixin: JsonaObject;
   private constructor(workDir: string, env: string) {
     this.workDir = workDir;
     this.env = env;
-    this.cases = new Cases();
     this.clients = new Clients();
   }
 
@@ -48,7 +48,7 @@ export default class Runner {
     const moduleName = "main";
     const mainFileName = this.env ? `${moduleName}.${this.env}.jsona` : `${moduleName}.jsona`;
     const mainFile = path.resolve(this.workDir, mainFileName);
-    let jsa;
+    let jsa: JsonaValue;
     try {
       jsa = await loadJsonaFile(mainFile);
     } catch (err) {
@@ -57,9 +57,7 @@ export default class Runner {
     if (jsa.type !== "Object") {
       throw new Error(`[${moduleName}] should have object value`);
     }
-    for (const prop of jsa.properties) {
-      await this.cases.addProp(moduleName, prop);
-    }
+    this.modules.push([moduleName, jsa.properties]);
     for (const anno of jsa.annotations) {
       if (anno.name === "client") {
         await this.loadClient(anno);
@@ -69,6 +67,7 @@ export default class Runner {
         await this.loadModule(anno);
       }
     }
+    this.cases = new Cases(this.clients, this.mixin, this.modules);
   }
 
   private async loadClient(anno: JsonaAnnotation) {
@@ -85,7 +84,7 @@ export default class Runner {
     }
     if (typeof anno.value === "string") {
       const mixinName = anno.value;
-      let jsa;
+      let jsa: JsonaValue;
       try {
         jsa = await loadJsonaFile(mixinName);
       } catch (err) {
@@ -94,7 +93,7 @@ export default class Runner {
       if (jsa.type !== "Object") {
         throw new Error(`[${mixinName}] should have object value`);
       }
-      this.mixin = jsa;
+      this.mixin = jsa as JsonaObject;
     } else {
       throw new Error(`[main.@mixin] should have string value ${toPosString(anno.position)}`);
     }
@@ -104,7 +103,7 @@ export default class Runner {
     if (typeof anno.value === "string") {
       const moduleName = anno.value;
       const moduleFile = path.resolve(this.workDir, `${moduleName}.jsona`);
-      let jsa;
+      let jsa: JsonaValue;
       try {
         jsa = await loadJsonaFile(moduleFile);
       } catch (err) {
@@ -114,16 +113,14 @@ export default class Runner {
       if (jsa.type !== "Object") {
         throw new Error(`[${moduleName}] should have object value`);
       }
-      for (const prop of jsa.properties) {
-        await this.cases.addProp(moduleName, prop);
-      }
+      this.modules.push([moduleName, jsa.properties]);
     } else {
       throw new Error(`[main.@module] should have string value ${toPosString(anno.position)}`);
     }
   }
 }
 
-async function loadJsonaFile(file: string) {
+async function loadJsonaFile(file: string): Promise<JsonaValue> {
   try {
     const content = await fs.readFile(file, "utf8");
     return parse(content);

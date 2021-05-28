@@ -1,0 +1,18 @@
+{
+  @client({
+    name: "default",
+    kind: "http",
+    options: {
+      baseUrl: "https://htte-realworld.herokuapp.com/api",
+      timeout: 10000
+    }
+  })
+  @mixin("mixin")
+  @module("beforeall")
+  @module("auth")
+  @module("profile")
+  @module("article")
+  @module("comment")
+  @module("tag")
+  @module("afterall")
+}

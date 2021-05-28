@@ -1,0 +1,9 @@
+{
+  listTags1: { @describe("all tags") @mixin("listTags")
+    res: {
+      200: {
+        tags: ['dragons', 'training']
+      }
+    }
+  }
+}
