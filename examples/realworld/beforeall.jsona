@@ -1,5 +1,5 @@
 {
-  herokuBoot: { @describe("heroku boot") @timeout(60000)
+  herokuBoot: { @describe("heroku boot") @client({options:{timeout:60000}})
     req: {
         url: "/_heroku"
     }

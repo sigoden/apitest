@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as fs from "fs/promises";
+import * as _ from "lodash";
 import { parse, parseAsJSON } from "jsona-js";
 import Cases from "./Cases";
 import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "./types";
@@ -41,7 +42,7 @@ export default class Runner {
   }
 
   public async run(reset: boolean) {
-
+    
   }
 
   private async loadMain() {
@@ -71,22 +72,23 @@ export default class Runner {
   }
 
   private async loadClient(anno: JsonaAnnotation) {
-    if (anno.value !== null && typeof anno.value === "object") {
+    if (anno.value !== null && _.isObject(anno.value)) {
       this.clients.addClient(anno);
     } else {
-      throw new Error(`[main.@client] should have object value ${toPosString(anno.position)}`);
+      throw new Error(`[main@client] should have object value${toPosString(anno.position)}`);
     }
   }
 
   private async loadMixin(anno: JsonaAnnotation) {
     if (this.mixin) {
-      throw new Error(`[main.@mixin] only need one ${toPosString(anno.position)}`);
+      throw new Error(`[main@mixin] only need one${toPosString(anno.position)}`);
     }
     if (typeof anno.value === "string") {
       const mixinName = anno.value;
+      const mixinFile = path.resolve(this.workDir, `${mixinName}.jsona`);
       let jsa: JsonaValue;
       try {
-        jsa = await loadJsonaFile(mixinName);
+        jsa = await loadJsonaFile(mixinFile);
       } catch (err) {
         throw new Error(`[${mixinName}] parse error: ${err.message}`);
       }
@@ -95,7 +97,7 @@ export default class Runner {
       }
       this.mixin = jsa as JsonaObject;
     } else {
-      throw new Error(`[main.@mixin] should have string value ${toPosString(anno.position)}`);
+      throw new Error(`[main@mixin] should have string value${toPosString(anno.position)}`);
     }
   }
 
@@ -115,7 +117,7 @@ export default class Runner {
       }
       this.modules.push([moduleName, jsa.properties]);
     } else {
-      throw new Error(`[main.@module] should have string value ${toPosString(anno.position)}`);
+      throw new Error(`[main@module] should have string value${toPosString(anno.position)}`);
     }
   }
 }
@@ -125,7 +127,7 @@ async function loadJsonaFile(file: string): Promise<JsonaValue> {
     const content = await fs.readFile(file, "utf8");
     return parse(content);
   } catch (err) {
-    if (err.position) throw new Error(`${err.info} ${toPosString(err.position)}`);
+    if (err.position) throw new Error(`${err.info}${toPosString(err.position)}`);
     throw err;
   }
 }

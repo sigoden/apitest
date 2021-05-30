@@ -2,6 +2,7 @@ export interface Position {
   index: number;
   line: number;
   col: number;
+  mixin?: boolean;
 }
 
 export interface JsonaAnnotation {

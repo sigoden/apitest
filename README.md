@@ -16,6 +16,7 @@
 ### Request
 
 - `@eval`
+- `@query`
 
 ### Response
 
