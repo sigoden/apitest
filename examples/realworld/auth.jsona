@@ -4,7 +4,7 @@
       body: {
         user: {
           email: `"john" + randomString(4) + "@jacob.com"`, @eval
-          password: "johnnyjacob", @eval
+          password: "johnnyjacob",
           username: `"john" + randomString(4)` @eval
         }
       }

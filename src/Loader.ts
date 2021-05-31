@@ -2,6 +2,7 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import { parse } from "jsona-js";
 import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue, Position } from "./types";
+import * as vm from "vm";
 import * as _ from "lodash";
 import Cases from "./Cases";
 import Clients from "./Clients";
@@ -9,6 +10,7 @@ import Clients from "./Clients";
 export default class Loader {
   private workDir: string;
   private cases: Cases;
+  private jslibs: string[] = [];
   private clients: Clients = new Clients();
   private modules: [string, JsonaProperty[]][] = [];
   private mixin: JsonaObject;
@@ -32,6 +34,8 @@ export default class Loader {
         await this.loadClient(anno);
       } else if (anno.name === "mixin") {
         await this.loadMixin(anno);
+      } else if (anno.name === "jslib") {
+        await this.loadJslib(anno);
       } else if (anno.name === "module") {
         await this.loadModule(anno);
       }
@@ -44,6 +48,7 @@ export default class Loader {
       mainFile,
       cases: this.cases,
       clients: this.clients,
+      jslibs: this.jslibs,
     };
   }
 
@@ -104,6 +109,28 @@ export default class Loader {
     }
   }
 
+  private async loadJslib(anno: JsonaAnnotation) {
+    if (typeof anno.value === "string") {
+      const libName = anno.value;
+      let jslib;
+      try {
+        jslib = await fs.readFile(path.resolve(this.workDir, `${libName}.js`), "utf8");
+      } catch (err) {
+        throw new Error(`[main@jslib] fail to load ${libName}.js${toPosString(anno.position)}`);
+      }
+      try {
+        const context = {};
+        const script = new vm.Script(jslib);
+        script.runInNewContext(context);
+      } catch (err) {
+        throw new Error(`[main@jslib(${libName})] syntax fail ${err.message}${toPosString(anno.position)}`);
+      }
+      this.jslibs.push(jslib);
+    } else {
+      throw new Error(`[main@jslib] should have string value${toPosString(anno.position)}`);
+    }
+  }
+
   private async loadModule(anno: JsonaAnnotation) {
     if (typeof anno.value === "string") {
       const moduleName = anno.value;
@@ -112,11 +139,11 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(moduleFile);
       } catch (err) {
-        throw new Error(`[${moduleName}] parse error: ${err.message}`);
+        throw new Error(`[main@module(${moduleName})] parse error: ${err.message}`);
       }
       
       if (jsa.type !== "Object") {
-        throw new Error(`[${moduleName}] should have object value`);
+        throw new Error(`[main@module(${moduleName})] should have object value`);
       }
       this.modules.push([moduleName, jsa.properties]);
     } else {

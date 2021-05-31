@@ -9,39 +9,41 @@ export default class Session {
   private cacheFile: string;
   private cache: Cache;
   private unitIds: string[];
+  private jslibs: string[] = [];
 
-  public constructor(cacheFile: string, unitIds: string[], cache: Cache) {
+  public constructor(cacheFile: string, unitIds: string[], cache: Cache, jslibs: string[]) {
     this.cacheFile = cacheFile;
     this.unitIds = unitIds;
     this.cache = cache;
+    this.jslibs = jslibs;
   }
 
-  public static async create(mainFile: string, unitIds: string[]) {
+  public static async create(mainFile: string, unitIds: string[], jslibs: string[]) {
     const cacheFileName = "apitest" + md5(mainFile) + ".json";
     const cacheFile = path.resolve(os.tmpdir(), cacheFileName);
     const cache = await loadCache(cacheFile);
-    const session = new Session(cacheFile, unitIds, cache);
+    const session = new Session(cacheFile, unitIds, cache, jslibs);
     return session;
   }
 
-  public get last(): string {
-    return this.cache.last;
+  public get cursor(): string {
+    return this.cache.cursor;
   }
 
-  public async getCtx(unit: Unit) {
+  public async getCtx(unit: Unit): Promise<VmContext> {
     const idx = this.unitIds.findIndex(v => v === unit.id);
-    const ctx = {};
+    const state = {};
     if (idx > -1) {
       for (let i = 0; i <= idx; i++) {
         const paths = this.unitIds[i].split(".");
         const obj = _.get(this.cache.tests, paths, {req: {}, res: {}});
-        _.set(ctx, paths, _.clone(obj));
+        _.set(state, paths, _.clone(obj));
       }
     }
     for (let i = 1; i < unit.paths.length; i++) {
-      _.set(ctx, unit.paths[i], _.get(ctx, unit.paths.slice(0, i + 1)));
+      _.set(state, unit.paths[i], _.get(state, unit.paths.slice(0, i + 1)));
     }
-    return ctx;
+    return { state, jslibs: this.jslibs };
   }
 
   public async saveReq(unit: Unit, req: any) {
@@ -53,11 +55,20 @@ export default class Session {
     test.res = res;
     await saveCache(this.cacheFile, this.cache);
   }
+  
+  public async saveCursor(unit: Unit) {
+    this.cache.cursor = unit.id;
+    await saveCache(this.cacheFile, this.cache);
+  }
 }
 
+export interface VmContext {
+  jslibs: string[],
+  state: any;
+}
 
 export interface Cache {
-  last: string;
+  cursor: string;
   tests: {
     [k: string]: {
       req?: any;
@@ -72,7 +83,7 @@ async function loadCache(cacheFile: string): Promise<Cache> {
     const cache = JSON.parse(content);
     return cache;
   } catch (err) {
-    return { last: "", tests: {} };
+    return { cursor: "", tests: {} };
   }
 }
 

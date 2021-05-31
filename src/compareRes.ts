@@ -3,13 +3,14 @@ import { Unit, UnitFail } from "./Cases";
 import { JsonaArray, JsonaString, JsonaValue } from "./types";
 import { existAnno, evalValue } from "./createReq";
 import { getType } from "./Loader";
+import { VmContext } from "./Session";
 
-export default function compareRes(unit: Unit, ctx: any, res: any) {
+export default function compareRes(unit: Unit, ctx: VmContext, res: any) {
   if (!unit.res) return;
   return compareValue(unit.paths.concat(["res"]), ctx, unit.res, res);
 }
 
-function compareValue(paths: string[], ctx: any, v1: JsonaValue, v2: any) {
+function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) {
   if (existAnno(paths, v1, "eval", "string")) {
     const pass = evalValue(paths, ctx, (v1 as JsonaString).value);
     if (typeof pass !== "boolean") {

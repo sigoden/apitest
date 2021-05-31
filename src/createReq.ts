@@ -2,12 +2,13 @@ import { Unit } from "./Cases";
 import * as vm from "vm";
 import { JsonaString, JsonaValue } from "./types";
 import * as _ from "lodash";
+import { VmContext } from "./Session";
 
-export default function createReq(unit: Unit, ctx: any): any {
+export default function createReq(unit: Unit, ctx: VmContext): any {
   return createValue(unit.paths.concat(["req"]), ctx, unit.req);
 }
 
-function createValue(paths: string[], ctx: any, jsa: JsonaValue) {
+function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
   if (existAnno(paths, jsa, "eval", "string")) {
     return evalValue(paths, ctx, (jsa as JsonaString).value);
   } else {
@@ -31,19 +32,19 @@ function createValue(paths: string[], ctx: any, jsa: JsonaValue) {
   }
 }
 
-export function evalValue(paths: string[], ctx: any, code: string): any {
+export function evalValue(paths: string[], ctx: VmContext, code: string): any {
   const expressions = code.split(";");
   if (!_.trim(_.last(expressions)).startsWith("return")) {
-    expressions[expressions.length - 1] = "return" + expressions[expressions.length - 1];
+    expressions[expressions.length - 1] = "return " + expressions[expressions.length - 1];
   }
-  const patchedCode = expressions.join(";");
+  const patchedCode = ctx.jslibs.join("\n") + expressions.join(";");
   const EXPORT_KEY = "__exports__";
-  ctx[EXPORT_KEY] = null;
+  ctx.state[EXPORT_KEY] = null;
   try {
     const wrapCode = `${EXPORT_KEY} = (function(){${patchedCode}}())`;
     const script = new vm.Script(wrapCode);
-    script.runInNewContext(ctx);
-    return ctx[EXPORT_KEY];
+    script.runInNewContext(ctx.state);
+    return ctx.state[EXPORT_KEY];
   } catch (err) {
     throw { paths, anno: "eval", message: `throw err: ${err.message}` };
   }

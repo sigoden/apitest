@@ -22,11 +22,11 @@ export default class Runner {
   public static async create(target: string, env: string) {
     const runner = new Runner();
     const loader = new Loader();
-    const { clients, cases, mainFile } = await loader.load(target, env);
+    const { clients, cases, mainFile, jslibs } = await loader.load(target, env);
+    const session = await Session.create(mainFile, cases.units.map(v => v.id), jslibs);
+    runner.session = session;
     runner.cases = cases;
     runner.clients = clients;
-    const session = await Session.create(mainFile, cases.units.map(v => v.id));
-    runner.session = session;
     return runner;
   }
 
@@ -35,8 +35,8 @@ export default class Runner {
     if (options.only) {
       units = this.cases.units.filter(v => v.id.startsWith(options.only));
     } else if (!options.reset) {
-      if (this.session.last) {
-        const idx = this.cases.units.findIndex(v => v.id === this.session.last);
+      if (this.session.cursor) {
+        const idx = this.cases.units.findIndex(v => v.id === this.session.cursor);
         if (idx > -1) {
           if (idx == this.cases.units.length - 1) {
             units = this.cases.units;
@@ -73,11 +73,13 @@ export default class Runner {
         _.set(ctx2, "req", _.get(ctx2, unit.paths.concat(["req"])));
         await compareRes(unit, ctx2, res);
         await reporter.endUnit(unit, ctx2, null);
+        await this.session.saveCursor(unit);
       } catch (fail) {
         const ctx = await this.session.getCtx(unit);
         await reporter.endUnit(unit, ctx, fail);
-        if (!options.ci) return;
+        if (!options.ci) break;
       }
     }
+    await reporter.summary();
   }
 }
