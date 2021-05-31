@@ -9,23 +9,23 @@ const argv = require("yargs/yargs")(process.argv.slice(2)) // eslint-disable-lin
   .options({
     ci: {
       type: "boolean",
-      describe: "whether to run in ci mode",
+      describe: "Whether to run in ci mode",
     },
     reset: {
       type: "boolean",
-      describe: "whether to continue with last case",
+      describe: "Whether to continue with last case",
     },
     "dry-run": {
       type: "boolean",
-      describe: "check syntax then print all cases",
+      describe: "Check syntax then print all cases",
     },
     env: {
       type: "string",
-      describe: "specific test enviroment like prod, dev",
+      describe: "Specific test enviroment like prod, dev",
     },
     only: {
       type: "string",
-      describe: "run specific module/case",
+      describe: "Run specific module/case",
     },
   })
   .argv;

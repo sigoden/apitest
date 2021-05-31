@@ -27,6 +27,7 @@ export default class Cases {
     this.clients = clients;
     this.mixin = mixin;
     for (const [moduleName, props] of modules) {
+      this.describes[moduleName] = "module " + moduleName;
       for (const prop of props) {
         this.addProp([moduleName], prop);
       }

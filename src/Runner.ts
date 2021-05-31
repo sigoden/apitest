@@ -47,6 +47,8 @@ export default class Runner {
       } else {
         units = this.cases.units;
       }
+    } else {
+      units = this.cases.units;
     }
     if (units.length === 0) {
       throw new Error("no cases");
@@ -54,9 +56,7 @@ export default class Runner {
     const reporter = new Reporter(options, this.cases);
     for (const unit of units) {
       await reporter.startUnit(unit);
-      if (options.dryRun) {
-        await reporter.endUnit(unit, null, null);
-      }
+      if (options.dryRun) continue;
       try {
         const ctx1 = await this.session.getCtx(unit);
         const req = await createReq(unit, ctx1);
@@ -66,16 +66,17 @@ export default class Runner {
           res = await this.clients.runUnit(unit, req);
         } catch (err) {
           if (err.paths) throw err;
-          throw { paths: unit.paths.concat(["req"]), anno: "", message: `fail, ${err.message}` };
+          throw { paths: unit.paths, anno: "", message: `client error, ${err.message}` };
         }
         await this.session.saveRes(unit, res);
         const ctx2 = await this.session.getCtx(unit);
+        _.set(ctx2, "req", _.get(ctx2, unit.paths.concat(["req"])));
         await compareRes(unit, ctx2, res);
         await reporter.endUnit(unit, ctx2, null);
       } catch (fail) {
         const ctx = await this.session.getCtx(unit);
         await reporter.endUnit(unit, ctx, fail);
-        continue;
+        if (!options.ci) return;
       }
     }
   }

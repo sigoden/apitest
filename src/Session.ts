@@ -33,31 +33,23 @@ export default class Session {
     const ctx = {};
     if (idx > -1) {
       for (let i = 0; i <= idx; i++) {
-        const unitId = this.unitIds[i];
-        const req = _.get(this.cache.tests, unitId + ".req", {});
-        const res = _.get(this.cache.tests, unitId + ".res", {});
-        _.set(ctx, unitId, _.clone({ req, res }));
+        const paths = this.unitIds[i].split(".");
+        const obj = _.get(this.cache.tests, paths, {req: {}, res: {}});
+        _.set(ctx, paths, _.clone(obj));
       }
     }
     for (let i = 1; i < unit.paths.length; i++) {
       _.set(ctx, unit.paths[i], _.get(ctx, unit.paths.slice(0, i + 1)));
     }
-    _.set(ctx, "req", _.get(ctx, unit.paths.concat(["req"])));
     return ctx;
   }
 
   public async saveReq(unit: Unit, req: any) {
-    let test = this.cache.tests[unit.id];
-    if (!test) {
-      test = this.cache.tests[unit.id] = { req, res: {} };
-    } else {
-      test.req = req;
-      test.res = {};
-    }
+    _.set(this.cache.tests, unit.paths, { req, res: {} });
     await saveCache(this.cacheFile, this.cache);
   }
   public async saveRes(unit: Unit, res: any) {
-    const test = this.cache.tests[unit.id];
+    const test = _.get(this.cache.tests, unit.paths);
     test.res = res;
     await saveCache(this.cacheFile, this.cache);
   }

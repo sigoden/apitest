@@ -5,6 +5,7 @@ import { existAnno, evalValue } from "./createReq";
 import { getType } from "./Loader";
 
 export default function compareRes(unit: Unit, ctx: any, res: any) {
+  if (!unit.res) return;
   return compareValue(unit.paths.concat(["res"]), ctx, unit.res, res);
 }
 

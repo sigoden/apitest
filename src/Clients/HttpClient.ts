@@ -3,12 +3,15 @@ import * as _ from "lodash";
 import { Client } from ".";
 import { Unit } from "../Cases";
 import { toPosString } from "../Loader";
-import { JsonaString, JsonaValue } from "../types";
+import { JsonaObject, JsonaString, JsonaValue } from "../types";
 
 export default class HttpClient implements Client {
   private options: any;
   public constructor(options: any) {
     this.options = options;
+  }
+  public get name() {
+    return "http";
   }
 
   public validate(unit: Unit) {
@@ -20,8 +23,8 @@ export default class HttpClient implements Client {
     const opts: AxiosRequestConfig = {
       ...(this.options || {}),
       ...(unit.client.options || {}),
-      method: "get",
       url: req.url,
+      method: req.method || "get",
     };
     if (req.query) {
       opts.params = req.query;
@@ -30,27 +33,30 @@ export default class HttpClient implements Client {
       opts.headers = req.header;
     }
     if (req.body) {
-      if (!req.header["content-type"] && req.header["Content-Type"]) {
-        opts.headers["content-type"] = "application/json; charset=utf-8";
+      if (!(req.header && (req.header["content-type"] || req.header["Content-Type"]))) {
+        _.set(opts, ["headers", "content-type"], "application/json; charset=utf-8");
       }
       opts.data = req.body;
     }
+    const result = {} as any;
+    let needHeader = false;
+    if (unit.res) {
+      const res_ = unit.res as JsonaObject;
+      needHeader = !!res_.properties.find(v => v.key === "header");
+    }
     try {
-      const res = await axios(opts);
-      return {
-        header: res.headers,
-        [res.status]: res.data,
-      };
+      const axiosRes = await axios(opts);
+      if (needHeader) result.header = axiosRes.headers;
+      result[axiosRes.status] = axiosRes.data;
     } catch (err) {
       if (err.response) {
-        return {
-          header: err.response.headers,
-          [err.response.status]: err.response.data,
-        };
+        if (needHeader) result.header = err.response.headers;
+        result[err.response.status] = err.response.data;
       } else {
         throw err;
       }
     }
+    return result;
   }
 
   private validateReq(paths: string[], req: JsonaValue) {

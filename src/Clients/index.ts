@@ -9,6 +9,7 @@ import HttpClient from "./HttpClient";
 export abstract class Client {
   constructor(options: any) {}
   abstract validate(unit: Unit);
+  abstract get name(): string;
   abstract run(unit: Unit, req: any): Promise<any>; 
 }
 
@@ -25,6 +26,25 @@ export default class Clients {
       this.clients[name] = new HttpClient(options);
     } else {
       throw new Error(`[main@client] kind '${kind}' is unsupported${toPosString(anno.position)}`);
+    }
+  }
+  public ensureDefault() {
+    let existEcho = false;
+    let existDefault = false;
+    for (const name in this.clients) {
+      const client = this.clients[name];
+      if (name === "default") {
+        existDefault = true;
+      }
+      if (client.name === "echo") {
+        existEcho = true;
+      }
+    }
+    if (!existEcho && !this.clients["echo"]) {
+      this.clients["echo"] = new EchoClient({});
+    }
+    if (!existDefault) {
+      this.clients["default"] = new HttpClient({});
     }
   }
   public validateUnit(unit: Unit) {

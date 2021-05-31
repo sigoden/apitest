@@ -36,6 +36,8 @@ export default class Loader {
         await this.loadModule(anno);
       }
     }
+    this.clients.ensureDefault();
+
     this.cases = new Cases(this.clients, this.mixin, this.modules);
 
     return {
@@ -67,7 +69,7 @@ export default class Loader {
         return { mainFile, workDir: path.resolve(target) };
       }
     } catch (err){
-      throw new Error("cannot find main jsona file");
+      throw new Error("not found main jsona file");
     }
   }
 
@@ -150,6 +152,6 @@ export function getType(value) {
       return "object";
     }
   } else {
-    typeof value;
+    return typeof value;
   }
 }
