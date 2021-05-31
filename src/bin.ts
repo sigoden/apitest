@@ -3,7 +3,6 @@
 import Runner, { RunOptions } from "./Runner";
 const pkg = require("../package.json");  // eslint-disable-line
 const argv = require("yargs/yargs")(process.argv.slice(2)) // eslint-disable-line
-  .describe("declarative api test tool")
   .usage("usage: $0 [options] [target]")
   .help("help").alias("help", "h")
   .version("version", pkg.version).alias("version", "V")

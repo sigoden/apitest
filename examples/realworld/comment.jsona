@@ -1,7 +1,7 @@
 {
   listCommentsForActicle1: { @describe("all comments for article") @mixin("listCommentsForActicle")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
       },
       params: {
@@ -16,7 +16,7 @@
   },
   createCommentTrainDragon: { @describe("create comments") @mixin("createComment")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
       },
       params: {
@@ -41,7 +41,7 @@
   },
   deleteComment1: { @describe("delete comments") @mixin("deleteComment")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
       },
       params: {

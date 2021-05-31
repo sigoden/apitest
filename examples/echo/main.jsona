@@ -10,7 +10,7 @@
     res: {
       200: {
         url: "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
-        headers: {}, @exist
+        header: {}, @exist
         args: {
           foo1: "bar1",
           foo2: "Bar2",

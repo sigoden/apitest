@@ -1,7 +1,7 @@
 {
   getProfile1: { @describe("get profile") @mixin("getProfile")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
       },
       params: {
@@ -20,7 +20,7 @@
   },
   followProfile1: { @describe("follow profile") @mixin("followProfile")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
       },
       params: {
@@ -44,7 +44,7 @@
   },
   unfollowProfile1: { @describe("unfollow profile") @mixin("unfollowProfile")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginTom.res.body.user.token}` @eval
       },
       params: {
@@ -61,7 +61,7 @@
   },
   followProfile2: { @describe("follow profile agagin") @mixin("followProfile")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginTom.res.body.user.token}` @eval
       },
       params: {

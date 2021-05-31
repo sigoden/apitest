@@ -40,7 +40,7 @@
   },
   getUser1: { @describe("current user") @mixin("getUser")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${loginJohn.res.body.user.token}` @eval
       }
     },
@@ -56,7 +56,7 @@
   },
   updateUser1: { @describe("update user") @mixin("updateUser")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${loginJohn.res.body.user.token}` @eval
       },
       body: {

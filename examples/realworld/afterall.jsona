@@ -1,7 +1,7 @@
 {
   deleteArticle1: { @describe("remove article") @mixin("deleteArticle")
     req: {
-      headers: {
+      header: {
         Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
       },
       params: {

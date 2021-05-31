@@ -46,31 +46,34 @@ export default class Loader {
   }
 
   private async findMainFile(target: string, env: string) {
-    if (target.endsWith(".jsona")) {
-      const stat = await fs.stat(target);
-      if (stat.isFile()) {
-        return { mainFile: path.resolve(target), workDir: path.resolve(target, "..") };
+    try {
+      if (target.endsWith(".jsona")) {
+        const stat = await fs.stat(target);
+        if (stat.isFile()) {
+          return { mainFile: path.resolve(target), workDir: path.resolve(target, "..") };
+        }
       }
-    }
-    const envName = env ? "." + env : "";
-    let mainFile = path.resolve(target, `main${envName}.jsona`);
-    let stat = await fs.stat(mainFile);
-    if (stat.isFile()) {
-      return { mainFile, workDir: path.resolve(target) };
-    }
+      const envName = env ? "." + env : "";
+      let mainFile = path.resolve(target, `main${envName}.jsona`);
+      let stat = await fs.stat(mainFile);
+      if (stat.isFile()) {
+        return { mainFile, workDir: path.resolve(target) };
+      }
 
-    const baseName = path.basename(target);
-    mainFile = path.resolve(target, `${baseName}${envName}.jsona`);
-    stat = await fs.stat(mainFile);
-    if (stat.isFile()) {
-      return { mainFile, workDir: path.resolve(target) };
+      const baseName = path.basename(target);
+      mainFile = path.resolve(target, `${baseName}${envName}.jsona`);
+      stat = await fs.stat(mainFile);
+      if (stat.isFile()) {
+        return { mainFile, workDir: path.resolve(target) };
+      }
+    } catch (err){
+      throw new Error("cannot find main jsona file");
     }
-    throw new Error("cannot find main jsona file");
   }
 
 
   private async loadClient(anno: JsonaAnnotation) {
-    if (anno.value !== null && _.isObject(anno.value)) {
+    if (getType(anno.value) === "object") {
       this.clients.addClient(anno);
     } else {
       throw new Error(`[main@client] should have object value${toPosString(anno.position)}`);
@@ -135,4 +138,18 @@ export function toPosString(position: Position) {
     return " at mixin";
   }
   return ` at line ${position.line} col ${position.col}`;
+}
+
+export function getType(value) {
+  if (value === null) {
+    return "null";
+  } else if (typeof value === "object") {
+    if (Array.isArray(value)) {
+      return "array";
+    } else {
+      return "object";
+    }
+  } else {
+    typeof value;
+  }
 }

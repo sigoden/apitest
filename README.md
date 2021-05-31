@@ -21,10 +21,9 @@
 
 - `@eval`
 - `@query`
-- `@arraylike`
-- `@partial`
 - `@every`
 - `@some`
+- `@partial`
 - `@exist`
 
 ## eval fn

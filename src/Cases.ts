@@ -1,14 +1,20 @@
 import * as _ from "lodash";
 import Clients, { UnitClient } from "./Clients";
 import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue } from "./types";
-import { toPosString } from "./Loader";
+import { getType, toPosString } from "./Loader";
 
 export interface Unit {
   id: string;
   paths: string[];
   client: UnitClient;
-  req: JsonaObject,
-  res?: JsonaObject,
+  req: JsonaValue,
+  res?: JsonaValue,
+}
+
+export interface UnitFail {
+  paths: string[];
+  anno: string;
+  message: string;
 }
 
 export default class Cases {
@@ -77,18 +83,14 @@ export default class Cases {
     if (!reqProp) {
       throw new Error(`[${[...paths, "req"].join(".")}] is required${toPosString(value.position)}`);
     }
-    if (reqProp.value.type !== "Object") {
-      throw new Error(`[${[...paths, "req"].join(".")}] should have object value${toPosString(reqProp.value.position)}`);
-    }
-    const req = reqProp.value as JsonaObject;
+    const req = reqProp.value;
+
+    const unit: Unit = { id: paths.join("."), client, paths, req };
 
     const resProp = value.properties.find(v => v.key === "res");
-    if (resProp && resProp.value.type !== "Object") {
-      throw new Error(`[${[...paths, "res"].join(".")}] is required${toPosString(value.position)}`);
+    if (resProp) {
+      unit.res = resProp.value;
     }
-    const res = (resProp ? resProp.value : null) as JsonaObject;
-
-    const unit: Unit = { id: paths.join("."), client, paths, req, res };
 
     this.clients.validateUnit(unit);
 
@@ -134,7 +136,7 @@ export default class Cases {
     if (!clientAnno) return { name: "default", options: {} };
     if (typeof clientAnno.value === "string") {
       return { name: clientAnno.value, options: { } };
-    } else if (_.isObject(clientAnno.value)) {
+    } else if (getType(clientAnno.value) === "object") {
       return { name: "default", ...clientAnno.value } as UnitClient;
     } else {
       throw new Error(`[${paths.join(".")}@describe] should have string value${toPosString(clientAnno.position)}`);

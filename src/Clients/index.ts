@@ -1,13 +1,13 @@
 import { Unit } from "../Cases";
 import { JsonaAnnotation } from "../types";
-import { toPosString } from "../utils";
+import { toPosString } from "../Loader";
 
 import Session from "../Session";
 import EchoClient from "./EchoClient";
 import HttpClient from "./HttpClient";
 
 export abstract class Client {
-  constructor(name: string, options: any) {}
+  constructor(options: any) {}
   abstract validate(unit: Unit);
   abstract run(unit: Unit, req: any): Promise<any>; 
 }
@@ -20,9 +20,9 @@ export default class Clients {
       throw new Error(`[main@client] should have name and kind${toPosString(anno.position)}`);
     }
     if (kind === "echo") {
-      this.clients[name] = new EchoClient(name, options);
+      this.clients[name] = new EchoClient(options);
     } else if (kind === "http") {
-      this.clients[name] = new HttpClient(name, options);
+      this.clients[name] = new HttpClient(options);
     } else {
       throw new Error(`[main@client] kind '${kind}' is unsupported${toPosString(anno.position)}`);
     }

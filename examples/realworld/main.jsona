@@ -3,7 +3,7 @@
     name: "default",
     kind: "http",
     options: {
-      baseUrl: "https://htte-realworld.herokuapp.com/api",
+      baseURL: "https://htte-realworld.herokuapp.com/api",
       timeout: 10000
     }
   })

@@ -18,7 +18,6 @@ export default class Runner {
   private clients: Clients;
   private cases: Cases;
   private session: Session;
-  private reporter: Reporter;
 
   public static async create(target: string, env: string) {
     const runner = new Runner();
@@ -27,9 +26,7 @@ export default class Runner {
     runner.cases = cases;
     runner.clients = clients;
     const session = await Session.create(mainFile, cases.units.map(v => v.id));
-    const reporter = new Reporter();
     runner.session = session;
-    runner.reporter = reporter;
     return runner;
   }
 
@@ -54,17 +51,31 @@ export default class Runner {
     if (units.length === 0) {
       throw new Error("no cases");
     }
-    await this.reporter.prepare(options);
+    const reporter = new Reporter(options, this.cases);
     for (const unit of units) {
-      await this.reporter.startUnit(unit);
-      if (!options.dryRun) {
-        const ctx = await this.session.getCtx(unit);
-        const req = await createReq(unit, ctx);
+      await reporter.startUnit(unit);
+      if (options.dryRun) {
+        await reporter.endUnit(unit, null, null);
+      }
+      try {
+        const ctx1 = await this.session.getCtx(unit);
+        const req = await createReq(unit, ctx1);
         await this.session.saveReq(unit, req);
-        const res = await this.clients.runUnit(unit, req);
-        const fail = await compareRes(unit, res);
+        let res;
+        try {
+          res = await this.clients.runUnit(unit, req);
+        } catch (err) {
+          if (err.paths) throw err;
+          throw { paths: unit.paths.concat(["req"]), anno: "", message: `fail, ${err.message}` };
+        }
         await this.session.saveRes(unit, res);
-        await this.reporter.endUnit(unit, fail, req, res);
+        const ctx2 = await this.session.getCtx(unit);
+        await compareRes(unit, ctx2, res);
+        await reporter.endUnit(unit, ctx2, null);
+      } catch (fail) {
+        const ctx = await this.session.getCtx(unit);
+        await reporter.endUnit(unit, ctx, fail);
+        continue;
       }
     }
   }
