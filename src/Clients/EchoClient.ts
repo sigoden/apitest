@@ -1,9 +1,10 @@
 import { Client } from ".";
-import Session from "../Session";
 import { Unit } from "../Cases";
 
 export default class EchoClient implements Client {
-  constructor(_name: string, _options: any) {}
-  validate(_unit: Unit) {}
-  async run(_session: Session, _uint: Unit) {}
+  public constructor(_name: string, _options: any) {}
+  public validate(_unit: Unit) {}
+  public async run(_unit: Unit, req: any) {
+    return req;
+  }
 }

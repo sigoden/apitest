@@ -8,8 +8,8 @@ import HttpClient from "./HttpClient";
 
 export abstract class Client {
   constructor(name: string, options: any) {}
-  validate(unit: Unit) {}
-  async run(session: Session, unit: Unit) {}
+  abstract validate(unit: Unit);
+  abstract run(unit: Unit, req: any): Promise<any>; 
 }
 
 export default class Clients {
@@ -34,9 +34,9 @@ export default class Clients {
     }
     client.validate(unit);
   }
-  public async runUnit(session: Session, unit: Unit) {
+  public async runUnit(unit: Unit, req: any): Promise<any> {
     const client = this.clients[unit.client.name];
-    return client.run(session, unit);
+    return client.run(unit, req);
   }
 }
 

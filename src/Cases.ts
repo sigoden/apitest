@@ -1,9 +1,10 @@
 import * as _ from "lodash";
 import Clients, { UnitClient } from "./Clients";
 import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue } from "./types";
-import { toPosString } from "./utils";
+import { toPosString } from "./Loader";
 
 export interface Unit {
+  id: string;
   paths: string[];
   client: UnitClient;
   req: JsonaObject,
@@ -11,8 +12,8 @@ export interface Unit {
 }
 
 export default class Cases {
-  private describes: {[k: string]: string} = {};
-  private units: Unit[] = [];
+  public describes: {[k: string]: string} = {};
+  public units: Unit[] = [];
   private clients: Clients;
   private mixin: JsonaObject;
 
@@ -46,9 +47,9 @@ export default class Cases {
       throw new Error(`[${paths.join(".")}] should have object value${toPosString(value.position)}`);
     }
     const valueObject = value as JsonaObject;
-    const describe = this.retriveAnnoDescribe(paths, value);
-
-    this.describes[JSON.stringify(paths)] = describe;
+    let describe = this.retriveAnnoDescribe(paths, value);
+    if (!describe) describe = "group " + _.last(paths);
+    this.describes[paths.join(".")] = describe;
 
     for (const prop of valueObject.properties) {
       this.addProp(paths, prop);
@@ -60,8 +61,10 @@ export default class Cases {
       throw new Error(`[${paths.join(".")}] should have object value${toPosString(value.position)}`);
     }
     const valueObject = value as JsonaObject;
-    const describe = this.retriveAnnoDescribe(paths, value);
-    this.describes[JSON.stringify(paths)] = describe;
+
+    let describe = this.retriveAnnoDescribe(paths, value);
+    if (!describe) describe = "unit " + _.last(paths);
+    this.describes[paths.join(".")] = describe;
 
     const client = this.retriveAnnoClient(paths, value);
 
@@ -85,7 +88,7 @@ export default class Cases {
     }
     const res = (resProp ? resProp.value : null) as JsonaObject;
 
-    const unit: Unit = { client, paths, req, res };
+    const unit: Unit = { id: paths.join("."), client, paths, req, res };
 
     this.clients.validateUnit(unit);
 

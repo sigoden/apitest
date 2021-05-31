@@ -1,133 +1,71 @@
-import * as path from "path";
-import * as fs from "fs/promises";
 import * as _ from "lodash";
-import { parse, parseAsJSON } from "jsona-js";
-import Cases from "./Cases";
-import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "./types";
+import Loader from "./Loader";
 import Clients from "./Clients";
-import { toPosString } from "./utils";
+import Cases, { Unit } from "./Cases";
+import Session from "./Session";
+import Reporter from "./Reporter";
+import createReq from "./createReq";
+import compareRes from "./compareRes";
+
+export interface RunOptions {
+  ci?: boolean;
+  reset?: boolean;
+  dryRun?: boolean;
+  only?: string;
+}
 
 export default class Runner {
-  private workDir: string;
-  private env: string;
-  private cases: Cases;
   private clients: Clients;
-  private modules: [string, JsonaProperty[]][] = [];
-  private mixin: JsonaObject;
-  private constructor(workDir: string, env: string) {
-    this.workDir = workDir;
-    this.env = env;
-    this.clients = new Clients();
-  }
+  private cases: Cases;
+  private session: Session;
+  private reporter: Reporter;
 
-  public static async create(workDir: string, env: string) {
-    workDir = path.resolve(workDir);
-    try {
-      const stat = await fs.stat(workDir);
-      if (!stat.isDirectory) throw new Error();
-    } catch (err) {
-      throw new Error(`${workDir} not found or not directory`);
-    }
-    const runner = new Runner(workDir, env);
-    await runner.loadMain();
+  public static async create(target: string, env: string) {
+    const runner = new Runner();
+    const loader = new Loader();
+    const { clients, cases, mainFile } = await loader.load(target, env);
+    runner.cases = cases;
+    runner.clients = clients;
+    const session = await Session.create(mainFile, cases.units.map(v => v.id));
+    const reporter = new Reporter();
+    runner.session = session;
+    runner.reporter = reporter;
     return runner;
   }
 
-  public async runOnly(name: string) {
-
-  }
-
-  public async runCi() {
-
-  }
-
-  public async run(reset: boolean) {
-    
-  }
-
-  private async loadMain() {
-    const moduleName = "main";
-    const mainFileName = this.env ? `${moduleName}.${this.env}.jsona` : `${moduleName}.jsona`;
-    const mainFile = path.resolve(this.workDir, mainFileName);
-    let jsa: JsonaValue;
-    try {
-      jsa = await loadJsonaFile(mainFile);
-    } catch (err) {
-      throw new Error(`[${moduleName}] parse error: ${err.message}`);
-    }
-    if (jsa.type !== "Object") {
-      throw new Error(`[${moduleName}] should have object value`);
-    }
-    this.modules.push([moduleName, jsa.properties]);
-    for (const anno of jsa.annotations) {
-      if (anno.name === "client") {
-        await this.loadClient(anno);
-      } else if (anno.name === "mixin") {
-        await this.loadMixin(anno);
-      } else if (anno.name === "module") {
-        await this.loadModule(anno);
+  public async run(options: RunOptions) {
+    let units: Unit[];
+    if (options.only) {
+      units = this.cases.units.filter(v => v.id.startsWith(options.only));
+    } else if (!options.reset) {
+      if (this.session.last) {
+        const idx = this.cases.units.findIndex(v => v.id === this.session.last);
+        if (idx > -1) {
+          if (idx == this.cases.units.length - 1) {
+            units = this.cases.units;
+          } else {
+            units = this.cases.units.slice(idx + 1);
+          }
+        }
+      } else {
+        units = this.cases.units;
       }
     }
-    this.cases = new Cases(this.clients, this.mixin, this.modules);
-  }
-
-  private async loadClient(anno: JsonaAnnotation) {
-    if (anno.value !== null && _.isObject(anno.value)) {
-      this.clients.addClient(anno);
-    } else {
-      throw new Error(`[main@client] should have object value${toPosString(anno.position)}`);
+    if (units.length === 0) {
+      throw new Error("no cases");
     }
-  }
-
-  private async loadMixin(anno: JsonaAnnotation) {
-    if (this.mixin) {
-      throw new Error(`[main@mixin] only need one${toPosString(anno.position)}`);
+    await this.reporter.prepare(options);
+    for (const unit of units) {
+      await this.reporter.startUnit(unit);
+      if (!options.dryRun) {
+        const ctx = await this.session.getCtx(unit);
+        const req = await createReq(unit, ctx);
+        await this.session.saveReq(unit, req);
+        const res = await this.clients.runUnit(unit, req);
+        const fail = await compareRes(unit, res);
+        await this.session.saveRes(unit, res);
+        await this.reporter.endUnit(unit, fail, req, res);
+      }
     }
-    if (typeof anno.value === "string") {
-      const mixinName = anno.value;
-      const mixinFile = path.resolve(this.workDir, `${mixinName}.jsona`);
-      let jsa: JsonaValue;
-      try {
-        jsa = await loadJsonaFile(mixinFile);
-      } catch (err) {
-        throw new Error(`[${mixinName}] parse error: ${err.message}`);
-      }
-      if (jsa.type !== "Object") {
-        throw new Error(`[${mixinName}] should have object value`);
-      }
-      this.mixin = jsa as JsonaObject;
-    } else {
-      throw new Error(`[main@mixin] should have string value${toPosString(anno.position)}`);
-    }
-  }
-
-  private async loadModule(anno: JsonaAnnotation) {
-    if (typeof anno.value === "string") {
-      const moduleName = anno.value;
-      const moduleFile = path.resolve(this.workDir, `${moduleName}.jsona`);
-      let jsa: JsonaValue;
-      try {
-        jsa = await loadJsonaFile(moduleFile);
-      } catch (err) {
-        throw new Error(`[${moduleName}] parse error: ${err.message}`);
-      }
-      
-      if (jsa.type !== "Object") {
-        throw new Error(`[${moduleName}] should have object value`);
-      }
-      this.modules.push([moduleName, jsa.properties]);
-    } else {
-      throw new Error(`[main@module] should have string value${toPosString(anno.position)}`);
-    }
-  }
-}
-
-async function loadJsonaFile(file: string): Promise<JsonaValue> {
-  try {
-    const content = await fs.readFile(file, "utf8");
-    return parse(content);
-  } catch (err) {
-    if (err.position) throw new Error(`${err.info}${toPosString(err.position)}`);
-    throw err;
   }
 }

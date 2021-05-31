@@ -16,7 +16,6 @@
 ### Request
 
 - `@eval`
-- `@query`
 
 ### Response
 
@@ -24,6 +23,8 @@
 - `@query`
 - `@arraylike`
 - `@partial`
+- `@every`
+- `@some`
 - `@exist`
 
 ## eval fn

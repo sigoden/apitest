@@ -1,45 +1,57 @@
 #!/usr/bin/env node
 
-import Runner from "./Runner";
-
+import Runner, { RunOptions } from "./Runner";
 const pkg = require("../package.json");  // eslint-disable-line
 const argv = require("yargs/yargs")(process.argv.slice(2)) // eslint-disable-line
-  .describe("Declarative api test tool")
-  .usage("Usage: $0 [options] [dir]")
+  .describe("declarative api test tool")
+  .usage("usage: $0 [options] [target]")
   .help("help").alias("help", "h")
   .version("version", pkg.version).alias("version", "V")
   .options({
     ci: {
-      boolean: true,
-      describe: "Whether to run in ci mode",
+      type: "boolean",
+      describe: "whether to run in ci mode",
     },
     reset: {
-      boolean: true,
-      describe: "Whether to continue with last case",
+      type: "boolean",
+      describe: "whether to continue with last case",
+    },
+    "dry-run": {
+      type: "boolean",
+      describe: "check syntax then print all cases",
     },
     env: {
-      describe: "Specific test enviroment like prod, dev",
+      type: "string",
+      describe: "specific test enviroment like prod, dev",
     },
     only: {
-      describe: "Run specific module/case",
+      type: "string",
+      describe: "run specific module/case",
     },
-  })
-  .positional("dir", {
-    describe: "Apitest folder",
   })
   .argv;
 
 async function main(argv) {
   try {
-    const workDir = argv["_"][0] || process.cwd();
-    const runner = await Runner.create(workDir, argv.env);
-    if (argv.only) {
-      await runner.runOnly(argv.only);
-    } else if (argv.ci) {
-      await runner.runCi();
+    const target = argv["_"][0] || process.cwd();
+    const runner = await Runner.create(target, argv.env);
+    let runOptions: RunOptions;
+    if (argv["dry-run"]) {
+      runOptions = {
+        dryRun: true,
+        reset: true,
+      };
+    } else if (argv.only) {
+      runOptions = {
+        only: argv.only,
+      };
     } else {
-      await runner.run(argv.reset);
+      runOptions = {
+        ci: !!argv.ci,
+        reset: argv.reset,
+      };
     }
+    await runner.run(runOptions);
   } catch (err) {
     console.log(err.message);
     process.exit(1);
