@@ -70,7 +70,7 @@ export default class Runner {
         }
         await this.session.saveRes(unit, res);
         const ctx2 = await this.session.getCtx(unit);
-        _.set(ctx2, "req", _.get(ctx2, unit.paths.concat(["req"])));
+        _.set(ctx2.state, "req", _.get(ctx2.state, unit.paths.concat(["req"])));
         await compareRes(unit, ctx2, res);
         await reporter.endUnit(unit, ctx2, null);
         await this.session.saveCursor(unit);

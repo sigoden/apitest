@@ -1,6 +1,7 @@
+import * as chalk from "chalk";
+import * as _ from "lodash";
 import Cases, { Unit, UnitFail } from "./Cases";
 import { RunOptions } from "./Runner";
-import * as chalk from "chalk";
 import { VmContext } from "./Session";
 
 export default class Reporter {
@@ -25,6 +26,7 @@ export default class Reporter {
       process.stdout.write(chalk.red(" ✘\n"));
       if (!this.options.ci) {
         this.reportFail(fail, (unit.paths.length - 1) * 2);
+        this.reportData(unit, ctx);
       } else {
         this.fails.push([unit, fail]);
       }
@@ -63,5 +65,19 @@ export default class Reporter {
   private reportFail(fail: UnitFail, indent: number) {
     const content = `${" ".repeat(indent)}${fail.paths.join(".") + (fail.anno ? "@" + fail.anno : "")}: ${fail.message}\n\n`;
     process.stdout.write(chalk.red(content));
+  }
+
+  private reportData(unit: Unit, ctx: VmContext) {
+    const data = _.get(ctx.state, unit.paths, {});
+    const content = JSON.stringify(data, null, 2);
+    const indent = (unit.paths.length - 1) * 2;
+    let lines = content.split("\n");
+    if (lines.length > 200) {
+      const ellipse = lines[100];
+      const spaces = ellipse.length - _.trimStart(ellipse).length;
+      lines = [...lines.slice(0, 99), `${" ".repeat(spaces)}...`, ...lines.slice(100)];
+    }
+    const output = lines.map(v => " ".repeat(indent) + v).join("\n");
+    process.stdout.write(chalk.gray(output + "\n"));
   }
 }

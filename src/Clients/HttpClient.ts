@@ -32,6 +32,11 @@ export default class HttpClient implements Client {
     if (req.header) {
       opts.headers = req.header;
     }
+    if (req.params) {
+      for (const key in req.params) {
+        opts.url = opts.url.replace(new RegExp(`{${key}}`, "g"), req.params[key]);
+      }
+    }
     if (req.body) {
       if (!(req.header && (req.header["content-type"] || req.header["Content-Type"]))) {
         _.set(opts, ["headers", "content-type"], "application/json; charset=utf-8");

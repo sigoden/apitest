@@ -19,12 +19,12 @@
       }
     }
   },
-  loginJonh: { @describe("login john") @mixin("login")
+  loginJohn: { @describe("login john") @mixin("login")
     req: {
       body: {
         user: {
-          email: "${registerJohn.req.body.user.email}", @eval
-          password: "${registerJohn.req.body.user.password}", @eval
+          email: "registerJohn.req.body.user.email", @eval
+          password: "registerJohn.req.body.user.password", @eval
         }
       }
     },
@@ -41,7 +41,7 @@
   getUser1: { @describe("current user") @mixin("getUser")
     req: {
       header: {
-        Authorization: `"Token " + ${loginJohn.res.body.user.token}` @eval
+        Authorization: `"Token " + loginJohn.res["200"].user.token` @eval
       }
     },
     res: {
@@ -57,7 +57,7 @@
   updateUser1: { @describe("update user") @mixin("updateUser")
     req: {
       header: {
-        Authorization: `"Token " + ${loginJohn.res.body.user.token}` @eval
+        Authorization: `"Token " + loginJohn.res["200"].user.token` @eval
       },
       body: {
         user: {

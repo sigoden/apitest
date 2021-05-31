@@ -2,10 +2,10 @@
   listCommentsForActicle1: { @describe("all comments for article") @mixin("listCommentsForActicle")
     req: {
       header: {
-        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
       },
       params: {
-        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+        slug: "article.createArticleTrainDragon.res['200'].article.slug", @eval
       },
     },
     res: {
@@ -17,10 +17,10 @@
   createCommentTrainDragon: { @describe("create comments") @mixin("createComment")
     req: {
       header: {
-        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
       },
       params: {
-        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
+        slug: "article.createArticleTrainDragon.res['200'].article.slug", @eval
       },
       body: {
         comment: {
@@ -34,7 +34,7 @@
           id: 0, @exist
           body: "req.body.comment.body", @query
           createdAt: "", @exist
-          author: "", @exist
+          author: {}, @exist
         }
       }
     }
@@ -42,11 +42,11 @@
   deleteComment1: { @describe("delete comments") @mixin("deleteComment")
     req: {
       header: {
-        Authorization: `"Token " + ${auth.loginJohn.res.body.user.token}` @eval
+        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
       },
       params: {
-        slug: "${createArticleTrainDragon.res.body.article.slug}", @eval
-        id: "${createCommentTrainDragon.res.body.comment.id}", @eval
+        slug: "article.createArticleTrainDragon.res['200'].article.slug", @eval
+        id: "createCommentTrainDragon.res['200'].comment.id", @eval
       },
     }
   }

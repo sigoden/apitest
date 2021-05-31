@@ -41,7 +41,11 @@ export default class Session {
       }
     }
     for (let i = 1; i < unit.paths.length; i++) {
-      _.set(state, unit.paths[i], _.get(state, unit.paths.slice(0, i + 1)));
+      const scope = _.get(state, unit.paths.slice(0, i));
+      for (const key in scope) {
+        const value = _.get(state, key);
+        if (!value) _.set(state, key, scope[key]);
+      }
     }
     return { state, jslibs: this.jslibs };
   }

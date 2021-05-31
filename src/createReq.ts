@@ -46,7 +46,7 @@ export function evalValue(paths: string[], ctx: VmContext, code: string): any {
     script.runInNewContext(ctx.state);
     return ctx.state[EXPORT_KEY];
   } catch (err) {
-    throw { paths, anno: "eval", message: `throw err: ${err.message}` };
+    throw { paths, anno: "eval", message: `throw err, ${err.message}` };
   }
 }
 
