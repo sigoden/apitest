@@ -2,14 +2,15 @@
   deleteArticle1: { @describe("remove article") @mixin("deleteArticle")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        slug: "article.createArticleTrainDragon.res['200'].article.slug", @eval
+        slug: "article.createArticleTrainDragon.res.body.article.slug", @eval
       }
     },
     res: {
-      204:  "" @exist
+      status: 204,
+      body:  "" @exist
       
     }
   }

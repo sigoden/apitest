@@ -2,7 +2,7 @@
   createArticleTrainDragon: { @describe("create article") @mixin("createArticle")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       body: {
         article: {
@@ -14,7 +14,8 @@
       }
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         article: {
           slug: "/^how-to-train-your-dragon/.test($)", @eval
           title: "req.body.article.title", @query
@@ -37,14 +38,15 @@
   getArticle1: { @describe("single article by slug") @mixin("getArticle")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        slug: "createArticleTrainDragon.res['200'].article.slug", @eval
+        slug: "createArticleTrainDragon.res.body.article.slug", @eval
       }
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         article: {
           slug: "/^how-to-train-your-dragon/.test($)", @eval
           title: "createArticleTrainDragon.req.body.article.title", @query
@@ -67,10 +69,10 @@
   updateArticleTrainDragon: { @describe("update article") @mixin("updateArticle")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        slug: "createArticleTrainDragon.res['200'].article.slug", @eval
+        slug: "createArticleTrainDragon.res.body.article.slug", @eval
       },
       body: {
         article: {
@@ -79,7 +81,8 @@
       }
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         article: { @partial
           body: "req.body.article.body", @query
         }
@@ -89,14 +92,15 @@
   favoriteArticle1: { @describe("favorite article") @mixin("favoriteArticle")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        slug: "createArticleTrainDragon.res['200'].article.slug", @eval
+        slug: "createArticleTrainDragon.res.body.article.slug", @eval
       },
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         article: { @partial
           favorited: true,
           favoritesCount: 1,
@@ -107,14 +111,15 @@
   unfavoriteArticle1: { @describe("unfavorite article") @mixin("unfavoriteArticle")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        slug: "createArticleTrainDragon.res['200'].article.slug", @eval
+        slug: "createArticleTrainDragon.res.body.article.slug", @eval
       },
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         article: { @partial
           favorited: false,
           favoritesCount: 0,
@@ -126,11 +131,12 @@
     listArticles1: { @describe("all articles") @mixin("listArticles")
       req: {
         header: {
-          Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+          Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
         }
       },
       res: {
-        200: {
+        status: 200,
+        body: {
           articles: [ @partial
             { @partial
               slug: "/^how-to-train-your-dragon/.test($)", @eval
@@ -143,14 +149,15 @@
     listArticles2: { @describe("articles by author") @mixin("listArticles")
       req: {
         header: {
-          Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+          Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
         },
         query: {
           author: "auth.registerJohn.req.body.user.username", @eval
         }
       },
       res: {
-        200: { @partial
+        status: 200,
+        body: { @partial
           articlesCount: "$ >= 1" @eval
         }
       }
@@ -158,14 +165,15 @@
     listArticles3: { @describe("articles favorited by username") @mixin("listArticles")
       req: {
         header: {
-          Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+          Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
         },
         query: {
           favorited: true
         }
       },
       res: {
-        200: { @partial
+        status: 200,
+        body: { @partial
           articles: [],
           articlesCount: 0
         }
@@ -174,7 +182,7 @@
     listArticles4: { @describe("articles by tag") @mixin("listArticles")
       req: {
         header: {
-          Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+          Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
         },
         query: {
           tag: "dragons"
@@ -185,12 +193,13 @@
   listArticlesWithoutAuth: { @describe("all articles") @group
     listArticles1: { @describe("all articles") @mixin("listArticles")
       res: {
-        200: { @partial
+        status: 200,
+        body: { @partial
           articles: [ @partial
             {
-              slug: "createArticleTrainDragon.res['200'].article.slug", @query
-              title: "createArticleTrainDragon.res['200'].article.title", @query
-              description: "createArticleTrainDragon.res['200'].article.description", @query
+              slug: "createArticleTrainDragon.res.body.article.slug", @query
+              title: "createArticleTrainDragon.res.body.article.title", @query
+              description: "createArticleTrainDragon.res.body.article.description", @query
               body: "updateArticleTrainDragon.req.body.article.body", @query
               createdAt: "", @exist
               updatedAt: "", @exist
@@ -212,11 +221,12 @@
     getFeed1: { @describe("john feed") @mixin("getFeed")
       req: {
         header: {
-          Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+          Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
         },
       },
       res: {
-        200: {
+        status: 200,
+        body: {
           articles: `$.length > 0`, @eval
           articlesCount: `$ > 0`, @eval
         }

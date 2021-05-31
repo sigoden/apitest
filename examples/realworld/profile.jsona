@@ -2,14 +2,15 @@
   getProfile1: { @describe("get profile") @mixin("getProfile")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        id: "auth.loginJohn.res['200'].user.username", @eval
+        id: "auth.loginJohn.res.body.user.username", @eval
       }
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         profile: {
           username: "req.params.id", @query
           image: "", @exist
@@ -21,10 +22,10 @@
   followProfile1: { @describe("follow profile") @mixin("followProfile")
     req: {
       header: {
-        Authorization: `"Token " + auth.loginJohn.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
       },
       params: {
-        id: "auth.loginJohn.res['200'].user.username", @eval
+        id: "auth.loginJohn.res.body.user.username", @eval
       },
       body: {
         user: {
@@ -33,7 +34,8 @@
       }
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         profile: {
           username: "req.params.id", @query
           image: "", @exist
@@ -45,14 +47,15 @@
   unfollowProfile1: { @describe("unfollow profile") @mixin("unfollowProfile")
     req: {
       header: {
-        Authorization: `"Token " + auth.registerTom.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.registerTom.res.body.user.token` @eval
       },
       params: {
-        id: "auth.loginJohn.res['200'].user.username", @eval
+        id: "auth.loginJohn.res.body.user.username", @eval
       },
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         profile: { @partial
           following: false,
         }
@@ -62,10 +65,10 @@
   followProfile2: { @describe("follow profile agagin") @mixin("followProfile")
     req: {
       header: {
-        Authorization: `"Token " + auth.registerTom.res["200"].user.token` @eval
+        Authorization: `"Token " + auth.registerTom.res.body.user.token` @eval
       },
       params: {
-        id: "auth.loginJohn.res['200'].user.username", @eval
+        id: "auth.loginJohn.res.body.user.username", @eval
       },
       body: {
         user: {
@@ -74,7 +77,8 @@
       }
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         profile: { @partial
           following: true,
         }

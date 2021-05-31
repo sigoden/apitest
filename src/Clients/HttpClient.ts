@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import { Client } from ".";
 import { Unit } from "../Cases";
 import { toPosString } from "../Loader";
-import { JsonaObject, JsonaString, JsonaValue } from "../types";
+import { JsonaObject, JsonaValue } from "../types";
 
 export default class HttpClient implements Client {
   private options: any;
@@ -45,18 +45,22 @@ export default class HttpClient implements Client {
     }
     const result = {} as any;
     let needHeader = false;
+    let needStatus = false;
     if (unit.res) {
       const res_ = unit.res as JsonaObject;
       needHeader = !!res_.properties.find(v => v.key === "header");
+      needStatus = !!res_.properties.find(v => v.key === "status");
     }
     try {
       const axiosRes = await axios(opts);
       if (needHeader) result.header = axiosRes.headers;
-      result[axiosRes.status] = axiosRes.data;
+      if (needStatus) result.status = axiosRes.status;
+      result.body = axiosRes.data;
     } catch (err) {
       if (err.response) {
         if (needHeader) result.header = err.response.headers;
-        result[err.response.status] = err.response.data;
+        if (needStatus) result.status = err.response.status;
+        result.body = err.response.data;
       } else {
         throw err;
       }
@@ -134,28 +138,22 @@ export default class HttpClient implements Client {
     if (res.type !== "Object") {
       throw new Error(`${[paths.join(".")]} should be object value${toPosString(res.position)}`);
     }
-    const keys = res.properties.map(v => v.key);
-    if (keys.indexOf("header") > -1) {
-      const headerProp = res.properties.find(v => v.key === "header");
-      if (headerProp) {
-        if (headerProp.value.type !== "Object") {
-          throw new Error(`${[paths.concat(["header"]).join(".")]} should be object value${toPosString(headerProp.position)}`);
-        }
-        for (const prop of headerProp.value.properties) {
-          if (prop.value.type === "Object" || prop.value.type === "Array") {
-            throw new Error(`${[paths.concat(["params"]).join(".")]} should be scalar value${toPosString(prop.position)}`);
-          }
+    const headerProp = res.properties.find(v => v.key === "header");
+    if (headerProp) {
+      if (headerProp.value.type !== "Object") {
+        throw new Error(`${[paths.concat(["header"]).join(".")]} should be object value${toPosString(headerProp.position)}`);
+      }
+      for (const prop of headerProp.value.properties) {
+        if (prop.value.type === "Object" || prop.value.type === "Array") {
+          throw new Error(`${[paths.concat(["params"]).join(".")]} should be scalar value${toPosString(prop.position)}`);
         }
       }
-      keys.splice(keys.indexOf("header"), 1);
     }
-    if (keys.length !== 1) {
-      throw new Error(`${[paths.join(".")]} should have only one status prop${toPosString(res.position)}`);
-    }
-    const statusProp = res.properties.find(v => v.key === keys[0]);
-    const status = parseInt(keys[0]);
-    if (Number.isNaN(status) || status < 200 || status >= 600) {
-      throw new Error(`${[paths.concat(keys[0]).join(".")]} key value should be valid http status code${toPosString(statusProp.position)}`);
+    const statusProp = res.properties.find(v => v.key === "status");
+    if (statusProp) {
+      if (statusProp.value.type !== "Integer") {
+        throw new Error(`${[paths.concat(["status"]).join(".")]} should be integer value${toPosString(statusProp.position)}`);
+      }
     }
   }
 }

@@ -8,7 +8,8 @@
       },
     },
     res: {
-      200: {
+      status: 200,
+      body: {
         url: "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
         headers: {}, @exist
         args: {
@@ -28,7 +29,8 @@
       }
     },
     res:{
-      200: { @partial
+      status: 200,
+      body: { @partial
         json: {
           foo1: "bar1",
           foo2: "Bar2",

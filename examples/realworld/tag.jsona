@@ -1,7 +1,8 @@
 {
   listTags1: { @describe("all tags") @mixin("listTags")
     res: {
-      200: {
+      status: 200,
+      body: {
         tags: ['dragons', 'training']
       }
     }
