@@ -126,7 +126,7 @@ so the test is failed, then apitest print error.
 There are multiple ways to install apitest.
 
 1.  **Binaries**
-   Binaries are available for download [here][releases]. Make sure to put the
+   Binaries are available for download [releases](https://github.com/sigoden/apitest/releases). Make sure to put the
    path to the binary into your `PATH`.
 
 2. **From npm**
