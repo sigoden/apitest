@@ -1,40 +1,30 @@
 {
-  case1: { @describe("echo get")
+  post: { @describe("httpbin post")
     req: {
-      url: "https://postman-echo.com/get",
-      query: {
+      url: "https://httpbin.org/post",
+      method: "post",
+      header: {
+        'content-type': 'application/json',
+      },
+      body: {
         foo1: "bar1",
-        foo2: "bar2",
+        foo2: "Bar2",
       },
     },
     res: {
       status: 200,
-      body: {
-        url: "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
-        headers: {}, @type
-        args: {
-          foo1: "bar1",
-          foo2: "Bar2",
-        },
-      }
-    }
-  },
-  case2: { @describe("echo post")
-    req: {
-      url: "https://postman-echo.com/post",
-      method: "post",
-      body: {
-        foo1: "bar1",
-        foo2: "Bar2",
-      }
-    },
-    res:{
-      status: 200,
       body: { @partial
-        json: {
-          foo1: "bar1",
-          foo2: "Bar2",
-        }
+        "args": {},
+        "data": "{\"foo1\":\"bar1\",\"foo2\":\"Bar2\"}",
+        "files": {},
+        "form": {},
+        "headers": {}, @type
+        "json": {
+          "foo1": "bar1",
+          "foo2": "Bar2"
+        },
+        "origin": "", @type
+        "url": "https://httpbin.org/post"
       }
     }
   }
