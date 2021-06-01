@@ -3,6 +3,7 @@ import * as vm from "vm";
 import { JsonaString, JsonaValue } from "./types";
 import * as _ from "lodash";
 import { VmContext } from "./Session";
+import { RunUnitError } from "./Reporter";
 
 export default function createReq(unit: Unit, ctx: VmContext): any {
   return createValue(unit.paths.concat(["req"]), ctx, unit.req);
@@ -46,7 +47,7 @@ export function evalValue(paths: string[], ctx: VmContext, code: string): any {
     script.runInNewContext(ctx.state);
     return ctx.state[EXPORT_KEY];
   } catch (err) {
-    throw { paths, anno: "eval", message: `throw err, ${err.message}` };
+    throw new RunUnitError(paths, "eval", `throw err, ${err.message}`);
   }
 }
 
@@ -56,5 +57,5 @@ export function existAnno(paths: string[], value: JsonaValue, name: string, type
   if (type === "any" || value.type.toLowerCase() === type) {
     return true;
   }
-  throw { paths, anno: name, message: `should have ${type} value` };
+  throw new RunUnitError(paths, name, `should have ${type} value`);
 }

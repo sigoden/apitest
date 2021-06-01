@@ -1,14 +1,32 @@
 import * as chalk from "chalk";
 import * as _ from "lodash";
-import Cases, { Unit, UnitFail } from "./Cases";
+import Cases, { Unit } from "./Cases";
 import { RunOptions } from "./Runner";
-import { VmContext } from "./Session";
+
+export interface EndUnitArgs {
+  unit: Unit,
+  state: any,
+  fail?: RunUnitError,
+  timeMs?: number;
+}
+
+export class RunUnitError extends Error {
+  public paths: string[];
+  public anno: string;
+  constructor(paths: string[], anno: string, message: string) {
+    super(message);
+    Error.captureStackTrace(this, RunUnitError);
+    this.paths = paths;
+    this.anno = anno;
+    this.name = "RunUnitError";
+  }
+}
 
 export default class Reporter {
   private options: RunOptions;
   private cases: Cases;
   private currentPaths: string[] = [];
-  private fails: [Unit, UnitFail][] = [];
+  private fails: EndUnitArgs[] = [];
   constructor(options: RunOptions, cases: Cases) {
     this.options = options;
     this.cases = cases;
@@ -19,16 +37,20 @@ export default class Reporter {
 
     this.currentPaths = unit.paths;
   }
-  public async endUnit(unit: Unit, ctx: VmContext, fail: UnitFail) {
-    if (!fail) {
-      process.stdout.write(chalk.green(" ✔\n"));
+  public async endUnit(args: EndUnitArgs) {
+    let timeStr = "";
+    if (args.timeMs) {
+      timeStr = " (" + (args.timeMs / 1000).toFixed(3) + ")";
+    }
+    if (!args.fail) {
+      process.stdout.write(chalk.green(`${timeStr} ✔\n`));
     } else {
-      process.stdout.write(chalk.red(" ✘\n"));
+      process.stdout.write(chalk.red(`${timeStr} ✘\n`));
       if (!this.options.ci) {
-        this.reportFail(fail, (unit.paths.length - 1) * 2);
-        this.reportData(unit, ctx);
+        this.reportFail(args.fail, (args.unit.paths.length - 1) * 2);
+        this.reportData(args.unit, args.state);
       } else {
-        this.fails.push([unit, fail]);
+        this.fails.push(args);
       }
     }
   }
@@ -36,12 +58,12 @@ export default class Reporter {
   public async summary() {
     if (!this.options.ci) return;
     process.stdout.write("\n");
-    for (const [i, [unit, fail]] of this.fails.entries()) {
-      const key = unit.paths.join(".");
+    for (const [i, args] of this.fails.entries()) {
+      const key = args.unit.paths.join(".");
       const describe = this.cases.describes[key];
       const prefix = `${i + 1}. `;
       process.stdout.write(`${prefix}${describe}(${key})\n`);
-      this.reportFail(fail, prefix.length);
+      this.reportFail(args.fail, prefix.length);
     }
   }
 
@@ -62,13 +84,13 @@ export default class Reporter {
       }
     }
   }
-  private reportFail(fail: UnitFail, indent: number) {
+  private reportFail(fail: RunUnitError, indent: number) {
     const content = `${" ".repeat(indent)}${fail.paths.join(".") + (fail.anno ? "@" + fail.anno : "")}: ${fail.message}\n\n`;
     process.stdout.write(chalk.red(content));
   }
 
-  private reportData(unit: Unit, ctx: VmContext) {
-    const data = _.get(ctx.state, unit.paths, {});
+  private reportData(unit: Unit, state: any) {
+    const data = _.get(state, unit.paths, {});
     const content = JSON.stringify(data, null, 2);
     const indent = (unit.paths.length - 1) * 2;
     let lines = content.split("\n");

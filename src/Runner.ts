@@ -3,7 +3,7 @@ import Loader from "./Loader";
 import Clients from "./Clients";
 import Cases, { Unit } from "./Cases";
 import Session from "./Session";
-import Reporter from "./Reporter";
+import Reporter, { RunUnitError } from "./Reporter";
 import createReq from "./createReq";
 import compareRes from "./compareRes";
 
@@ -57,26 +57,30 @@ export default class Runner {
     for (const unit of units) {
       await reporter.startUnit(unit);
       if (options.dryRun) continue;
+      let timeMs = 0;
       try {
         const ctx1 = await this.session.getCtx(unit);
         const req = await createReq(unit, ctx1);
         await this.session.saveReq(unit, req);
         let res;
         try {
+          const timeStart = process.hrtime();
           res = await this.clients.runUnit(unit, req);
+          const timeEnd = process.hrtime(timeStart);
+          timeMs = timeEnd[0] * 1000 + Math.floor(timeEnd[1] / 1000000);
         } catch (err) {
-          if (err.paths) throw err;
-          throw { paths: unit.paths, anno: "", message: `client error, ${err.message}` };
+          if (err.name === "RunUnitError") throw err;
+          throw new RunUnitError(unit.paths, "", `client error, ${err.message}`); 
         }
         await this.session.saveRes(unit, res);
         const ctx2 = await this.session.getCtx(unit);
         _.set(ctx2.state, "req", _.get(ctx2.state, unit.paths.concat(["req"])));
         await compareRes(unit, ctx2, res);
-        await reporter.endUnit(unit, ctx2, null);
+        await reporter.endUnit({ unit, state: ctx2.state, timeMs });
         await this.session.saveCursor(unit);
       } catch (fail) {
         const ctx = await this.session.getCtx(unit);
-        await reporter.endUnit(unit, ctx, fail);
+        await reporter.endUnit({ unit, state: ctx.state, fail, timeMs });
         if (!options.ci) break;
       }
     }

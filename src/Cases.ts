@@ -11,12 +11,6 @@ export interface Unit {
   res?: JsonaValue,
 }
 
-export interface UnitFail {
-  paths: string[];
-  anno: string;
-  message: string;
-}
-
 export default class Cases {
   public describes: {[k: string]: string} = {};
   public units: Unit[] = [];
