@@ -1,9 +1,9 @@
 name: Node.js Package
 on:
   release:
-    types: [created]
+    types: [published]
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,6 +13,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@sigodenjs'
       - run: yarn
-      - run: yarn publish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
