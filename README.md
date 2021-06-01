@@ -131,7 +131,7 @@ There are multiple ways to install apitest.
 
 2. **From npm**
   ```
-  npm i -g @sigoden/apitest
+  npm i -g @sigodenjs/apitest
   ```
 
 ## Annotation
