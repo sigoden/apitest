@@ -1,7 +1,24 @@
 {
-  "name": "apitest-js",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "apitester",
+  "description": "declartive api testing tool",
+  "version": "0.1.0",
+  "bin": "dist/bin.js",
+  "keywords": [
+    "api",
+    "testing",
+    "apitester",
+    "ci"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "homepage": "https://github.com/sigoden/apitester",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sigoden/apitester.git"
+  },
+  "bugs": "https://github.com/sigoden/apitester/issues",
+  "author": "Sigoden Huang <sigoden@gmail.com>",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --ext js --ext ts",
