@@ -1,6 +1,6 @@
 # Jslib
 
-apitest can run javascript in [eval](./eval.md)
+Apitest can run javascript with [@eval](./eval.md)
 
 @jslib include js functions.
 
@@ -13,7 +13,7 @@ apitest can run javascript in [eval](./eval.md)
 }
 ```
 
-apitest will include functions defined in builtin/rand.js and mylib.js.
+Apitest will include functions defined in builtin/rand.js and mylib.js.
 
 > @jslib value starts with "@" means it's a builtin lib.
 

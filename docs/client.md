@@ -1,10 +1,12 @@
 # Client
 
-Apitest supports two client `echo` and `http` now. it will support more clients in the future.
+Apitest supports two client now
+- echo: return req as res, no network needed
+- http: send req and get res through http/https protocol
 
 ## main annotation
 
-include/config the client in main jsona file
+include/config the client.
 
 ```js
 {
@@ -19,19 +21,19 @@ include/config the client in main jsona file
 }
 ```
 
-- name: client name. Name will be referred by unit @client annotation. If there is no
+- name: client name. Name will be referred by @client unit annotation. If there is no
     client named "default", apitest will automatic include  `http` client as default.
 - kind: echo | http.
 - options: client options. Each kind of client have its own options.
 
-> `echo` is included by default.
+> `echo` client is inclued by default, have no options.
 
-> `http` client is powered by axios, so it's options is same to [axios request config](https://github.com/axios/axios#request-config);
+> `http` client is powered by axios, so its options is [axios request config](https://github.com/axios/axios#request-config);
 
 
 ## unit annotation
 
-use/customize the client in unit
+use/customize the client for test unit.
 
 ```js
 {

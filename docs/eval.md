@@ -1,10 +1,10 @@
 # Eval
 
-@eval uses js
+@eval use js to generate req data and compare res value.
 
 ## req annotation
 
-@eval generated data in `req` parts.
+@eval generated req data in `req` parts.
 
 ```js
 {
@@ -18,7 +18,7 @@
 
 ## res annotation
 
-@eval compare data in `res` parts. If eval express returns true, the test is passed.
+@eval compare res value in `res` parts. If eval express returns true, the test is passed.
 
 ```js
 {
@@ -38,10 +38,10 @@
 
 ## eval context
 
-Apitest regist [jslib](./jslib.md) to eval context. so you can define functions in jslib and use functions
-in req eval and res eval.
+Apitest regist [jslib](./jslib.md) to eval context. so you can define function in jslib and use it
+in eval context.
 
-Apitest also collect the data of test cases and regist it to eval context.
+Apitest also collect the data of test units and regist it to eval context.
 
 ```js
 // module mod1

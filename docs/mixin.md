@@ -12,7 +12,7 @@ in main jsona file
 }
 ```
 
-It tells apitest that `mixin.jsona` is for mixin.
+It tells apitest that `mixin.jsona` is used for mixin.
 
 For example, we write `mixin.jsona` below
 ```js

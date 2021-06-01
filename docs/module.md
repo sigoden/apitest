@@ -1,6 +1,6 @@
 # Module
 
-We can split the unit tests to mutilpe files, each file is a module.
+We can split the unit tests to mutiple files, each file is a module.
 
 ## main annotation
 

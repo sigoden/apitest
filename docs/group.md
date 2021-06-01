@@ -1,6 +1,6 @@
 # Group
 
-we can group some releated test units as group
+we can group some test units as group
 
 ```js
 {

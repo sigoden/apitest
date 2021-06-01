@@ -2,7 +2,7 @@
 
 Apitest will take strict checking on array/object. 
 
-@partial tell aptest only checks partial of array/object.
+@partial tells aptest only checks partial of array/object.
 
 ```js
 {

@@ -1,6 +1,6 @@
 # Every
 
-@some is for multi-conditions test. It tests whether all condition is true.
+@some tests whether all condition is true.
 
 ```js
 {

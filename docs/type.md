@@ -1,6 +1,6 @@
 # Type
 
-@type tell aptest only checks type of value other than value.
+@type tells aptest only checks type of value other than value.
 
 ```js
 {
