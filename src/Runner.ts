@@ -38,16 +38,13 @@ export default class Runner {
       if (this.session.cursor) {
         const idx = this.cases.units.findIndex(v => v.id === this.session.cursor);
         if (idx > -1) {
-          if (idx == this.cases.units.length - 1) {
-            units = this.cases.units;
-          } else {
+          if (idx < this.cases.units.length - 1) {
             units = this.cases.units.slice(idx + 1);
           }
         }
-      } else {
-        units = this.cases.units;
       }
-    } else {
+    }
+    if (!units) {
       units = this.cases.units;
     }
     if (units.length === 0) {

@@ -186,6 +186,12 @@ export function getType(value) {
       return "object";
     }
   } else {
+    if (typeof value === "number") {
+      if (Number.isInteger(value)) {
+        return "integer";
+      }
+      return "float";
+    }
     return typeof value;
   }
 }

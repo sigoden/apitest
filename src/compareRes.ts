@@ -57,29 +57,25 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     const v1Type = v1.type.toLowerCase();
     const v2Type = getType(v2);
     if (v1Type !== v2Type) {
-      if (!(v2Type === "number" && (v1Type === "float" || v1Type === "integer"))) {
-        throw new RunUnitError(paths, "type", `fail, expect type ${v1Type} ≠ actual type ${v2Type}`);
-      }
+      throw new RunUnitError(paths, "type", `fail, type ${v2Type} ≠ type ${v1Type}`);
     }
   } else {
     const v1Type = v1.type.toLowerCase();
     const v2Type = getType(v2);
     if (v1Type !== v2Type) {
-      if (!(v2Type === "number" && (v1Type === "float" || v1Type === "integer"))) {
-        throw new RunUnitError(paths,  "", `fail, expect type ${v1Type} ≠ actual type ${v2Type}`);
-      }
+      throw new RunUnitError(paths,  "", `fail, type ${v2Type} ≠ type ${v1Type}`);
     }
     if (typeof v2 !== "object") {
       const v1Value = _.get(v1, "value", null);
       if (v1Value === v2) return;
-      throw new RunUnitError(paths, "", `fail, expect value ${v1Value} ≠ actual value ${v2}`);
+      throw new RunUnitError(paths, "", `fail, ${v1Value} ≠ ${v2}`);
     }
     if (v1.type === "Object") {
       if (!existAnno(paths, v1, "partial", "object")) {
         const v1Keys = v1.properties.map(v => v.key);
         const v2Keys = Object.keys(v2);
         if (v1Keys.length !== v2Keys.length) {
-          throw new RunUnitError(paths, "", "fail, keys length of expect value ≠ keys length of actual value");
+          throw new RunUnitError(paths, "", "fail, keys length ≠");
         }
       }
       for (const prop of v1.properties) {
@@ -88,7 +84,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     } else if (v1.type === "Array") {
       if (!existAnno(paths, v1, "partial", "array")) {
         if (v1.elements.length !== v2.length) {
-          throw new RunUnitError(paths, "", "fail, length of expect value ≠ length of actual value");
+          throw new RunUnitError(paths, "", "fail, elements length ≠");
         }
       }
       for (const [i, ele] of v1.elements.entries()) {
