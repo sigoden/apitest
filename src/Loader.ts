@@ -23,7 +23,7 @@ export default class Loader {
     try {
       jsa = await loadJsonaFile(mainFile);
     } catch (err) {
-      throw new Error(`[main] parse error: ${err.message}`);
+      throw new Error(`[main] load '${mainFile}' fail, ${err.message}`);
     }
     if (jsa.type !== "Object") {
       throw new Error("[main] should have object value");
@@ -98,7 +98,7 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(mixinFile);
       } catch (err) {
-        throw new Error(`[main@mixin(${mixinName})] parse error: ${err.message}`);
+        throw new Error(`[main@mixin(${mixinName})] load '${mixinFile}' fail, ${err.message}`);
       }
       if (jsa.type !== "Object") {
         throw new Error(`[main@mixin(${mixinName})] should have object value`);
@@ -123,7 +123,7 @@ export default class Loader {
       try {
         jslib = await fs.readFile(libFile, "utf8");
       } catch (err) {
-        throw new Error(`[main@jslib(${libName})] fail to load ${libName}.js${toPosString(anno.position)}`);
+        throw new Error(`[main@jslib(${libName})] load '${libFile}' fail${toPosString(anno.position)}`);
       }
       try {
         const context = {};
@@ -146,7 +146,7 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(moduleFile);
       } catch (err) {
-        throw new Error(`[main@module(${moduleName})] parse error: ${err.message}`);
+        throw new Error(`[main@module(${moduleName})] load '${moduleFile}' fail, ${err.message}`);
       }
       
       if (jsa.type !== "Object") {
