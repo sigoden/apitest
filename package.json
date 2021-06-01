@@ -1,5 +1,5 @@
 {
-  "name": "@sigoden/apitest",
+  "name": "@sigodenjs/apitest",
   "description": "declartive api testing tool",
   "version": "0.1.0",
   "bin": {
@@ -14,10 +14,10 @@
   "engines": {
     "node": ">=10"
   },
-  "homepage": "https://github.com/sigoden/apitester",
+  "homepage": "https://github.com/sigoden/apitest",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sigoden/apitester.git"
+    "url": "git+https://github.com/sigoden/apitest.git"
   },
   "files": [
     "dist",
@@ -26,7 +26,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "bugs": "https://github.com/sigoden/apitester/issues",
+  "bugs": "https://github.com/sigoden/apitest/issues",
   "author": "Sigoden Huang <sigoden@gmail.com>",
   "license": "MIT",
   "scripts": {
