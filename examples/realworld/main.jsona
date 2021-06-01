@@ -3,17 +3,23 @@
     name: "default",
     kind: "http",
     options: {
-      baseURL: "https://htte-realworld.herokuapp.com/api",
-      timeout: 10000
+      baseURL: "https://conduit.productionready.io/api",
+      timeout: 30000
     }
   })
   @mixin("mixin")
   @jslib("@rand")
-  @module("beforeall")
   @module("auth")
+  @module("article1")
+  @module("article2")
   @module("profile")
-  @module("article")
-  @module("comment")
   @module("tag")
-  @module("afterall")
+
+  variables: { @client("echo")
+    req: {
+      username: `"u" + rand.str(8, 3)`, @eval
+      email: 'req.username + "@gmail.com"', @eval
+      password: `"p" + rand.str(10)`, @eval
+    }
+  }
 }

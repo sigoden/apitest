@@ -1,0 +1,27 @@
+{
+  listArticles: { @describe("All Articles") @mixin(["listArticles", "articlesRes"])
+    req: {
+    },
+  },
+  listArticlesByAuthor: { @describe("Articles by Author") @mixin(["listArticles", "articlesRes"])
+    req: {
+      query: {
+        author: "johnjacob",
+      }
+    }
+  },
+  listArticlesFavorited: { @describe("Articles Favorited by Username") @mixin(["listArticles", "articlesRes"])
+    req: {
+      query: {
+        favorited: "jane",
+      }
+    }
+  },
+  listArticlesByTag: {  @describe("Articles by Tag") @mixin(["listArticles", "articlesRes"])
+    req: {
+      query: {
+        tag: "dragons",
+      }
+    }
+  }
+}

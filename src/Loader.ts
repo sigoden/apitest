@@ -23,7 +23,7 @@ export default class Loader {
     try {
       jsa = await loadJsonaFile(mainFile);
     } catch (err) {
-      throw new Error(`[main] load '${mainFile}' fail, ${err.message}`);
+      throw new Error(`[main] load '${mainFile}' fail`);
     }
     if (jsa.type !== "Object") {
       throw new Error("[main] should have object value");
@@ -98,7 +98,7 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(mixinFile);
       } catch (err) {
-        throw new Error(`[main@mixin(${mixinName})] load '${mixinFile}' fail, ${err.message}`);
+        throw new Error(`[main@mixin(${mixinName})] load '${mixinFile}' fail`);
       }
       if (jsa.type !== "Object") {
         throw new Error(`[main@mixin(${mixinName})] should have object value`);
@@ -146,7 +146,7 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(moduleFile);
       } catch (err) {
-        throw new Error(`[main@module(${moduleName})] load '${moduleFile}' fail, ${err.message}`);
+        throw new Error(`[main@module(${moduleName})] load '${moduleFile}' fail`);
       }
       
       if (jsa.type !== "Object") {

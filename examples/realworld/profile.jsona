@@ -1,86 +1,51 @@
 {
-  getProfile1: { @describe("get profile") @mixin("getProfile")
+  registerCeleb: { @describe("Register Celeb") @mixin(["register", "userRes"])
     req: {
-      header: {
-        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
-      },
-      params: {
-        id: "auth.loginJohn.res.body.user.username", @eval
-      }
-    },
-    res: {
-      status: 200,
       body: {
-        profile: {
-          username: "req.params.id", @query
-          image: "", @type
-          following: false,
+        user: {
+          email: `"celeb_" + main.variables.req.email`, @eval
+          password: `main.variables.req.password`, @eval
+          username: `"celeb_" + main.variables.req.username` @eval
         }
       }
-    }
+    },
   },
-  followProfile1: { @describe("follow profile") @mixin("followProfile")
+  getProfile: { @describe("Profile") @mixin(["getProfile", "profileRes", "auth1"])
     req: {
-      header: {
-        Authorization: `"Token " + auth.loginJohn.res.body.user.token` @eval
-      },
       params: {
-        id: "auth.loginJohn.res.body.user.username", @eval
+        id: `registerCeleb.req.body.user.username`, @eval
+      }
+    },
+  },
+  followProfile: { @describe("Follow Profile") @mixin(["followProfile", "profileRes", "auth1"])
+    req: {
+      params: {
+        id: `registerCeleb.req.body.user.username`, @eval
       },
       body: {
         user: {
-          email: "john@jacob.com"
+          email: `main.variables.req.email`, @eval
         }
       }
     },
     res: {
-      status: 200,
       body: {
         profile: {
-          username: "req.params.id", @query
-          image: "", @type
           following: true,
         }
       }
     }
   },
-  unfollowProfile1: { @describe("unfollow profile") @mixin("unfollowProfile")
+  unfollowProfile: { @describe("Unfollow Profile") @mixin(["unfollowProfile", "profileRes", "auth1"])
     req: {
-      header: {
-        Authorization: `"Token " + auth.registerTom.res.body.user.token` @eval
-      },
       params: {
-        id: "auth.loginJohn.res.body.user.username", @eval
+        id: `registerCeleb.req.body.user.username`, @eval
       },
     },
     res: {
-      status: 200,
       body: {
-        profile: { @partial
+        profile: {
           following: false,
-        }
-      }
-    }
-  },
-  followProfile2: { @describe("follow profile agagin") @mixin("followProfile")
-    req: {
-      header: {
-        Authorization: `"Token " + auth.registerTom.res.body.user.token` @eval
-      },
-      params: {
-        id: "auth.loginJohn.res.body.user.username", @eval
-      },
-      body: {
-        user: {
-          email: "john@jacob.com"
-        }
-      }
-    },
-    res: {
-      status: 200,
-      body: {
-        profile: { @partial
-          following: true,
         }
       }
     }

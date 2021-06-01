@@ -1,93 +1,42 @@
 {
-  registerJohn: { @describe("register john") @mixin("register")
+  register: { @describe("Register") @mixin(["register", "userRes"])
     req: {
       body: {
         user: {
-          email: `"john" + rand.str(4, 3) + "@jacob.com"`, @eval
-          password: "johnnyjacob",
-          username: `"john" + rand.str(4, 3)` @eval
+          email: `main.variables.req.email`, @eval
+          password: `main.variables.req.password`, @eval
+          username: `main.variables.req.username` @eval
         }
       }
     },
-    res: {
-      status: 200,
-      body: {
-        user: {
-          email: "req.body.user.email", @query
-          username: "req.body.user.username", @query
-          token: "", @type
-        }
-      }
-    }
   },
-  loginJohn: { @describe("login john") @mixin("login")
+  login: { @describe("Login") @mixin(["login", "userRes"])
     req: {
       body: {
         user: {
-          email: "registerJohn.req.body.user.email", @eval
-          password: "registerJohn.req.body.user.password", @eval
+          email: `main.variables.req.email`, @eval
+          password: `main.variables.req.password`, @eval
         }
       }
     },
-    res: {
-      status: 200,
-      body: {
-        user: {
-          email: "", @type
-          username: "", @type
-          token: "", @type
-        }
-      }
-    }
   },
-  getUser1: { @describe("current user") @mixin("getUser")
+  curentUser: { @describe("Current User") @mixin(["getUser", "userRes"])
     req: {
       header: {
-        Authorization: `"Token " + loginJohn.res.body.user.token` @eval
+        Authorization: `"Token " + login.res.body.user.token` @eval
       }
     },
-    res: {
-      status: 200,
-      body: {
-        user: {
-          email: "", @type
-          username: "", @type
-          token: "", @type
-        }
-      }
-    }
   },
-  updateUser1: { @describe("update user") @mixin("updateUser")
+  updateUser: { @describe("Update User") @mixin(["updateUser", "userRes"])
     req: {
       header: {
-        Authorization: `"Token " + loginJohn.res.body.user.token` @eval
+        Authorization: `"Token " + login.res.body.user.token` @eval
       },
       body: {
         user: {
-          email: `"john" + rand.str(4, 3) + "@jacob.com"`, @eval
+          email: `main.variables.req.email`, @eval
         }
       }
     },
-    res: {
-      status: 200,
-      body: {
-        user: {
-          email: "", @type
-          username: "", @type
-          token: "", @type
-        }
-      }
-    }
   },
-  registerTom: { @describe("register tom") @mixin("register")
-    req: {
-      body: {
-        user: {
-          email: `"tom" + rand.str(4, 3) + "@jacob.com"`, @eval
-          password: "tomnyjacob", 
-          username: `"tom" + rand.str(4, 3)`, @eval
-        }
-      }
-    }
-  }
 }

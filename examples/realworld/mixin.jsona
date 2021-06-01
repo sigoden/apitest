@@ -105,5 +105,101 @@
       "method": "delete",
       "url": "/articles/{slug}"
     }
+  },
+  auth1: {
+    req: {
+      header: {
+        Authorization: `"Token " + auth.login.res.body.user.token` @eval
+      }
+    }
+  },
+  userRes: {
+    res: {
+      status: 200,
+      body: {
+        user: { @partial
+          email: "", @type
+          username: "", @type
+          bio: null, @type
+          image: null, @type
+          token: "", @type
+        }
+      }
+    }
+  },
+  articlesRes: {
+    res: {
+      status: 200,
+      body: [ @some
+        {
+          articles: [],
+          articlesCount: 0,
+        },
+        {
+          articles: [ @partial
+            { @partial
+              title: "", @type
+              slug: "", @type
+              body: "", @type
+              createdAt: "", @type
+              updatedAt: "", @type
+              description: "", @type
+              tagList: [], @type
+              author: {}, @type
+              favorited: false, @type
+              favoritesCount: 0, @type
+            }
+          ],
+          articlesCount: `$ > 0`, @eval
+        }
+      ]
+    }
+  },
+  signleArticleRes: {
+    res: {
+      status: 200,
+      body: { 
+        article: { @partial
+          title: "", @type
+          slug: "", @type
+          body: "", @type
+          createdAt: "", @type
+          updatedAt: "", @type
+          description: "", @type
+          tagList: [], @type
+          author: {}, @type
+          favorited: false, @type
+          favoritesCount: 0, @type
+        }
+      }
+    }
+  },
+  commentsRes: {
+    res: {
+      status: 200,
+      body: {
+        comments: [ @partial
+          { @partial
+            id: 0, @type
+            createdAt: "", @type
+            updatedAt: "", @type
+            author: {}, @type
+          }
+        ]
+      }
+    } 
+  },
+  profileRes: {
+    res: {
+      status: 200,
+      body: {
+        profile: {
+          username: "", @type
+          bio: null, @type
+          image: "", @type
+          following: false, @type
+        }
+      }
+    }
   }
 }

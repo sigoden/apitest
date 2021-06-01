@@ -6,18 +6,20 @@ import { RunOptions } from "./Runner";
 export interface EndUnitArgs {
   unit: Unit,
   state: any,
-  fail?: RunUnitError,
+  err?: RunUnitError,
   timeMs?: number;
 }
 
 export class RunUnitError extends Error {
   public paths: string[];
   public anno: string;
-  constructor(paths: string[], anno: string, message: string) {
+  public subErrors: RunUnitError[];
+  constructor(paths: string[], anno: string, message: string, subErrors: RunUnitError[] = []) {
     super(message);
     Error.captureStackTrace(this, RunUnitError);
     this.paths = paths;
     this.anno = anno;
+    this.subErrors = subErrors;
     this.name = "RunUnitError";
   }
 }
@@ -42,12 +44,12 @@ export default class Reporter {
     if (args.timeMs) {
       timeStr = " (" + (args.timeMs / 1000).toFixed(3) + ")";
     }
-    if (!args.fail) {
+    if (!args.err) {
       process.stdout.write(chalk.green(`${timeStr} ✔\n`));
     } else {
       process.stdout.write(chalk.red(`${timeStr} ✘\n`));
       if (!this.options.ci) {
-        this.reportFail(args.fail, (args.unit.paths.length - 1) * 2);
+        this.reportError(args.err, (args.unit.paths.length - 1) * 2);
         this.reportData(args.unit, args.state);
       } else {
         this.fails.push(args);
@@ -63,7 +65,7 @@ export default class Reporter {
       const describe = this.cases.describes[key];
       const prefix = `${i + 1}. `;
       process.stdout.write(`${prefix}${describe}(${key})\n`);
-      this.reportFail(args.fail, prefix.length);
+      this.reportError(args.err, prefix.length);
     }
   }
 
@@ -84,8 +86,14 @@ export default class Reporter {
       }
     }
   }
-  private reportFail(fail: RunUnitError, indent: number) {
-    const content = `${" ".repeat(indent)}${fail.paths.join(".") + (fail.anno ? "@" + fail.anno : "")}: ${fail.message}\n\n`;
+  private reportError(err: RunUnitError, indent: number) {
+    let content = `${" ".repeat(indent)}${err.paths.join(".") + (err.anno ? "@" + err.anno : "")}: ${err.message}\n`;
+    if(err.subErrors) {
+      for (const subErr of err.subErrors) {
+        content += `${" ".repeat(indent + 2)}${subErr.paths.join(".") + (subErr.anno ? "@" + subErr.anno : "")}: ${subErr.message}\n`;
+      }
+    }
+    content += "\n";
     process.stdout.write(chalk.red(content));
   }
 

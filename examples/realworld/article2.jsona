@@ -1,0 +1,145 @@
+{
+  createArticle: { @describe("Create Article") @mixin(["createArticle", "signleArticleRes", "auth1"])
+    req: {
+      body: {
+        article: {
+          title: "How to train your dragon",
+          description: "Ever wonder how?",
+          body: "Very carefully",
+          tagList: ["dragons", "training"],
+        }
+      }
+    },
+  },
+  getFeed: { @describe("Feed") @mixin(["getFeed","auth1","articlesRes"])
+    req: {
+    },
+    res: {
+    }
+  },
+  listArticles: { @describe("All Articles with auth") @mixin(["listArticles", "articlesRes", "auth1"])
+    req: {
+    },
+  },
+  listArticlesByAuthor: { @describe("Articles by Author with auth") @mixin(["listArticles", "articlesRes", "auth1"])
+    req: {
+      query: {
+        author: `main.variables.req.username`, @eval
+      }
+    }
+  },
+  listArticlesFavorited: { @describe("Articles Favorited by Username with auth") @mixin(["listArticles", "articlesRes", "auth1"])
+    req: {
+      query: {
+        favorited: `main.variables.req.username`, @eval
+      }
+    }
+  },
+  getArticleBySlug: { @describe("Single Article by slug") @mixin(["getArticle", "signleArticleRes", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      }
+    }
+  },
+  listArticlesByTag: { @describe("Articles by Tag") @mixin(["listArticles", "articlesRes", "auth1"])
+    req: {
+      query: {
+        tag: "dragons",
+      }
+    }
+  },
+  updateArticle: { @describe("Update Article") @mixin(["updateArticle", "signleArticleRes", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      },
+      body: {
+        article: {
+          body: "With two hands",
+        }
+      }
+    }
+  },
+  favoriteArticle: { @describe("Favorite Article") @mixin(["favoriteArticle", "signleArticleRes", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      },
+    },
+    res: {
+      body: {
+        article: {
+          favorited: true,
+          favoritesCount: `$ > 0`, @eval
+        }
+      }
+    }
+  },
+  unfavoriteArticle: { @describe("Unfavorite Article") @mixin(["unfavoriteArticle", "signleArticleRes", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      },
+    },
+    res: {
+      body: {
+        article: {
+          favorited: false,
+        }
+      }
+    }
+  },
+  createComment: { @describe("Create Comment for Article") @mixin(["createComment", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      },
+      body: {
+        comment: {
+          body: "Thank you so much!",
+        }
+      }
+    },
+    res: {
+      status: 200,
+      body: {
+        comment: { @partial
+          id: 0, @type
+          createdAt: "", @type
+          updatedAt: "", @type
+          author: {}, @type
+        }
+      }
+    }
+  },
+  listCommentsForActicle: { @describe("All Comments for Article") @mixin(["listCommentsForActicle", "commentsRes", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      },
+    },
+  },
+  listCommentsForActicleNoAuth: { @describe("All Comments for Article without auth") @mixin(["listCommentsForActicle", "commentsRes"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      },
+    },
+  },
+  deleteComment: { @describe("Delete Comment for Article") @mixin(["deleteComment", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+        id: `createComment.res.body.comment.id`, @eval
+      },
+    },
+  },
+  deleteArticle: { @describe("Delete Article") @mixin(["deleteArticle", "auth1"])
+    req: {
+      params: {
+        slug: `createArticle.res.body.article.slug`, @eval
+      }
+    }
+  }
+}

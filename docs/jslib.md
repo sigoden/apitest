@@ -2,7 +2,7 @@
 
 Apitest can run javascript with [@eval](./eval.md)
 
-@jslib include js functions.
+@jslib includes builtin and user-defined functions.
 
 ## main annotaion
 

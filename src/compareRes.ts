@@ -28,30 +28,35 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
   } else if (existAnno(paths, v1, "some", "array")) {
     const v1_ = v1 as JsonaArray;
     let pass = false;
+    const subErrors: RunUnitError[] = [];
     for (const [i, ele] of v1_.elements.entries()) {
       try {
         compareValue(paths.concat([String(i)]), ctx, ele, v2);
         pass = true;
         break;
-      } catch {}
+      } catch (err) {
+        subErrors.push(err);
+      }
     }
     if (pass) return;
-    throw  new RunUnitError(paths, "some", "fail, no test pass");
+    throw new RunUnitError(paths, "some", "fail, no test pass", subErrors);
   } else if (existAnno(paths, v1, "every", "array")) {
     const v1_ = v1 as JsonaArray;
     let pass = true;
+    const subErrors: RunUnitError[] = [];
     for (const [i, ele] of v1_.elements.entries()) {
       try {
         compareValue(paths.concat([String(i)]), ctx, ele, v2);
-      } catch {
+      } catch (err) {
         pass = false;
+        subErrors.push(err);
         break;
       }
     }
     if (pass) return;
-    throw new RunUnitError(paths, "every", "fail, not all tests pass");
+    throw new RunUnitError(paths, "every", "fail, not all tests pass", subErrors);
   } else if (existAnno(paths, v1, "type", "any")) {
-    if (v1.type === "Null") {
+    if (v1.type === "Null" || v2 === null) {
       return;
     }
     const v1Type = v1.type.toLowerCase();

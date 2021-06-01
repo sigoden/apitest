@@ -38,10 +38,10 @@
 
 ## eval context
 
-Apitest regist [jslib](./jslib.md) to eval context. so you can define function in jslib and use it
-in eval context.
-
-Apitest also collect the data of test units and regist it to eval context.
+Three types of data registed to eval context
+- @jslib functions.
+- req and res of test units
+- env variables
 
 ```js
 // module mod1
@@ -90,6 +90,7 @@ Apitest also collect the data of test units and regist it to eval context.
                     v2_1: "group1.test2.req.body.v2", @eval 
                     v2_2: "test2.req.body.v2", @eval // omit current mod and current group <mod2.gruop1>
                     v3: "xyz",
+                    v4: "env.USER", @eval // enviroment variable
                 }
             },
             res: {

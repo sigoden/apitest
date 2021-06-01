@@ -77,7 +77,7 @@ export default class Runner {
         await this.session.saveCursor(unit);
       } catch (fail) {
         const ctx = await this.session.getCtx(unit);
-        await reporter.endUnit({ unit, state: ctx.state, fail, timeMs });
+        await reporter.endUnit({ unit, state: ctx.state, err: fail, timeMs });
         if (!options.ci) break;
       }
     }

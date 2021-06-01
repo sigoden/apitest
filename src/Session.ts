@@ -32,7 +32,7 @@ export default class Session {
 
   public async getCtx(unit: Unit): Promise<VmContext> {
     const idx = this.unitIds.findIndex(v => v === unit.id);
-    const state = {};
+    const state = { env: _.clone(process.env) };
     if (idx > -1) {
       for (let i = 0; i <= idx; i++) {
         const paths = this.unitIds[i].split(".");

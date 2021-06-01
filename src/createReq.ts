@@ -6,12 +6,16 @@ import { VmContext } from "./Session";
 import { RunUnitError } from "./Reporter";
 
 export default function createReq(unit: Unit, ctx: VmContext): any {
-  return createValue(unit.paths.concat(["req"]), ctx, unit.req);
+  const nextPaths = unit.paths.concat(["req"]);
+  _.set(ctx.state, ["req"], _.get(ctx.state, nextPaths));
+  return createValue(nextPaths, ctx, unit.req);
 }
 
 function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
   if (existAnno(paths, jsa, "eval", "string")) {
-    return evalValue(paths, ctx, (jsa as JsonaString).value);
+    const value = evalValue(paths, ctx, (jsa as JsonaString).value);
+    _.set(ctx.state, paths, value);
+    return value;
   } else {
     if (jsa.type === "Array") {
       const output = [];
