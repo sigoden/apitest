@@ -3,9 +3,9 @@
     req: {
       body: {
         user: {
-          email: `"john" + randomString(4) + "@jacob.com"`, @eval
+          email: `"john" + rand.str(4, 3) + "@jacob.com"`, @eval
           password: "johnnyjacob",
-          username: `"john" + randomString(4)` @eval
+          username: `"john" + rand.str(4, 3)` @eval
         }
       }
     },
@@ -64,7 +64,7 @@
       },
       body: {
         user: {
-          email: `"john" + randomString(4) + "@jacob.com"`, @eval
+          email: `"john" + rand.str(4, 3) + "@jacob.com"`, @eval
         }
       }
     },
@@ -83,9 +83,9 @@
     req: {
       body: {
         user: {
-          email: `"tom" + randomString(4) + "@jacob.com"`, @eval
+          email: `"tom" + rand.str(4, 3) + "@jacob.com"`, @eval
           password: "tomnyjacob", 
-          username: `"tom" + randomString(4)`, @eval
+          username: `"tom" + rand.str(4, 3)`, @eval
         }
       }
     }

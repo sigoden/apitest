@@ -98,10 +98,10 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(mixinFile);
       } catch (err) {
-        throw new Error(`[${mixinName}] parse error: ${err.message}`);
+        throw new Error(`[main@mixin(${mixinName})] parse error: ${err.message}`);
       }
       if (jsa.type !== "Object") {
-        throw new Error(`[${mixinName}] should have object value`);
+        throw new Error(`[main@mixin(${mixinName})] should have object value`);
       }
       this.mixin = jsa as JsonaObject;
     } else {
@@ -112,11 +112,18 @@ export default class Loader {
   private async loadJslib(anno: JsonaAnnotation) {
     if (typeof anno.value === "string") {
       const libName = anno.value;
+      let libFile: string;
+      if (libName.startsWith("@")) {
+        // builtin jslib
+        libFile = path.join(__dirname, "../jslib/", libName.slice(1) + ".js");
+      } else {
+        libFile = path.resolve(this.workDir, `${libName}.js`);
+      }
       let jslib;
       try {
-        jslib = await fs.readFile(path.resolve(this.workDir, `${libName}.js`), "utf8");
+        jslib = await fs.readFile(libFile, "utf8");
       } catch (err) {
-        throw new Error(`[main@jslib] fail to load ${libName}.js${toPosString(anno.position)}`);
+        throw new Error(`[main@jslib(${libName})] fail to load ${libName}.js${toPosString(anno.position)}`);
       }
       try {
         const context = {};

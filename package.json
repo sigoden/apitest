@@ -20,7 +20,8 @@
     "url": "git+https://github.com/sigoden/apitester.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "jslib"
   ],
   "publishConfig": {
     "access": "public"
