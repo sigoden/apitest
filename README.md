@@ -1,4 +1,4 @@
-# ApiTester - Declartive api testing tool
+# ApiTest - Declartive api testing tool
 
 ## Get Started
 
