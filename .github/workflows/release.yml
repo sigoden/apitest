@@ -1,4 +1,4 @@
-name: release
+name: Release binaries
 on: 
   push:
     tags:
