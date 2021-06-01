@@ -10,7 +10,7 @@
     },
     res: {
       status: 204,
-      body:  "" @exist
+      body:  "" @type
       
     }
   }

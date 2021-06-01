@@ -13,7 +13,7 @@
       body: {
         profile: {
           username: "req.params.id", @query
-          image: "", @exist
+          image: "", @type
           following: false,
         }
       }
@@ -38,7 +38,7 @@
       body: {
         profile: {
           username: "req.params.id", @query
-          image: "", @exist
+          image: "", @type
           following: true,
         }
       }

@@ -15,7 +15,7 @@
         user: {
           email: "req.body.user.email", @query
           username: "req.body.user.username", @query
-          token: "", @exist
+          token: "", @type
         }
       }
     }
@@ -33,9 +33,9 @@
       status: 200,
       body: {
         user: {
-          email: "", @exist
-          username: "", @exist
-          token: "", @exist
+          email: "", @type
+          username: "", @type
+          token: "", @type
         }
       }
     }
@@ -50,9 +50,9 @@
       status: 200,
       body: {
         user: {
-          email: "", @exist
-          username: "", @exist
-          token: "", @exist
+          email: "", @type
+          username: "", @type
+          token: "", @type
         }
       }
     }
@@ -72,9 +72,9 @@
       status: 200,
       body: {
         user: {
-          email: "", @exist
-          username: "", @exist
-          token: "", @exist
+          email: "", @type
+          username: "", @type
+          token: "", @type
         }
       }
     }

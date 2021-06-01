@@ -50,7 +50,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     }
     if (pass) return;
     throw new RunUnitError(paths, "every", "fail, not all tests pass");
-  } else if (existAnno(paths, v1, "exist", "any")) {
+  } else if (existAnno(paths, v1, "type", "any")) {
     if (v1.type === "Null") {
       return;
     }
@@ -58,7 +58,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     const v2Type = getType(v2);
     if (v1Type !== v2Type) {
       if (!(v2Type === "number" && (v1Type === "float" || v1Type === "integer"))) {
-        throw new RunUnitError(paths, "exist", `fail, expect type ${v1Type} ≠ actual type ${v2Type}`);
+        throw new RunUnitError(paths, "type", `fail, expect type ${v1Type} ≠ actual type ${v2Type}`);
       }
     }
   } else {

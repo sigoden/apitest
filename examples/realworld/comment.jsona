@@ -33,10 +33,10 @@
       status: 200,
       body: {
         comment: {
-          id: 0, @exist
+          id: 0, @type
           body: "req.body.comment.body", @query
-          createdAt: "", @exist
-          author: {}, @exist
+          createdAt: "", @type
+          author: {}, @type
         }
       }
     }

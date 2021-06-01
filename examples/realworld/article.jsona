@@ -21,14 +21,14 @@
           title: "req.body.article.title", @query
           description: "req.body.article.description", @query
           body: "req.body.article.body", @query
-          createdAt: "", @exist
-          updatedAt: "", @exist
+          createdAt: "", @type
+          updatedAt: "", @type
           tagList: ["dragons", "training"],
           favorited: false,
           favoritesCount: 0,
           author: { @partial
             username: "auth.registerJohn.req.body.user.username", @query
-            image: "", @exist
+            image: "", @type
             following: true,
           }
         }
@@ -52,14 +52,14 @@
           title: "createArticleTrainDragon.req.body.article.title", @query
           description: "createArticleTrainDragon.req.body.article.description", @query
           body: "createArticleTrainDragon.req.body.article.body", @query
-          createdAt: "", @exist
-          updatedAt: "", @exist
+          createdAt: "", @type
+          updatedAt: "", @type
           tagList: ["dragons", "training"],
           favorited: false,
           favoritesCount: 0,
           author: { @partial
             username: "auth.registerJohn.req.body.user.username", @query
-            image: "", @exist
+            image: "", @type
             following: true,
           }
         }
@@ -142,7 +142,7 @@
               slug: "/^how-to-train-your-dragon/.test($)", @eval
             }
           ],
-          articlesCount: 0, @exist
+          articlesCount: 0, @type
         }
       }
     },
@@ -201,14 +201,14 @@
               title: "createArticleTrainDragon.res.body.article.title", @query
               description: "createArticleTrainDragon.res.body.article.description", @query
               body: "updateArticleTrainDragon.req.body.article.body", @query
-              createdAt: "", @exist
-              updatedAt: "", @exist
+              createdAt: "", @type
+              updatedAt: "", @type
               tagList: ['dragons', 'training'],
               favorited: false,
               favoritesCount: 0,
               author: { @partial
                 username: "auth.registerJohn.req.body.user.username", @query
-                image: "", @exist
+                image: "", @type
                 following: false,
               },
             }

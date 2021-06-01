@@ -28,6 +28,6 @@
 - `@every`
 - `@some`
 - `@partial`
-- `@exist`
+- `@type`
 
 ## eval fn
