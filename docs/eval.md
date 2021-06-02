@@ -102,22 +102,3 @@ Three types of data registed to eval context
     }
 }
 ```
-
-## @query
-
-@query is syntax sugar of eval to compare value is equal to eval expression
-
-```js
-{
-    test1: { @client("echo")
-        req: {
-            v1: 3,
-            v2: 4,
-        },
-        res: {
-            v1: "req.body.v1", @query
-            v2: "$ == req.body.v2", @eval
-        }
-    }
-}
-```

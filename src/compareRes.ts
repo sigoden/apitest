@@ -16,15 +16,10 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     ctx.state.$ = v2;
     const pass = evalValue(paths, ctx, (v1 as JsonaString).value);
     if (typeof pass !== "boolean") {
-      throw new RunUnitError(paths, "eval",  "should return bool");
+      throw new RunUnitError(paths, "eval",  "eval result ≠ boolean");
     }
     if (pass) return;
-    throw new RunUnitError(paths, "eval",  "eval returns false");
-  } else if (existAnno(paths, v1, "query", "string")) {
-    ctx.state.$ = v2;
-    const value = evalValue(paths, ctx, (v1 as JsonaString).value);
-    if (_.isEqual(value, v2)) return;
-    throw new RunUnitError(paths, "query", `query value ${value} ≠ actual value ${v2}`);
+    throw new RunUnitError(paths, "eval",  "eval result ≠ true");
   } else if (existAnno(paths, v1, "some", "array")) {
     const v1_ = v1 as JsonaArray;
     let pass = false;
@@ -54,7 +49,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
       }
     }
     if (pass) return;
-    throw new RunUnitError(paths, "every", "not all tests pass", subErrors);
+    throw new RunUnitError(paths, "every", "some test fail", subErrors);
   } else if (existAnno(paths, v1, "type", "any")) {
     if (v1.type === "Null" || v2 === null) {
       return;
@@ -80,7 +75,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
         const v1Keys = v1.properties.map(v => v.key);
         const v2Keys = Object.keys(v2);
         if (v1Keys.length !== v2Keys.length) {
-          throw new RunUnitError(paths, "", "keys length ≠");
+          throw new RunUnitError(paths, "", `keys length ${v1Keys.length} ≠ ${v2Keys.length}`);
         }
       }
       for (const prop of v1.properties) {
@@ -89,7 +84,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     } else if (v1.type === "Array") {
       if (!existAnno(paths, v1, "partial", "array")) {
         if (v1.elements.length !== v2.length) {
-          throw new RunUnitError(paths, "", "elements length ≠");
+          throw new RunUnitError(paths, "", `elements length ${v1.elements.length} ≠ ${v2.length}`);
         }
       }
       for (const [i, ele] of v1.elements.entries()) {

@@ -106,7 +106,6 @@ exists in `req` parts
 exists in `res` parts
 
 - [@eval](./docs/eval.md) use js to diff data
-- [@query](./docs/eval.md) a specific case of eval
 - [@every](./docs/every.md) multi-conditions test: whether all condition is true
 - [@some](./docs/some.md) multi-conditions test: whether at least one condition is true
 - [@partial](./docs/partial.md) only check partial of array/object
