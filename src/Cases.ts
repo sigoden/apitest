@@ -30,11 +30,11 @@ export default class Cases {
 
   private addProp(paths: string[], prop: JsonaProperty) {
     if (!/\w+/.test(prop.key)) {
-      throw new Error(`[${paths.join(".")}] prop key '${prop.key}' is invalid${toPosString(prop.position)}`);
+      throw new Error(`${paths.join(".")}: prop key '${prop.key}' is invalid${toPosString(prop.position)}`);
     }
     const nextPaths = paths.concat(prop.key);
     if (prop.value.type !== "Object") {
-      throw new Error(`[${nextPaths.join(".")}] should have object value${toPosString(prop.position)}`);
+      throw new Error(`${nextPaths.join(".")}: should have object value${toPosString(prop.position)}`);
     }
     if (prop.value.annotations.find(v => v.name === "group")) {
       this.addGroup(nextPaths, prop.value);
@@ -45,7 +45,7 @@ export default class Cases {
 
   private addGroup(paths: string[], value: JsonaValue) {
     if (value.type !== "Object") {
-      throw new Error(`[${paths.join(".")}] should have object value${toPosString(value.position)}`);
+      throw new Error(`${paths.join(".")}: should have object value${toPosString(value.position)}`);
     }
     const valueObject = value as JsonaObject;
     let describe = this.retriveAnnoDescribe(paths, value);
@@ -59,7 +59,7 @@ export default class Cases {
 
   private addUnit(paths: string[], value: JsonaValue) {
     if (value.type !== "Object") {
-      throw new Error(`[${paths.join(".")}] should have object value${toPosString(value.position)}`);
+      throw new Error(`${paths.join(".")}: should have object value${toPosString(value.position)}`);
     }
     const valueObject = value as JsonaObject;
 
@@ -76,7 +76,7 @@ export default class Cases {
 
     const reqProp = value.properties.find(v => v.key === "req");
     if (!reqProp) {
-      throw new Error(`[${[...paths, "req"].join(".")}] is required${toPosString(value.position)}`);
+      throw new Error(`${[...paths, "req"].join(".")}: is required${toPosString(value.position)}`);
     }
     const req = reqProp.value;
 
@@ -96,7 +96,7 @@ export default class Cases {
     const describeAnno = value.annotations.find(v => v.name === "describe");
     if (!describeAnno) return "";
     if (typeof describeAnno.value !== "string") {
-      throw new Error(`[${paths.join(".")}@describe] should have string value${toPosString(describeAnno.position)}`);
+      throw new Error(`${paths.join(".")}@describe: should have string value${toPosString(describeAnno.position)}`);
     }
     return describeAnno.value;
   }
@@ -110,16 +110,16 @@ export default class Cases {
     } else if (Array.isArray(mixinAnno.value)) {
       mixinNames = mixinAnno.value;
     } else {
-      throw new Error(`[${paths.join(".")}@mixin] should have array value${toPosString(mixinAnno.position)}`);
+      throw new Error(`${paths.join(".")}@mixin: should have array value${toPosString(mixinAnno.position)}`);
     }
     const result = [];
     for (const name of mixinNames) {
       const prop = this.mixin.properties.find(v => v.key === name);
       if (!prop) {
-        throw new Error(`[${paths.join(".")}@mixin] ${name} is miss${toPosString(mixinAnno.position)}`);
+        throw new Error(`${paths.join(".")}@mixin: ${name} is miss${toPosString(mixinAnno.position)}`);
       }
       if (prop.value.type !== "Object") {
-        throw new Error(`[${paths.join(".")}@mixin] ${name} should be object,${toPosString(mixinAnno.position)}`);
+        throw new Error(`${paths.join(".")}@mixin: ${name} should be object,${toPosString(mixinAnno.position)}`);
       }
       result.push(cloneMixin(prop.value) as JsonaObject);
     }
@@ -134,7 +134,7 @@ export default class Cases {
     } else if (getType(clientAnno.value) === "object") {
       return { name: "default", ...clientAnno.value } as UnitClient;
     } else {
-      throw new Error(`[${paths.join(".")}@describe] should have string value${toPosString(clientAnno.position)}`);
+      throw new Error(`${paths.join(".")}@describe: should have string value${toPosString(clientAnno.position)}`);
     }
   }
 }

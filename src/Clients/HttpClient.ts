@@ -70,14 +70,14 @@ export default class HttpClient implements Client {
 
   private validateReq(paths: string[], req: JsonaValue) {
     if (req.type !== "Object") {
-      throw new Error(`${[paths.join(".")]} should be object value${toPosString(req.position)}`);
+      throw new Error(`${paths.join(".")}: should be object value${toPosString(req.position)}`);
     }
     const urlProp = req.properties.find(v => v.key === "url");
     if (!urlProp) {
-      throw new Error(`${[paths.concat(["url"]).join(".")]} is required${toPosString(req.position)}`);
+      throw new Error(`${paths.concat(["url"]).join(".")}: is required${toPosString(req.position)}`);
     }
     if (urlProp.value.type !== "String") {
-      throw new Error(`${[paths.concat(["url"]).join(".")]} should be string value${toPosString(urlProp.position)}`);
+      throw new Error(`${paths.concat(["url"]).join(".")}: should be string value${toPosString(urlProp.position)}`);
     }
 
     const urlParamKeys =  _.uniq(urlProp.value.value.split("/").filter(v => /^\{\w+\}$/.test(v)).map(v => v.slice(1, -1)));
@@ -85,28 +85,28 @@ export default class HttpClient implements Client {
     const methodProp = req.properties.find(v => v.key === "method");
     if (methodProp) {
       if (methodProp.value.type !== "String") {
-        throw new Error(`${[paths.concat(["method"]).join(".")]} should be string value${toPosString(methodProp.position)}`);
+        throw new Error(`${paths.concat(["method"]).join(".")}: should be string value${toPosString(methodProp.position)}`);
       }
       const method = methodProp.value.value;
       if (["post", "get", "put", "delete", "patch"].indexOf(method) === -1) {
-        throw new Error(`${[paths.concat(["method"]).join(".")]} is not valid http method${toPosString(methodProp.position)}`);
+        throw new Error(`${paths.concat(["method"]).join(".")}: is not valid http method${toPosString(methodProp.position)}`);
       }
     }
 
     const paramsProp = req.properties.find(v => v.key === "params");
     if (paramsProp) {
       if (paramsProp.value.type !== "Object") {
-        throw new Error(`${[paths.concat(["params"]).join(".")]} should be object value${toPosString(paramsProp.position)}`);
+        throw new Error(`${paths.concat(["params"]).join(".")}: should be object value${toPosString(paramsProp.position)}`);
       }
       const paramKeys = [];
       for (const prop of paramsProp.value.properties) {
         if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${[paths.concat(["params"]).join(".")]} should be scalar value${toPosString(prop.position)}`);
+          throw new Error(`${paths.concat(["params"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
         }
         paramKeys.push(prop.key);
       }
       if (!_.isEqual(_.sortBy(urlParamKeys), _.sortBy(paramKeys))) {
-        throw new Error(`${[paths.concat(["params"]).join(".")]} should match url params${toPosString(paramsProp.position)}`);
+        throw new Error(`${paths.concat(["params"]).join(".")}: should match url params${toPosString(paramsProp.position)}`);
       }
     } else {
       if (urlParamKeys.length > 0) {
@@ -117,18 +117,18 @@ export default class HttpClient implements Client {
     const headerProp = req.properties.find(v => v.key === "header");
     if (headerProp) {
       if (headerProp.value.type !== "Object") {
-        throw new Error(`${[paths.concat(["header"]).join(".")]} should be object value${toPosString(headerProp.position)}`);
+        throw new Error(`${paths.concat(["header"]).join(".")}: should be object value${toPosString(headerProp.position)}`);
       }
       for (const prop of headerProp.value.properties) {
         if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${[paths.concat(["params"]).join(".")]} should be scalar value${toPosString(prop.position)}`);
+          throw new Error(`${paths.concat(["params"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
         }
       }
     }
     const queryProp = req.properties.find(v => v.key === "query");
     if (queryProp) {
       if (queryProp.value.type !== "Object") {
-        throw new Error(`${[paths.concat(["query"]).join(".")]} should be object value${toPosString(queryProp.position)}`);
+        throw new Error(`${paths.concat(["query"]).join(".")}: should be object value${toPosString(queryProp.position)}`);
       }
     }
   }
@@ -141,18 +141,18 @@ export default class HttpClient implements Client {
     const headerProp = res.properties.find(v => v.key === "header");
     if (headerProp) {
       if (headerProp.value.type !== "Object") {
-        throw new Error(`${[paths.concat(["header"]).join(".")]} should be object value${toPosString(headerProp.position)}`);
+        throw new Error(`${paths.concat(["header"]).join(".")}: should be object value${toPosString(headerProp.position)}`);
       }
       for (const prop of headerProp.value.properties) {
         if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${[paths.concat(["params"]).join(".")]} should be scalar value${toPosString(prop.position)}`);
+          throw new Error(`${paths.concat(["params"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
         }
       }
     }
     const statusProp = res.properties.find(v => v.key === "status");
     if (statusProp) {
       if (statusProp.value.type !== "Integer") {
-        throw new Error(`${[paths.concat(["status"]).join(".")]} should be integer value${toPosString(statusProp.position)}`);
+        throw new Error(`${paths.concat(["status"]).join(".")}: should be integer value${toPosString(statusProp.position)}`);
       }
     }
   }

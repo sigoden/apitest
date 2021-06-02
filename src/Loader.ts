@@ -23,10 +23,10 @@ export default class Loader {
     try {
       jsa = await loadJsonaFile(mainFile);
     } catch (err) {
-      throw new Error(`[main] load '${mainFile}' fail`);
+      throw new Error(`main: load '${mainFile}' fail`);
     }
     if (jsa.type !== "Object") {
-      throw new Error("[main] should have object value");
+      throw new Error("main: should have object value");
     }
     this.modules.push(["main", jsa.properties]);
     for (const anno of jsa.annotations) {
@@ -83,13 +83,13 @@ export default class Loader {
     if (getType(anno.value) === "object") {
       this.clients.addClient(anno);
     } else {
-      throw new Error(`[main@client] should have object value${toPosString(anno.position)}`);
+      throw new Error(`main@client: should have object value${toPosString(anno.position)}`);
     }
   }
 
   private async loadMixin(anno: JsonaAnnotation) {
     if (this.mixin) {
-      throw new Error(`[main@mixin] only need one${toPosString(anno.position)}`);
+      throw new Error(`main@mixin: only need one${toPosString(anno.position)}`);
     }
     if (typeof anno.value === "string") {
       const mixinName = anno.value;
@@ -98,14 +98,14 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(mixinFile);
       } catch (err) {
-        throw new Error(`[main@mixin(${mixinName})] load '${mixinFile}' fail`);
+        throw new Error(`main@mixin(${mixinName}): load '${mixinFile}' fail`);
       }
       if (jsa.type !== "Object") {
-        throw new Error(`[main@mixin(${mixinName})] should have object value`);
+        throw new Error(`main@mixin(${mixinName}): should have object value`);
       }
       this.mixin = jsa as JsonaObject;
     } else {
-      throw new Error(`[main@mixin] should have string value${toPosString(anno.position)}`);
+      throw new Error(`main@mixin: should have string value${toPosString(anno.position)}`);
     }
   }
 
@@ -123,14 +123,14 @@ export default class Loader {
       try {
         jslib = await fs.readFile(libFile, "utf8");
       } catch (err) {
-        throw new Error(`[main@jslib(${libName})] load '${libFile}' fail${toPosString(anno.position)}`);
+        throw new Error(`main@jslib(${libName}): load '${libFile}' fail${toPosString(anno.position)}`);
       }
       try {
         const context = {};
         const script = new vm.Script(jslib);
         script.runInNewContext(context);
       } catch (err) {
-        throw new Error(`[main@jslib(${libName})] syntax fail ${err.message}${toPosString(anno.position)}`);
+        throw new Error(`main@jslib(${libName}): syntax fail ${err.message}${toPosString(anno.position)}`);
       }
       this.jslibs.push(jslib);
     } else {
@@ -146,15 +146,15 @@ export default class Loader {
       try {
         jsa = await loadJsonaFile(moduleFile);
       } catch (err) {
-        throw new Error(`[main@module(${moduleName})] load '${moduleFile}' fail`);
+        throw new Error(`main@module(${moduleName}): load '${moduleFile}' fail`);
       }
       
       if (jsa.type !== "Object") {
-        throw new Error(`[main@module(${moduleName})] should have object value`);
+        throw new Error(`main@module(${moduleName}): should have object value`);
       }
       this.modules.push([moduleName, jsa.properties]);
     } else {
-      throw new Error(`[main@module] should have string value${toPosString(anno.position)}`);
+      throw new Error(`main@module: should have string value${toPosString(anno.position)}`);
     }
   }
 }
