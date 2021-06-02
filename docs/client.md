@@ -1,8 +1,9 @@
 # Client
 
 Apitest supports two client now
+
 - echo: return req as res, no network needed
-- http: send req and get res through http/https protocol
+- [http](./httpclient.md): send req and get res through http/https protocol
 
 ## main annotation
 
@@ -26,10 +27,7 @@ include/config the client.
 - kind: echo | http.
 - options: client options. Each kind of client have its own options.
 
-> `echo` client is inclued by default, have no options.
-
-> `http` client is powered by axios, so its options is [axios request config](https://github.com/axios/axios#request-config);
-
+> EchoClient is inclued by default. EchoClient have no options.
 
 ## unit annotation
 
