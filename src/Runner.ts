@@ -50,6 +50,7 @@ export default class Runner {
     if (units.length === 0) {
       throw new Error("no cases");
     }
+    let anyFail = false;
     const reporter = new Reporter(options, this.cases);
     for (const unit of units) {
       await reporter.startUnit(unit);
@@ -76,11 +77,15 @@ export default class Runner {
         await reporter.endUnit({ unit, state: ctx2.state, timeMs });
         await this.session.saveCursor(unit);
       } catch (fail) {
+        anyFail = true;
         const ctx = await this.session.getCtx(unit);
         await reporter.endUnit({ unit, state: ctx.state, err: fail, timeMs });
         if (!options.ci) break;
       }
     }
-    await reporter.summary();
+    if (options.ci) {
+      await reporter.summary();
+    }
+    return anyFail ? 1 : 0;
   }
 }

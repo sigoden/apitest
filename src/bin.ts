@@ -50,7 +50,8 @@ async function main(argv) {
         reset: argv.reset,
       };
     }
-    await runner.run(runOptions);
+    const exitCode = await runner.run(runOptions);
+    process.exit(exitCode);
   } catch (err) {
     console.log(err.message);
     process.exit(1);

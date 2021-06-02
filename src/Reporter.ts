@@ -58,7 +58,6 @@ export default class Reporter {
   }
 
   public async summary() {
-    if (!this.options.ci) return;
     process.stdout.write("\n");
     for (const [i, args] of this.fails.entries()) {
       const key = args.unit.paths.join(".");
