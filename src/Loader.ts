@@ -112,13 +112,7 @@ export default class Loader {
   private async loadJslib(anno: JsonaAnnotation) {
     if (typeof anno.value === "string") {
       const libName = anno.value;
-      let libFile: string;
-      if (libName.startsWith("@")) {
-        // builtin jslib
-        libFile = path.join(__dirname, "../jslib/", libName.slice(1) + ".js");
-      } else {
-        libFile = path.resolve(this.workDir, `${libName}.js`);
-      }
+      const  libFile = path.resolve(this.workDir, `${libName}.js`);
       let jslib;
       try {
         jslib = await fs.readFile(libFile, "utf8");
