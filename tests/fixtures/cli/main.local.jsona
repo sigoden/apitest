@@ -1,0 +1,12 @@
+
+{
+  @module("mod1")
+  test1: { @client("echo")
+    req: {
+      v1: 'a',
+    },
+    res: {
+      v1: 'a'
+    }
+  }
+}

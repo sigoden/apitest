@@ -1,0 +1,22 @@
+{
+  @client({
+    name: "client1",
+    kind: "echo",
+  })
+  test1: { @client("client1")
+    req: {
+    }
+  },
+  test2: { @client({name: "client1"})
+    req: {
+    }
+  },
+  test3: { @client({options:{timeout: 60000}})
+    req: {
+      url: "https://httpbin.org/get",
+      query: {
+        a: 3
+      }
+    }
+  }
+}

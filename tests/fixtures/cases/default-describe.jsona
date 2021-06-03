@@ -1,0 +1,9 @@
+{
+  group1: { @group
+    unit1: { @client("echo")
+      req: {
+        v1: "a"
+      }
+    }
+  }
+}

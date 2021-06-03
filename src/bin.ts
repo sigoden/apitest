@@ -47,7 +47,7 @@ async function main(argv) {
     } else {
       runOptions = {
         ci: !!argv.ci,
-        reset: true, 
+        reset: argv.reset, 
       };
     }
     const exitCode = await runner.run(runOptions);

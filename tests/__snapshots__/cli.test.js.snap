@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli start from last failed 1`] = `
+"module main
+  unit test2 ✘
+  main.test2.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
+exports[`cli still start from last failed 1`] = `
+"module main
+  unit test2 ✘
+  main.test2.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
+exports[`cli target folder 1`] = `
+"module main
+  unit test1 ✔
+  unit test2 ✘
+  main.test2.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
+exports[`cli target folder with options --env 1`] = `
+"module main
+  unit test1 ✔
+module mod1
+  unit test1 ✘
+  mod1.test1.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
+exports[`cli with options --dry-run 1`] = `
+"module main
+  unit test1 (main.test1)
+  unit test2 (main.test2)
+  unit test3 (main.test3)
+  unit test4 (main.test4)
+module mod1
+  unit test1 (mod1.test1)
+  unit test2 (mod1.test2)
+"
+`;
+
+exports[`cli with options --env 1`] = `
+"module main
+  unit test1 ✔
+module mod1
+  unit test1 ✘
+  mod1.test1.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
+exports[`cli with options --only 1`] = `
+"module main
+  unit test4 ✔
+"
+`;
+
+exports[`cli with options --only 2 1`] = `
+"module mod1
+  unit test1 ✘
+  mod1.test1.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
+exports[`cli with options --reset 1`] = `
+"module main
+  unit test1 ✔
+  unit test2 ✘
+  main.test2.res.v1: b ≠ a
+
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;

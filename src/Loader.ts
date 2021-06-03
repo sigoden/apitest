@@ -55,9 +55,10 @@ export default class Loader {
   private async findMainFile(target: string, env: string) {
     try {
       if (target.endsWith(".jsona")) {
-        const stat = await fs.stat(target);
+        const mainFile = path.resolve(env ? target.slice(0, -6) + "." + env + ".jsona" : target);
+        const stat = await fs.stat(mainFile);
         if (stat.isFile()) {
-          return { mainFile: path.resolve(target), workDir: path.resolve(target, "..") };
+          return { mainFile, workDir: path.resolve(target, "..") };
         }
       }
       const envName = env ? "." + env : "";

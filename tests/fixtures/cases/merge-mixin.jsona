@@ -1,0 +1,41 @@
+{
+  @mixin("mixin1")
+  test1: { @describe("single mixin") @client("echo") @mixin("req1")
+    req: {
+    },
+    res: {
+      v1: "a",
+    }
+  },
+  test2: { @describe("multiple mixin") @client("echo") @mixin(["req1", "req2"])
+    req: {
+    },
+    res: {
+      v1: "a",
+      v2: "b",
+    }
+  },
+  test3: { @describe("omit mixin if exist prop") @client("echo") @mixin(["req1", "req3"])
+    req: {
+      v3: "a",
+    },
+    res: {
+      v1: "a",
+      v3: "a",
+    }
+  },
+  test4: { @describe("nest mixin") @client("echo") @mixin(["req1", "req4"])
+    req: {
+      n1: {
+        n1: "a"
+      }
+    },
+    res: {
+      v1: "a",
+      n1: {
+        n1: "a",
+        n2: "d"
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cases client 1`] = `
+"module main
+  unit test1 ✔
+  unit test2 ✔
+  unit test3 (1.370) ✔
+"
+`;
+
+exports[`cases default-describe 1`] = `
+"module main
+  group group1
+    unit unit1 ✔
+"
+`;
+
+exports[`cases invalid group value type 1`] = `
+"main.test1: should have object value at line 2 col 3
+"
+`;
+
+exports[`cases invalid mixin value type 1`] = `
+"main.test1@mixin: req1 should be object, at line 3 col 29
+"
+`;
+
+exports[`cases invalid prop key 1`] = `
+"main: prop 'test a' should satify rules of variable name at line 2 col 3
+"
+`;
+
+exports[`cases invalid unit client type 1`] = `
+"main.test1@describe: should have string value at line 2 col 13
+"
+`;
+
+exports[`cases invalid unit mixin 1`] = `
+"main.test1@mixin: reqx is miss at line 3 col 29
+"
+`;
+
+exports[`cases invalid unit mixin type 1`] = `
+"main.test1@mixin: should have array value at line 3 col 29
+"
+`;
+
+exports[`cases invalid unit value type 1`] = `
+"main.test1: should have object value at line 2 col 3
+"
+`;
+
+exports[`cases merge mixin 1`] = `
+"module main
+  single mixin ✔
+  multiple mixin ✔
+  omit mixin if exist prop ✔
+  nest mixin ✔
+"
+`;

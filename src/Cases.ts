@@ -29,8 +29,8 @@ export default class Cases {
   }
 
   private addProp(paths: string[], prop: JsonaProperty) {
-    if (!/\w+/.test(prop.key)) {
-      throw new Error(`${paths.join(".")}: prop key '${prop.key}' is invalid${toPosString(prop.position)}`);
+    if (!/^\w+$/.test(prop.key)) {
+      throw new Error(`${paths.join(".")}: prop '${prop.key}' should satify rules of variable name${toPosString(prop.position)}`);
     }
     const nextPaths = paths.concat(prop.key);
     if (prop.value.type !== "Object") {
@@ -110,7 +110,7 @@ export default class Cases {
     } else if (Array.isArray(mixinAnno.value)) {
       mixinNames = mixinAnno.value;
     } else {
-      throw new Error(`${paths.join(".")}@mixin: should have array value${toPosString(mixinAnno.position)}`);
+      throw new Error(`${paths.join(".")}@mixin: should have string or array value${toPosString(mixinAnno.position)}`);
     }
     const result = [];
     for (const name of mixinNames) {
@@ -119,7 +119,7 @@ export default class Cases {
         throw new Error(`${paths.join(".")}@mixin: ${name} is miss${toPosString(mixinAnno.position)}`);
       }
       if (prop.value.type !== "Object") {
-        throw new Error(`${paths.join(".")}@mixin: ${name} should be object,${toPosString(mixinAnno.position)}`);
+        throw new Error(`${paths.join(".")}@mixin: ${name} should be object${toPosString(mixinAnno.position)}`);
       }
       result.push(cloneMixin(prop.value) as JsonaObject);
     }
@@ -134,7 +134,7 @@ export default class Cases {
     } else if (getType(clientAnno.value) === "object") {
       return { name: "default", ...clientAnno.value } as UnitClient;
     } else {
-      throw new Error(`${paths.join(".")}@describe: should have string value${toPosString(clientAnno.position)}`);
+      throw new Error(`${paths.join(".")}@client: should have string or object value${toPosString(clientAnno.position)}`);
     }
   }
 }

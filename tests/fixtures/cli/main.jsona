@@ -1,0 +1,35 @@
+{
+  @module("mod1")
+  test1: { @client("echo")
+    req: {
+      v1: 'a',
+    },
+    res: {
+      v1: 'a'
+    }
+  },
+  test2: { @client("echo")
+    req: {
+      v1: 'a',
+    },
+    res: {
+      v1: 'b'
+    }
+  },
+  test3: { @client("echo")
+    req: {
+      v1: 'a',
+    },
+    res: {
+      v1: 'b'
+    }
+  },
+  test4: { @client("echo")
+    req: {
+      v1: 'a',
+    },
+    res: {
+      v1: 'a'
+    }
+  }
+}

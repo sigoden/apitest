@@ -1,0 +1,6 @@
+{
+  "test a": { @client("echo")
+    req: {
+    }
+  }
+}

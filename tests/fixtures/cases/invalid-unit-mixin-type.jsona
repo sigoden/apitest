@@ -1,0 +1,7 @@
+{
+  @mixin("mixin1")
+  test1: { @client("echo") @mixin({})
+    req: {
+    } 
+  }
+}
