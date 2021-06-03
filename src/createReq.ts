@@ -23,7 +23,6 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
     try {
       return fake(value);
     } catch(err) {
-      console.log(err);
       throw new RunUnitError(paths, "mock", `bad mock '${value}'`);
     }
   } else {
