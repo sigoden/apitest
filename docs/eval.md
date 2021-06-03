@@ -10,7 +10,7 @@
 {
     test1: {
         req: {
-            v1: "rand.str(4)", @eval // generate 4 chars string
+            v1: "Date.now()", @eval // current timestamp
         }
     }
 }

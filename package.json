@@ -37,6 +37,7 @@
     "prepublish": "npm run -s clean && npm run -s build"
   },
   "dependencies": {
+    "@sigodenjs/fake": "^0.1.4",
     "@types/lodash": "^4.14.170",
     "axios": "^0.21.1",
     "chalk": "^4.1.1",

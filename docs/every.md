@@ -6,7 +6,7 @@
 {
     test1: { @client("echo")
         req: {
-            v1: 'rand.int(0, 3)', @eval
+            v1: 'integer(0,3)', @mock
         },
         res: {
             v1: [ @every

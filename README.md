@@ -22,18 +22,19 @@ Write test case in `httpbin.jsona`
         'content-type': 'application/json',
       },
       body: {
-        foo1: "bar1",
-        foo2: "Bar2",
+        username: "alice",
+        password: "@string(12)", @mock
+        email: "@email", @mock
       },
     },
     res: {
       status: 200,
       body: { @partial
-        "json": {
-          "foo1": "bar1",
-          "foo2": "bar2"
+        json: { @partial
+          username: "alice",
+          email: "", @type
         },
-        "url": "https://httpbin.org/post"
+        url: "https://httpbin.org/post"
       }
     }
   }
@@ -50,14 +51,14 @@ Apitest will print
 ```
 module main
   httpbin post (1.018) ✘
-  main.post.res.body.json.foo2: fail, bar2 ≠ Bar2
+  main.post.res.body.json.username: alce ≠ alice
 
 ```
 
-Apitest detect value at `main.post.res.body.json.foo2` expect `bar2` but got `Bar2`, it is not equal. 
+Apitest detect value at `main.post.res.body.json.username` expect `alce` but got `alice`, it is not equal. 
 so the test is failed, then apitest print error.
 
-After we fixed `bar2` to `Bar2`, rerun
+After we fixed `alce` to `alice`, rerun
 
 Apitest will print
 ```
@@ -67,7 +68,7 @@ module main
 
 Test passed.
 
-Test cases are writen in JSON(with less limitations) + Some annotations(e.g. `@describe`, `@partial`).
+Test cases are writen in JSON(with less limitations) + Some annotations(e.g. `@describe`, `@mock`, `@type`).
 
 ## Annotation
 
@@ -100,6 +101,7 @@ exists in test unit
 exists in `req` parts
 
 - [@eval](./docs/eval.md) use js to generate data
+- [@mock](./docs/mock.md) generate mock data
 
 ### Response
 

@@ -8,18 +8,17 @@
     }
   })
   @mixin("mixin")
-  @jslib("@rand")
   @module("auth")
   @module("article1")
   @module("article2")
   @module("profile")
   @module("tag")
 
-  variables: { @client("echo")
+  variables: { @describe("prepare variables") @client("echo")
     req: {
-      username: `"u" + rand.str(8, 3)`, @eval
-      email: 'req.username + "@gmail.com"', @eval
-      password: `"p" + rand.str(10)`, @eval
+      username: 'username(true)', @mock
+      email: 'email', @mock
+      password: 'string(12)', @mock
     }
   }
 }

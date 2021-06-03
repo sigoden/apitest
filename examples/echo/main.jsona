@@ -7,24 +7,19 @@
         'content-type': 'application/json',
       },
       body: {
-        foo1: "bar1",
-        foo2: "Bar2",
+        username: "alice",
+        password: "@string(12)", @mock
+        email: "@email", @mock
       },
     },
     res: {
       status: 200,
       body: { @partial
-        "args": {},
-        "data": "{\"foo1\":\"bar1\",\"foo2\":\"Bar2\"}",
-        "files": {},
-        "form": {},
-        "headers": {}, @type
-        "json": {
-          "foo1": "bar1",
-          "foo2": "Bar2"
+        json: { @partial
+          username: "alice",
+          email: "", @type
         },
-        "origin": "", @type
-        "url": "https://httpbin.org/post"
+        url: "https://httpbin.org/post"
       }
     }
   }

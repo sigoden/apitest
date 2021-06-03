@@ -1,6 +1,8 @@
 import { Unit } from "./Cases";
 import * as vm from "vm";
 import { JsonaString, JsonaValue } from "./types";
+import * as fake from "@sigodenjs/fake/lib/exec";
+import "@sigodenjs/fake/lib/cn";
 import * as _ from "lodash";
 import { VmContext } from "./Session";
 import { RunUnitError } from "./Reporter";
@@ -16,6 +18,14 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
     const value = evalValue(paths, ctx, (jsa as JsonaString).value);
     _.set(ctx.state, paths, value);
     return value;
+  } else if(existAnno(paths, jsa, "mock", "string")) {
+    const value = (jsa as JsonaString).value;
+    try {
+      return fake(value);
+    } catch(err) {
+      console.log(err);
+      throw new RunUnitError(paths, "mock", `bad mock '${value}'`);
+    }
   } else {
     if (jsa.type === "Array") {
       const output = [];

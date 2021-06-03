@@ -6,7 +6,7 @@
 {
     test1: { @client("echo")
         req: {
-            v1: 'rand.num(0, 1)', @eval
+            v1: 'float(0, 1)', @eval
         },
         res: {
             v1: [ @some
