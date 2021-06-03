@@ -70,6 +70,47 @@ Test passed.
 
 Test cases are writen in JSON(with less limitations) + Some annotations(e.g. `@describe`, `@mock`, `@type`).
 
+
+[Realworld](https://github.com/gothinkster/realworld) test cases is provided as example.
+
+```
+apitest examples/realworld
+```
+
+```
+module auth
+  Current User (1.071) ✔
+  Update User (0.506) ✔
+module article1
+  All Articles (0.705) ✔
+  Articles by Author (0.612) ✔
+  Articles Favorited by Username (0.498) ✔
+  Articles by Tag (1.088) ✔
+module article2
+  Create Article (0.671) ✔
+  Feed (0.527) ✔
+  All Articles with auth (1.203) ✔
+  Articles by Author with auth (0.602) ✔
+  Articles Favorited by Username with auth (0.552) ✔
+  Single Article by slug (0.523) ✔
+  Articles by Tag (0.891) ✔
+  Update Article (0.751) ✔
+  Favorite Article (0.571) ✔
+  Unfavorite Article (0.559) ✔
+  Create Comment for Article (0.675) ✔
+  All Comments for Article (0.525) ✔
+  All Comments for Article without auth (0.653) ✔
+  Delete Comment for Article (0.543) ✔
+  Delete Article (0.610) ✔
+module profile
+  Register Celeb (0.674) ✔
+  Profile (0.579) ✔
+  Follow Profile (0.596) ✔
+  Unfollow Profile (0.581) ✔
+module tag
+  All Tags (1.719) ✔
+```
+
 ## Annotation
 
 Apitest use jsona to write tests. Click [sigoden/jsona](https://github.com/sigoden/jsona) for more details.
