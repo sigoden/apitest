@@ -14,12 +14,12 @@ export default function compareRes(unit: Unit, ctx: VmContext, res: any) {
 function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) {
   if (existAnno(paths, v1, "eval", "string")) {
     ctx.state.$ = v2;
-    const pass = evalValue(paths, ctx, (v1 as JsonaString).value);
-    if (typeof pass !== "boolean") {
-      throw new RunUnitError(paths, "eval",  "eval result ≠ boolean");
+    const value = evalValue(paths, ctx, (v1 as JsonaString).value);
+    if (typeof value === "boolean") {
+      if (value) return;
     }
-    if (pass) return;
-    throw new RunUnitError(paths, "eval",  "eval result ≠ true");
+    if (_.isEqual(value, v2)) return;
+    throw new RunUnitError(paths, "eval",  "eval expr fail");
   } else if (existAnno(paths, v1, "some", "array")) {
     const v1_ = v1 as JsonaArray;
     let pass = false;

@@ -18,20 +18,26 @@
 
 ## res annotation
 
-@eval compare res value in `res` parts. If eval express returns true, the test is passed.
+@eval compare res value in `res` parts. 
+
+If eval express returns true, the test is passed.
+If eval result equal to actual res value, the test is also passed.
 
 ```js
 {
     test1: { @client('echo')
         req: {
-            v1: 3
+            v1: 3,
+            v2: 3
         },
         res: {
             v1: "$ === 3", @eval 
+            v2: '1 + 2', @eval
         }
     }
 }
 ```
+
 
 **$ repersent the actual value to compared with**
 
