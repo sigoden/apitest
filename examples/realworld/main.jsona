@@ -14,7 +14,7 @@
   @module("profile")
   @module("tag")
 
-  variables: { @describe("prepare variables") @client("echo")
+  variables: { @describe("prepare") @client("echo")
     req: {
       username: 'username(true)', @mock
       email: 'email', @mock
