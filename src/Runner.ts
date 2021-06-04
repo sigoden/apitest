@@ -75,7 +75,7 @@ export default class Runner {
         _.set(ctx2.state, "req", _.get(ctx2.state, unit.paths.concat(["req"])));
         await compareRes(unit, ctx2, res);
         await reporter.endUnit({ unit, state: ctx2.state, timeMs });
-        if (!options.ci && !options.only) await this.session.saveCursor(unit);
+        if (!options.only) await this.session.saveCursor(unit);
       } catch (fail) {
         anyFail = true;
         const ctx = await this.session.getCtx(unit);

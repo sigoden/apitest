@@ -47,8 +47,7 @@ describe("cases", () => {
     expect(stdout).toMatchSnapshot();
   });
   test("client", async () => {
-    const { stdout, code } = await spwanTest("cases/client.jsona", ["--reset"]);
+    const { code } = await spwanTest("cases/client.jsona", ["--reset"]);
     expect(code).toEqual(0);
-    expect(stdout).toMatchSnapshot();
   });
 });

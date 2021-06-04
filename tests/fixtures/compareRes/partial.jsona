@@ -1,0 +1,24 @@
+{
+  test1: { @client("echo") @describe("@partial for object")
+    req: {
+      v1: 2,
+      v2: "a",
+    },
+    res: { @partial
+      v1: 2,
+    }
+  },
+  test2: { @client("echo") @describe("@partial for array")
+    req: {
+      v1: [
+        1,
+        2
+      ]
+    },
+    res: {
+      v1: [ @partial
+        1
+      ]
+    }
+  }
+}

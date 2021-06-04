@@ -1,0 +1,17 @@
+{
+  test1: { @describe("@mock")
+    req: {
+      v1: "@username", @mock
+    }
+  },
+  test2: { @describe("@mock throw err") @client("echo")
+    req: {
+      v1: "xyz", @mock
+    }
+  },
+  test3: { @describe("@mock must be string value") @client("echo")
+    req: {
+      v1: {}, @mock
+    }
+  },
+}

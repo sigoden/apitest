@@ -23,7 +23,7 @@ export default class Loader {
     try {
       jsa = await loadJsonaFile(mainFile);
     } catch (err) {
-      throw new Error(`main: load '${mainFile}' fail`);
+      throw new Error(`main: load ${path.basename(mainFile)} throw ${err.message}`);
     }
     if (jsa.type !== "Object") {
       throw new Error("main: should have object value");
@@ -90,16 +90,17 @@ export default class Loader {
 
   private async loadMixin(anno: JsonaAnnotation) {
     if (this.mixin) {
-      throw new Error(`main@mixin: only need one${toPosString(anno.position)}`);
+      throw new Error(`main@mixin: do not support multiple mixins${toPosString(anno.position)}`);
     }
     if (typeof anno.value === "string") {
       const mixinName = anno.value;
-      const mixinFile = path.resolve(this.workDir, `${mixinName}.jsona`);
+      const mixinFileName = `${mixinName}.jsona`;
+      const mixinFile = path.resolve(this.workDir, mixinFileName);
       let jsa: JsonaValue;
       try {
         jsa = await loadJsonaFile(mixinFile);
       } catch (err) {
-        throw new Error(`main@mixin(${mixinName}): load '${mixinFile}' fail`);
+        throw new Error(`main@mixin(${mixinName}): load ${mixinFileName} throw ${err.message}`);
       }
       if (jsa.type !== "Object") {
         throw new Error(`main@mixin(${mixinName}): should have object value`);
@@ -113,19 +114,20 @@ export default class Loader {
   private async loadJslib(anno: JsonaAnnotation) {
     if (typeof anno.value === "string") {
       const libName = anno.value;
-      const  libFile = path.resolve(this.workDir, `${libName}.js`);
+      const libFileName = `${libName}.js`;
+      const  libFile = path.resolve(this.workDir, libFileName);
       let jslib;
       try {
         jslib = await fs.readFile(libFile, "utf8");
       } catch (err) {
-        throw new Error(`main@jslib(${libName}): load '${libFile}' fail${toPosString(anno.position)}`);
+        throw new Error(`main@jslib(${libName}): load ${libFileName} failed`);
       }
       try {
         const context = {};
         const script = new vm.Script(jslib);
         script.runInNewContext(context);
       } catch (err) {
-        throw new Error(`main@jslib(${libName}): syntax fail ${err.message}${toPosString(anno.position)}`);
+        throw new Error(`main@jslib(${libName}): load ${libFileName} throw ${err.message}${toPosString(anno.position)}`);
       }
       this.jslibs.push(jslib);
     } else {
@@ -136,12 +138,13 @@ export default class Loader {
   private async loadModule(anno: JsonaAnnotation) {
     if (typeof anno.value === "string") {
       const moduleName = anno.value;
-      const moduleFile = path.resolve(this.workDir, `${moduleName}.jsona`);
+      const moduleFileName = `${moduleName}.jsona`;
+      const moduleFile = path.resolve(this.workDir, moduleFileName);
       let jsa: JsonaValue;
       try {
         jsa = await loadJsonaFile(moduleFile);
       } catch (err) {
-        throw new Error(`main@module(${moduleName}): load '${moduleFile}' fail`);
+        throw new Error(`main@module(${moduleName}): load ${moduleFileName} throw ${err.message}`);
       }
       
       if (jsa.type !== "Object") {

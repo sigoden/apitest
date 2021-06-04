@@ -1,0 +1,38 @@
+{
+  test1: { @describe("complex expr") @client("echo")
+    req: {
+      v1: `let x = 3;
+        let y = 4;
+        x + y
+      `, @eval
+      v2: `let x = 3;
+        let y = 4;
+        x + y;
+      `, @eval
+      v3: `let x = 3;
+        let y = 4;
+        return x + y;
+      `, @eval
+      v4: `let x = 3;
+        let y = 4;
+        return x + y
+      `, @eval
+    },
+    res: {
+      v1: 7,
+      v2: 7,
+      v3: 7,
+      v4: 7,
+    }
+  },
+  test2: { @describe("eval throw err") @client("echo")
+    req: {
+      v1: `letx a`, @eval
+    }
+  },
+  test3: { @describe("eval must be string value") @client("echo")
+    req: {
+      v1: {}, @eval
+    }
+  },
+}

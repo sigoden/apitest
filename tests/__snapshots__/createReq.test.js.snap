@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createReq eval 1`] = `
+"[1mmodule main[22m
+[1m[22m[1m  complex expr[22m[32m ✔[39m
+[32m[39m[1m  eval throw err[22m[31m ✘[39m
+[31m[39m[1m  eval must be string value[22m[31m ✘[39m
+[31m[39m
+1. eval throw err(main.test2)
+[31m   main.test2.req.v1@eval: throw err, Unexpected identifier[39m
+[31m[39m
+[31m[39m2. eval must be string value(main.test3)
+[31m   main.test3.req.v1@eval: should have string value[39m
+[31m[39m
+[31m[39m"
+`;
+
+exports[`createReq general 1`] = `
+"[1mmodule main[22m
+[1m[22m[1m  req variables[22m[32m ✔[39m
+[32m[39m[1m  all kinds[22m[32m ✔[39m
+[32m[39m[1m  nest value[22m[32m ✔[39m
+[32m[39m
+"
+`;
+
+exports[`createReq mock 1`] = `
+"main.test1.req.url: is required at line 3 col 10
+"
+`;

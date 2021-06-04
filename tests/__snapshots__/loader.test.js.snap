@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loader invalid client 1`] = `
+"main@client: should have object value at line 2 col 4
+"
+`;
+
+exports[`loader invalid jslib 1`] = `
+"[main@jslib] should have string value at line 2 col 4
+"
+`;
+
+exports[`loader invalid jslib js 1`] = `
+"main@jslib(invalid-jslib-404): load invalid-jslib-404.js failed
+"
+`;
+
+exports[`loader invalid jslib js2 1`] = `
+"main@jslib(invalid-jslib): load invalid-jslib.js throw Unexpected end of input at line 2 col 4
+"
+`;
+
+exports[`loader invalid jsona 1`] = `
+"main: load invalid-jsona.jsona throw unexpected token 'eof' at line 3 col 4
+"
+`;
+
+exports[`loader invalid jsona value 1`] = `
+"main: should have object value
+"
+`;
+
+exports[`loader invalid mixin 1`] = `
+"main@mixin: should have string value at line 2 col 4
+"
+`;
+
+exports[`loader invalid mixin jsona 1`] = `
+"main@mixin(invalid-jsona): load invalid-jsona.jsona throw unexpected token 'eof' at line 3 col 4
+"
+`;
+
+exports[`loader invalid mixin multiple 1`] = `
+"main@mixin: do not support multiple mixins at line 3 col 4
+"
+`;
+
+exports[`loader invalid mixin value 1`] = `
+"main@mixin(invalid-jsona-value): should have object value
+"
+`;
+
+exports[`loader invalid module 1`] = `
+"main@module: should have string value at line 2 col 4
+"
+`;
+
+exports[`loader invalid module jsona 1`] = `
+"main@module(invalid-jsona): load invalid-jsona.jsona throw unexpected token 'eof' at line 3 col 4
+"
+`;
+
+exports[`loader invalid module value 1`] = `
+"main@module(invalid-jsona-value): should have object value
+"
+`;
+
+exports[`loader target file not found 1`] = `
+"not found main jsona file
+"
+`;
+
+exports[`loader target main not found 1`] = `
+"not found main jsona file
+"
+`;

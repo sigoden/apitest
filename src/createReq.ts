@@ -21,7 +21,9 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
   } else if(existAnno(paths, jsa, "mock", "string")) {
     const value = (jsa as JsonaString).value;
     try {
-      return fake(value);
+      const mockValue = fake(value);
+      _.set(ctx.state, paths, mockValue);
+      return mockValue;
     } catch(err) {
       throw new RunUnitError(paths, "mock", `bad mock '${value}'`);
     }
@@ -47,15 +49,17 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
 }
 
 export function evalValue(paths: string[], ctx: VmContext, code: string): any {
-  const expressions = code.split(";");
-  if (!_.trim(_.last(expressions)).startsWith("return")) {
-    expressions[expressions.length - 1] = "return " + expressions[expressions.length - 1];
+  if (!code) return null;
+  const expressions = _.trimEnd(code.trim(), ";").split(";").map(v => v.trim());
+  const lastIdx = expressions.length - 1;
+  if (!expressions[lastIdx].trim().startsWith("return")) {
+    expressions[lastIdx] = "return " + expressions[lastIdx];
   }
   const patchedCode = ctx.jslibs.join("\n") + expressions.join(";");
   const EXPORT_KEY = "__exports__";
   ctx.state[EXPORT_KEY] = null;
   try {
-    const wrapCode = `${EXPORT_KEY} = (function(){${patchedCode}}())`;
+    const wrapCode = `${EXPORT_KEY} = (function(){${patchedCode};}())`;
     const script = new vm.Script(wrapCode);
     script.runInNewContext(ctx.state);
     return ctx.state[EXPORT_KEY];

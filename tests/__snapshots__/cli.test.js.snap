@@ -1,70 +1,109 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cli start from last failed 1`] = `
-"module main
-  unit test2 ✘
-  main.test2.res.v1: b ≠ a
+exports[`cli start from first 1`] = `
+"[1mmodule main[22m
+[1m[22m[1m  unit test1[22m[32m ✔[39m
+[32m[39m[1m  unit test2[22m[31m ✘[39m
+[31m[39m[31m  main.test2.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
+`;
 
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+exports[`cli start from last failed 1`] = `
+"[1mmodule main[22m
+[1m[22m[1m  unit test2[22m[31m ✘[39m
+[31m[39m[31m  main.test2.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
 `;
 
 exports[`cli still start from last failed 1`] = `
-"module main
-  unit test2 ✘
-  main.test2.res.v1: b ≠ a
-
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+"[1mmodule main[22m
+[1m[22m[1m  unit test2[22m[31m ✘[39m
+[31m[39m[31m  main.test2.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
 `;
 
 exports[`cli target folder 1`] = `
-"module main
-  unit test1 ✔
-  unit test2 ✘
-  main.test2.res.v1: b ≠ a
-
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+"[1mmodule main[22m
+[1m[22m[1m  unit test1[22m[32m ✔[39m
+[32m[39m[1m  unit test2[22m[31m ✘[39m
+[31m[39m[31m  main.test2.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
 `;
 
 exports[`cli target folder with options --env 1`] = `
-"module main
-  unit test1 ✔
-module mod1
-  unit test1 ✘
-  mod1.test1.res.v1: b ≠ a
+"[1mmodule main[22m
+[1m[22m[1m  unit test1[22m[32m ✔[39m
+[32m[39m[1mmodule mod1[22m
+[1m[22m[1m  unit test1[22m[31m ✘[39m
+[31m[39m[31m  mod1.test1.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
+`;
 
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+exports[`cli with options --ci 1`] = `
+"[1mmodule main[22m
+[1m[22m[1m  unit test1[22m[32m ✔[39m
+[32m[39m[1m  unit test2[22m[31m ✘[39m
+[31m[39m[1m  unit test3[22m[31m ✘[39m
+[31m[39m[1m  unit test4[22m[32m ✔[39m
+[32m[39m[1mmodule mod1[22m
+[1m[22m[1m  unit test1[22m[31m ✘[39m
+[31m[39m[1m  unit test2[22m[32m ✔[39m
+[32m[39m
+1. unit test2(main.test2)
+[31m   main.test2.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m2. unit test3(main.test3)
+[31m   main.test3.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m3. unit test1(mod1.test1)
+[31m   mod1.test1.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m"
 `;
 
 exports[`cli with options --dry-run 1`] = `
@@ -80,58 +119,58 @@ module mod1
 `;
 
 exports[`cli with options --env 1`] = `
-"module main
-  unit test1 ✔
-module mod1
-  unit test1 ✘
-  mod1.test1.res.v1: b ≠ a
-
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+"[1mmodule main[22m
+[1m[22m[1m  unit test1[22m[32m ✔[39m
+[32m[39m[1mmodule mod1[22m
+[1m[22m[1m  unit test1[22m[31m ✘[39m
+[31m[39m[31m  mod1.test1.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
 `;
 
 exports[`cli with options --only 1`] = `
-"module main
-  unit test4 ✔
-"
+"[1mmodule main[22m
+[1m[22m[1m  unit test4[22m[32m ✔[39m
+[32m[39m"
 `;
 
 exports[`cli with options --only 2 1`] = `
-"module mod1
-  unit test1 ✘
-  mod1.test1.res.v1: b ≠ a
-
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+"[1mmodule mod1[22m
+[1m[22m[1m  unit test1[22m[31m ✘[39m
+[31m[39m[31m  mod1.test1.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
 `;
 
 exports[`cli with options --reset 1`] = `
-"module main
-  unit test1 ✔
-  unit test2 ✘
-  main.test2.res.v1: b ≠ a
-
-  {
-    \\"req\\": {
-      \\"v1\\": \\"a\\"
-    },
-    \\"res\\": {
-      \\"v1\\": \\"a\\"
-    }
-  }
-"
+"[1mmodule main[22m
+[1m[22m[1m  unit test1[22m[32m ✔[39m
+[32m[39m[1m  unit test2[22m[31m ✘[39m
+[31m[39m[31m  main.test2.res.v1: b ≠ a[39m
+[31m[39m
+[31m[39m[90m  {[39m
+[90m    \\"req\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    },[39m
+[90m    \\"res\\": {[39m
+[90m      \\"v1\\": \\"a\\"[39m
+[90m    }[39m
+[90m  }[39m
+[90m[39m"
 `;

@@ -1,0 +1,39 @@
+{
+  test1: { @describe("req variables") @client("echo")
+    req: {
+      v1: "integer", @mock
+      v2: "req.v1", @eval
+      v3: "req.v2", @eval
+    },
+    res: {
+      v1: "req.v2", @eval
+      v2: "req.v1", @eval
+      v3: "req.v3", @eval
+    }
+  },
+  test2: { @describe("all kinds") @client("echo")
+    req: {
+      v1: null,
+      v2: true,
+      v3: "abc",
+      v4: 12,
+      v5: 12.3,
+      v6: [1, 2],
+      v7: {a:3,b:4},
+    }
+  },
+  test3: { @describe("nest value") @client("echo")
+    req: {
+      v1: {
+        v2: {
+          v3: "integer", @mock
+        },
+        v4: [
+          {
+            v5: "float", @mock
+          }
+        ]
+      }
+    }
+  }
+}

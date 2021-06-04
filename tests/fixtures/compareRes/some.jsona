@@ -1,0 +1,33 @@
+{
+  test1: { @describe("@some") @client("echo") 
+    req: {
+      v1: "integer(1, 10)", @mock
+    },
+    res: {
+      v1: [ @some
+        "$ > -1", @eval
+        "$ > 10", @eval
+      ]
+    }
+  },
+  test2: { @describe("@some throw") @client("echo")
+    req: {
+      v1: "integer(1, 10)", @mock
+    },
+    res: {
+      v1: [ @some
+        "$ > 10", @eval
+        "$ > 20", @eval
+      ]
+    }
+  },
+  test3: { @describe("@some must be array value") @client("echo")
+    req: {
+      v1: "integer(1, 10)", @mock
+    },
+    res: {
+      v1: { @some
+      }
+    }
+  },
+}

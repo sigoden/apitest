@@ -5,7 +5,8 @@
   },
   "ignorePatterns": [
     "dist/",
-    "node_modules/"
+    "node_modules/",
+    "tests/fixtures/loader/invalid-jslib.js"
   ],
   "extends": [
     "plugin:@typescript-eslint/recommended"

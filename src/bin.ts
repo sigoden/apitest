@@ -44,9 +44,15 @@ async function main(argv) {
       runOptions = {
         only: argv.only,
       };
+    } else if (argv.ci) {
+      runOptions = {
+        ci: true,
+        reset: true, 
+      };
     } else {
       runOptions = {
-        ci: !!argv.ci,
+        ci: false,
+        dryRun: false,
         reset: argv.reset, 
       };
     }

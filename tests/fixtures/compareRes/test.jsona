@@ -1,0 +1,60 @@
+{
+  test1: { @client("echo") @describe("value not equal")
+    req: {
+      v1: 3
+    },
+    res: {
+      v1: 2
+    }
+  },
+  test2: { @client("echo") @describe("nest value not equal")
+    req: {
+      v1: {
+        v2: {
+          v3: 'a'
+        }
+      }
+    },
+    res: {
+      v1: {
+        v2: {
+          v3: 'b'
+        }
+      }
+    }
+  },
+  test3: { @client("echo") @describe("value type not equal")
+    req: {
+      v1: 3
+    },
+    res: {
+      v1: "3"
+    }
+  },
+  test4: { @client("echo") @describe("object prop length not equal")
+    req: {
+      v1: {
+        a: 3,
+        b: 4,
+      }
+    },
+    res: {
+      v1: {
+        b: 4,
+      }
+    }
+  },
+  test5: { @client("echo") @describe("array elem length not equal")
+    req: {
+      v1: [
+        3,
+        4
+      ]
+    },
+    res: {
+      v1: [
+        4,
+      ]
+    }
+  }
+}

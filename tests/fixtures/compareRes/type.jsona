@@ -1,0 +1,50 @@
+{
+  test1: { @describe("@type") @client("echo")
+    req: {
+      v1: null,
+      v2: true,
+      v3: "abc",
+      v4: 12,
+      v5: 12.3,
+      v6: [1, 2],
+      v7: {a:3,b:4},
+    },
+    res: {
+      v1: null, @type
+      v2: false, @type
+      v3: "", @type
+      v4: 0, @type
+      v5: 0.0, @type
+      v6: [], @type
+      v7: {}, @type
+    }
+  },
+  test2: { @describe("@type null") @client("echo")
+    req: {
+      v1: null,
+      v2: null,
+      v3: null,
+      v4: null,
+      v5: null,
+      v6: null,
+      v7: null,
+    },
+    res: {
+      v1: null, @type
+      v2: false, @type
+      v3: "", @type
+      v4: 0, @type
+      v5: 0.0, @type
+      v6: [], @type
+      v7: {}, @type
+    }
+  },
+  test3: { @describe("@type throw") @client("echo")
+    req: {
+      v1: 0.8,
+    },
+    res: {
+      v1: 1, @type
+    }
+  }
+}
