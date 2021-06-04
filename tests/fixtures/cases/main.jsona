@@ -1,0 +1,35 @@
+{
+  @client({
+    name: "echo1",
+    kind: "echo",
+  })
+  @client({
+    name: "client1",
+    kind: "echo"
+  })
+  test1: { @client("client1") @describe("client with string")
+    req: {
+    },
+    res: {
+    }
+  },
+  test2: { @client({name: "client1"}) @describe("client with object")
+    req: {
+    }
+  },
+  test3: { @client({options:{timeout: 60000}}) @describe("custom client options")
+    req: {
+      url: "https://httpbin.org/get",
+      query: {
+        a: 3
+      }
+    }
+  },
+  group1: { @group
+    unit1: { @client("echo1")
+      req: {
+        v1: "a"
+      }
+    }
+  }
+}

@@ -86,9 +86,8 @@ describe("http", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("test", async () => {
-    const { stdout, code } = await spwanTest("http/test.jsona", ["--reset"]);
+  test("main", async () => {
+    const { code } = await spwanTest("http", ["--reset"]);
     expect(code).toEqual(0);
-    expect(stdout).toMatchSnapshot();
   }, 60000);
 });

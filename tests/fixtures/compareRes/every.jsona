@@ -1,5 +1,6 @@
 {
-  test1: { @describe("@every") @client("echo") 
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@every") 
     req: {
       v1: "integer(1, 10)", @mock
     },
@@ -10,7 +11,7 @@
       ]
     }
   },
-  test2: { @describe("@every throw") @client("echo")
+  test2: { @describe("fail# @every")
     req: {
       v1: "integer(1, 10)", @mock
     },
@@ -22,7 +23,7 @@
       ]
     }
   },
-  test3: { @describe("@every must be array value") @client("echo")
+  test3: { @describe("fail# @every must be array value")
     req: {
       v1: "integer(1, 10)", @mock
     },

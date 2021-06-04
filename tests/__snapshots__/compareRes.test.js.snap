@@ -1,48 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`compareRes data 1`] = `
+"module main
+  fail# value not equal ✘
+  fail# nest value not equal ✘
+  fail# value type not equal ✘
+  fail# object prop length not equal ✘
+  fail# array elem length not equal ✘
+
+1. fail# value not equal(main.test1)
+   main.test1.res.v1: 2 ≠ 3
+
+2. fail# nest value not equal(main.test2)
+   main.test2.res.v1.v2.v3: b ≠ a
+
+3. fail# value type not equal(main.test3)
+   main.test3.res.v1: type integer ≠ type string
+
+4. fail# object prop length not equal(main.test4)
+   main.test4.res.v1: keys length 1 ≠ 2
+
+5. fail# array elem length not equal(main.test5)
+   main.test5.res.v1: elements length 1 ≠ 2
+
+"
+`;
+
 exports[`compareRes eval 1`] = `
-"main.test1.req: is required at line 2 col 10
+"module main
+  @eval return true passes test ✔
+  fail# @eval return false fails test ✘
+  @eval return value equal ✔
+
+1. fail# @eval return false fails test(main.test2)
+   main.test2.res.v1@eval: eval expr fail
+
 "
 `;
 
 exports[`compareRes every 1`] = `
 "module main
   @every ✔
-  @every throw ✘
-  @every must be array value ✘
+  fail# @every ✘
+  fail# @every must be array value ✘
 
-1. @every throw(main.test2)
+1. fail# @every(main.test2)
    main.test2.res.v1@every: some test fail
      main.test2.res.v1.0@eval: eval expr fail
 
-2. @every must be array value(main.test3)
+2. fail# @every must be array value(main.test3)
    main.test3.res.v1@every: should have array value
-
-"
-`;
-
-exports[`compareRes general 1`] = `
-"module main
-  value not equal ✘
-  nest value not equal ✘
-  value type not equal ✘
-  object prop length not equal ✘
-  array elem length not equal ✘
-
-1. value not equal(main.test1)
-   main.test1.res.v1: 2 ≠ 3
-
-2. nest value not equal(main.test2)
-   main.test2.res.v1.v2.v3: b ≠ a
-
-3. value type not equal(main.test3)
-   main.test3.res.v1: type integer ≠ type string
-
-4. object prop length not equal(main.test4)
-   main.test4.res.v1: keys length 1 ≠ 2
-
-5. array elem length not equal(main.test5)
-   main.test5.res.v1: elements length 1 ≠ 2
 
 "
 `;
@@ -58,15 +65,15 @@ exports[`compareRes partial 1`] = `
 exports[`compareRes some 1`] = `
 "module main
   @some ✔
-  @some throw ✘
-  @some must be array value ✘
+  fail# @some ✘
+  fail# @some must be array value ✘
 
-1. @some throw(main.test2)
+1. fail# @some(main.test2)
    main.test2.res.v1@some: no test pass
      main.test2.res.v1.0@eval: eval expr fail
      main.test2.res.v1.1@eval: eval expr fail
 
-2. @some must be array value(main.test3)
+2. fail# @some must be array value(main.test3)
    main.test3.res.v1@some: should have array value
 
 "
@@ -76,9 +83,9 @@ exports[`compareRes type 1`] = `
 "module main
   @type ✔
   @type null ✔
-  @type throw ✘
+  fail# @type ✘
 
-1. @type throw(main.test3)
+1. fail# @type(main.test3)
    main.test3.res.v1@type: type float ≠ type integer
 
 "

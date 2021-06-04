@@ -1,5 +1,27 @@
 {
-  test1: {
-
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@eval return true passes test")
+    req: {
+      v1: {a:3}
+    },
+    res: {
+      v1: "true", @eval
+    }
+  },
+  test2: { @describe("fail# @eval return false fails test")
+    req: {
+      v1: false
+    },
+    res: {
+      v1: "false", @eval
+    }
+  },
+  test3: { @describe("@eval return value equal")
+    req: {
+      v1: 3,
+    },
+    res: {
+      v1: "1 + 2", @eval
+    }
   }
 }

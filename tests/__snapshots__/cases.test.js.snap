@@ -1,18 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cases default-describe 1`] = `
-"module main
-  group group1
-    unit unit1 ✔
-"
-`;
-
 exports[`cases invalid group value type 1`] = `
-"main.test1: should have object value at line 2 col 3
+"main.group1: should have object value at line 2 col 3
 "
 `;
 
-exports[`cases invalid mixin value type 1`] = `
+exports[`cases invalid mixin type 1`] = `
 "main.test1@mixin: req1 should be object at line 3 col 29
 "
 `;

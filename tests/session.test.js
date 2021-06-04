@@ -1,7 +1,7 @@
 const { spwanTest } = require("./utils");
 
 describe("session", () => {
-  test("session", async () => {
+  test("main", async () => {
     const { stdout, code } = await spwanTest("session", ["--reset"], {
       "FOO": "bar",
     });

@@ -1,5 +1,5 @@
 {
-  test1: { @describe("defaut method is req")
+  test1: { @describe("default method get")
     req: {
       url: "https://httpbin.org/get",
     },
@@ -10,7 +10,7 @@
       }
     }
   },
-  test2: { @describe("params prop value can be boolean")
+  test2: { @describe("params prop value dont have to be string")
     req: {
       url: "https://httpbin.org/anything/{key}",
       params: {

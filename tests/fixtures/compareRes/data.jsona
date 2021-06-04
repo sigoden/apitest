@@ -1,5 +1,6 @@
 {
-  test1: { @client("echo") @describe("value not equal")
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("fail# value not equal")
     req: {
       v1: 3
     },
@@ -7,7 +8,7 @@
       v1: 2
     }
   },
-  test2: { @client("echo") @describe("nest value not equal")
+  test2: { @describe("fail# nest value not equal")
     req: {
       v1: {
         v2: {
@@ -23,7 +24,7 @@
       }
     }
   },
-  test3: { @client("echo") @describe("value type not equal")
+  test3: { @describe("fail# value type not equal")
     req: {
       v1: 3
     },
@@ -31,7 +32,7 @@
       v1: "3"
     }
   },
-  test4: { @client("echo") @describe("object prop length not equal")
+  test4: { @describe("fail# object prop length not equal")
     req: {
       v1: {
         a: 3,
@@ -44,7 +45,7 @@
       }
     }
   },
-  test5: { @client("echo") @describe("array elem length not equal")
+  test5: { @describe("fail# array elem length not equal")
     req: {
       v1: [
         3,

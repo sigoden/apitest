@@ -2,20 +2,20 @@
 
 exports[`createReq eval 1`] = `
 "module main
-  complex expr ✔
-  eval throw err ✘
-  eval must be string value ✘
+  @eval complex expr ✔
+  fail# @eval syntax error ✘
+  fail# @eval must be string value ✘
 
-1. eval throw err(main.test2)
+1. fail# @eval syntax error(main.test2)
    main.test2.req.v1@eval: throw err, Unexpected identifier
 
-2. eval must be string value(main.test3)
+2. fail# @eval must be string value(main.test3)
    main.test3.req.v1@eval: should have string value
 
 "
 `;
 
-exports[`createReq general 1`] = `
+exports[`createReq main 1`] = `
 "module main
   req variables ✔
   all kinds ✔
@@ -25,6 +25,16 @@ exports[`createReq general 1`] = `
 `;
 
 exports[`createReq mock 1`] = `
-"main.test1.req.url: is required at line 3 col 10
+"module main
+  @mock ✔
+  fail# @mock ✘
+  fail# @mock must be string value ✘
+
+1. fail# @mock(main.test2)
+   main.test2.req.v1@mock: bad mock 'xyz'
+
+2. fail# @mock must be string value(main.test3)
+   main.test3.req.v1@mock: should have string value
+
 "
 `;

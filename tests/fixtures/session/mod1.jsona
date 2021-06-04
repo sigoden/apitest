@@ -1,11 +1,11 @@
 {
-  test1: { @client("echo")
+  test1: {
     req: {
       v1: "a"
     }
   },
   group1: { @group
-    test1: { @client("echo")
+    test1: {
       req: {
         v1: [
           {

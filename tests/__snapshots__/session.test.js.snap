@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`session session 1`] = `
+exports[`session main 1`] = `
 "module mod1
   unit test1 ✔
   group group1

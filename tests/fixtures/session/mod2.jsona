@@ -1,21 +1,21 @@
 {
-  test1: { @client("echo")
+  test1: {
     req: {
       v1: "a"
     }
   },
   group1: { @group
-    test1: { @client("echo")
+    test1: {
       req: {
         v1: "b"
       }
     },
-    test2: { @client("echo")
+    test2: {
       req: {
         v1: "c"
       }
     },
-    test3: { @client("echo") @describe("access variables")
+    test3: { @describe("access variables")
       req: {
         v1: "mod1.test1.req.v1", @eval
         v2: "mod1.group1.test1.req.v1[1].v2", @eval
@@ -39,14 +39,14 @@
     }
   },
   mod2: { @group
-    test1: { @client("echo") @describe("no override parent")
+    test1: { @describe("no override parent")
       req: {
         v1: "mod2.group1.test2.req.v1", @eval
       },
     }
   },
   env1: { @group
-    test1: { @client("echo")  @describe("env variables")
+    test1: {  @describe("env variables")
       req: {
         v1: "env.FOO", @eval
       },

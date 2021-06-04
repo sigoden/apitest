@@ -1,5 +1,6 @@
 {
-  test1: { @client("echo") @describe("@partial for object")
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@partial for object")
     req: {
       v1: 2,
       v2: "a",
@@ -8,7 +9,7 @@
       v1: 2,
     }
   },
-  test2: { @client("echo") @describe("@partial for array")
+  test2: { @describe("@partial for array")
     req: {
       v1: [
         1,

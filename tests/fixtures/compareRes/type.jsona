@@ -1,5 +1,6 @@
 {
-  test1: { @describe("@type") @client("echo")
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@type")
     req: {
       v1: null,
       v2: true,
@@ -19,7 +20,7 @@
       v7: {}, @type
     }
   },
-  test2: { @describe("@type null") @client("echo")
+  test2: { @describe("@type null")
     req: {
       v1: null,
       v2: null,
@@ -39,7 +40,7 @@
       v7: {}, @type
     }
   },
-  test3: { @describe("@type throw") @client("echo")
+  test3: { @describe("fail# @type")
     req: {
       v1: 0.8,
     },

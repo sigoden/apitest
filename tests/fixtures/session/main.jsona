@@ -1,4 +1,5 @@
 {
+  @client({name:"default",kind:"echo"})
   @module("mod1")
   @module("mod2")
 }

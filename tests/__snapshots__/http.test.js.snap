@@ -84,11 +84,3 @@ exports[`http invalid url type 1`] = `
 "main.test1.req.url: should be string value at line 4 col 7
 "
 `;
-
-exports[`http test 1`] = `
-"module main
-  defaut method is req (1.489) ✔
-  params prop value can be boolean (2.662) ✔
-  test all (1.662) ✔
-"
-`;

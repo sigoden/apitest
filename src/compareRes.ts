@@ -17,6 +17,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     const value = evalValue(paths, ctx, (v1 as JsonaString).value);
     if (typeof value === "boolean") {
       if (value) return;
+      throw new RunUnitError(paths, "eval",  "eval expr fail");
     }
     if (_.isEqual(value, v2)) return;
     throw new RunUnitError(paths, "eval",  "eval expr fail");

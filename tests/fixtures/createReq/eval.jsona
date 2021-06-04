@@ -1,5 +1,6 @@
 {
-  test1: { @describe("complex expr") @client("echo")
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@eval complex expr")
     req: {
       v1: `let x = 3;
         let y = 4;
@@ -25,12 +26,12 @@
       v4: 7,
     }
   },
-  test2: { @describe("eval throw err") @client("echo")
+  test2: { @describe("fail# @eval syntax error")
     req: {
       v1: `letx a`, @eval
     }
   },
-  test3: { @describe("eval must be string value") @client("echo")
+  test3: { @describe("fail# @eval must be string value")
     req: {
       v1: {}, @eval
     }

@@ -1,8 +1,8 @@
 const { spwanTest } = require("./utils");
 
 describe("compareRes", () => {
-  test("general", async () => {
-    const { stdout, code } = await spwanTest("compareRes/test.jsona", ["--ci"]);
+  test("data", async () => {
+    const { stdout, code } = await spwanTest("compareRes/data.jsona", ["--ci"]);
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
@@ -11,14 +11,14 @@ describe("compareRes", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("type", async () => {
-    const { stdout, code } = await spwanTest("compareRes/type.jsona", ["--ci"]);
-    expect(code).toEqual(1);
-    expect(stdout).toMatchSnapshot();
-  });
   test("every", async () => {
     const { stdout, code } = await spwanTest("compareRes/every.jsona", ["--ci"]);
     expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("partial", async () => {
+    const { stdout, code } = await spwanTest("compareRes/partial.jsona", ["--ci"]);
+    expect(code).toEqual(0);
     expect(stdout).toMatchSnapshot();
   });
   test("some", async () => {
@@ -26,9 +26,9 @@ describe("compareRes", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("partial", async () => {
-    const { stdout, code } = await spwanTest("compareRes/partial.jsona", ["--ci"]);
-    expect(code).toEqual(0);
+  test("type", async () => {
+    const { stdout, code } = await spwanTest("compareRes/type.jsona", ["--ci"]);
+    expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
 });

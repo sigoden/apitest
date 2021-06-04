@@ -1,15 +1,16 @@
 {
+  @client({name:"default",kind:"echo"})
   test1: { @describe("@mock")
     req: {
       v1: "@username", @mock
     }
   },
-  test2: { @describe("@mock throw err") @client("echo")
+  test2: { @describe("fail# @mock")
     req: {
       v1: "xyz", @mock
     }
   },
-  test3: { @describe("@mock must be string value") @client("echo")
+  test3: { @describe("fail# @mock must be string value")
     req: {
       v1: {}, @mock
     }
