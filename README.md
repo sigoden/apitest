@@ -9,7 +9,7 @@ Apitest is declarative api testing tool with JSON-like DSL for easy testing.
 Read this in other languages: [中文](./README.zh-CN.md)
 
 - [Apitest](#apitest)
-  - [Introduction](#introduction)
+  - [Examples](#examples)
   - [Installation](#installation)
   - [Features](#features)
     - [JSON-like DSL](#json-like-dsl)
@@ -32,11 +32,15 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [Normal Mode](#normal-mode)
     - [CI Mode](#ci-mode)
 
-## Introduction
+## Examples
 
+Execute in the terminal
 ```
 apitest examples/realworld
+```
 
+The command output is as follows
+```
 module main
   prepare ✔
 module auth
