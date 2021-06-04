@@ -1,6 +1,6 @@
 # Apitest
 
-Apitest is a declartive api testing tool.
+Apitest is a declarative api testing tool.
 
 Read this in other languages: [中文](./README.zh-CN.md)
 
