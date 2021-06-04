@@ -1,0 +1,10 @@
+{
+  test1: {
+    req: {
+      url: "https://httpbin.org/get",
+    },
+    res: {
+      status: '200',
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  test1: {
+    req: {
+      url: "https://httpbin.org/get",
+    },
+    res: {
+      header: {
+        key: {}
+      },
+    }
+  },
+}

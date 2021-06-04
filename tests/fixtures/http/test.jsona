@@ -1,0 +1,55 @@
+{
+  test1: { @describe("defaut method is req")
+    req: {
+      url: "https://httpbin.org/get",
+    },
+    res: {
+      status: 200,
+      body: { @partial
+
+      }
+    }
+  },
+  test2: { @describe("params prop value can be boolean")
+    req: {
+      url: "https://httpbin.org/anything/{key}",
+      params: {
+        key: true,
+      }
+    },
+    res: {
+      status: 200,
+      body: { @partial
+      }
+    }
+  },
+  test3: { @describe("test all")
+    req: {
+      url: "https://httpbin.org/anything/{id}",
+      method: "post", 
+      query: { 
+        foo: "v1",
+        bar: "v2",
+      },
+      params: {
+        id: 33,
+      },
+      header: {
+        'x-key': 'v1'
+      },
+      body: {
+        a: 3,
+      }
+    },
+    res: {
+      status: 200,
+      header: { @partial
+      },
+      body: { @partial
+        json: {
+          a: 3,
+        }
+      }
+    }
+  }
+}

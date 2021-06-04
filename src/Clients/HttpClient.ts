@@ -114,7 +114,7 @@ export default class HttpClient implements Client {
       }
     } else {
       if (urlParamKeys.length > 0) {
-        throw new Error(`${[paths]} must have url params ${urlParamKeys.join(",")}`);
+        throw new Error(`${[paths]} must have url params ${urlParamKeys.join(".")}`);
       }
     }
 
@@ -125,7 +125,7 @@ export default class HttpClient implements Client {
       }
       for (const prop of headerProp.value.properties) {
         if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${paths.concat(["params"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
+          throw new Error(`${paths.concat(["header"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
         }
       }
     }
@@ -133,6 +133,11 @@ export default class HttpClient implements Client {
     if (queryProp) {
       if (queryProp.value.type !== "Object") {
         throw new Error(`${paths.concat(["query"]).join(".")}: should be object value${toPosString(queryProp.position)}`);
+      }
+      for (const prop of queryProp.value.properties) {
+        if (prop.value.type === "Object" || prop.value.type === "Array") {
+          throw new Error(`${paths.concat(["query"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
+        }
       }
     }
   }
@@ -149,7 +154,7 @@ export default class HttpClient implements Client {
       }
       for (const prop of headerProp.value.properties) {
         if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${paths.concat(["params"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
+          throw new Error(`${paths.concat(["query"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
         }
       }
     }

@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`http invaid params mismatch path 1`] = `
+"main.test1.req.params: should match url params at line 5 col 7
+"
+`;
+
+exports[`http invaid params prop type 1`] = `
+"main.test1.req.params: should be scalar value at line 6 col 9
+"
+`;
+
+exports[`http invaid params type 1`] = `
+"main.test1.req.params: should be object value at line 5 col 7
+"
+`;
+
+exports[`http invalid header prop type 1`] = `
+"main.test1.req.header: should be scalar value at line 6 col 9
+"
+`;
+
+exports[`http invalid header type 1`] = `
+"main.test1.req.header: should be object value at line 5 col 7
+"
+`;
+
+exports[`http invalid method type 1`] = `
+"main.test1.req.method: should be string value at line 5 col 7
+"
+`;
+
+exports[`http invalid method value 1`] = `
+"main.test1.req.method: is not valid http method at line 5 col 7
+"
+`;
+
+exports[`http invalid params miss 1`] = `
+"main,test1,req must have url params id
+"
+`;
+
+exports[`http invalid query prop type 1`] = `
+"main.test1.req.query: should be scalar value at line 6 col 9
+"
+`;
+
+exports[`http invalid query type 1`] = `
+"main.test1.req.query: should be object value at line 5 col 7
+"
+`;
+
+exports[`http invalid req value 1`] = `
+"main.test1.req: should be object value at line 3 col 10
+"
+`;
+
+exports[`http invalid res header prop type 1`] = `
+"main.test1.res.query: should be scalar value at line 8 col 9
+"
+`;
+
+exports[`http invalid res header type 1`] = `
+"main.test1.res.header: should be object value at line 7 col 7
+"
+`;
+
+exports[`http invalid res status type 1`] = `
+"main.test1.res.status: should be integer value at line 7 col 7
+"
+`;
+
+exports[`http invalid res type 1`] = `
+"main.test1.res should be object value at line 6 col 10
+"
+`;
+
+exports[`http invalid url miss 1`] = `
+"main.test1.req.url: is required at line 3 col 10
+"
+`;
+
+exports[`http invalid url type 1`] = `
+"main.test1.req.url: should be string value at line 4 col 7
+"
+`;
+
+exports[`http test 1`] = `
+"module main
+  defaut method is req (1.489) ✔
+  params prop value can be boolean (2.662) ✔
+  test all (1.662) ✔
+"
+`;
