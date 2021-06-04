@@ -1,5 +1,9 @@
 # Apitest
 
+[![build](https://github.com/sigoden/apitest/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/sigoden/apitest/actions/workflows/ci.yaml)
+[![release](https://img.shields.io/github/v/release/sigoden/apitest)](https://github.com/sigoden/apitest/releases)
+[![npm](https://img.shields.io/npm/v/@sigodenjs/apitest)](https://www.npmjs.com/package/@sigodenjs/apitest)
+
 Apitest is a declarative api testing tool.
 
 Read this in other languages: [中文](./README.zh-CN.md)
@@ -78,6 +82,8 @@ Apites will execute the test cases in sequence and print the test results.
 ## Installation
 
  Binaries are available in [releases](https://github.com/sigoden/apitest/releases). Make sure to put the path to the binary into your `PATH`.
+
+ If you use `node`, you can install it by running `npm install -g @sigodenjs/apitest`
 
 ## Features
 

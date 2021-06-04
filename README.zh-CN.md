@@ -1,5 +1,9 @@
 # Apitest
 
+[![build](https://github.com/sigoden/apitest/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/sigoden/apitest/actions/workflows/ci.yaml)
+[![release](https://img.shields.io/github/v/release/sigoden/apitest)](https://github.com/sigoden/apitest/releases)
+[![npm](https://img.shields.io/npm/v/@sigodenjs/apitest)](https://www.npmjs.com/package/@sigodenjs/apitest)
+
 Apitest 是一款接口自动化测试工具。
 
 其他语言版本: [English](./README.md)
@@ -84,6 +88,8 @@ Apitest 会依序执行测试用例并打印测试结果。
 推荐从[Github Releases](https://github.com/sigoden/apitest/releases)下载可执行文件。
 
 Apitest工具是单可执行文件，不需要安装，放到`PATH`路径下面就可以直接运行
+
+如果你使用 node，可以通过运行 `npm install -g @sigodenjs/apitest` 安装
 
 ## 特性
 
