@@ -10,7 +10,7 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
 
 - [Apitest](#apitest)
   - [安装](#安装)
-  - [开始](#开始)
+  - [开始使用](#开始使用)
   - [特性](#特性)
     - [类JSON的DSL编写用例](#类json的dsl编写用例)
     - [跨平台，跨编程语言](#跨平台跨编程语言)
@@ -40,7 +40,7 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
 Apitest工具是单可执行文件，不需要安装，放到`PATH`路径下面就可以直接运行
 
 如果你使用 node，可以通过运行 `npm install -g @sigodenjs/apitest` 安装
-## 开始
+## 开始使用
 
 编写测试文件 `httpbin.jsona`
 
@@ -94,8 +94,6 @@ apitest httpbin.jsona
 module main
   unit test1 (0.930) ✔
 ```
-
-这次测试通过了。
 
 ## 特性
 

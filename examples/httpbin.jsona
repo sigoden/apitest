@@ -1,0 +1,24 @@
+{
+   test1: {
+     req: {
+       url: "https://httpbin.org/post",
+       method: "post",
+       header: {
+         'content-type':'application/json',
+       },
+       body: {
+         v1: "bar1",
+         v2: "Bar2",
+       },
+     },
+     res: {
+       status: 200,
+       body: {@partial
+         json: {
+           v1: "bar1",
+           v2: "bar2"
+         }
+       }
+     }
+   }
+}

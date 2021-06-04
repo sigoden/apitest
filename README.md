@@ -10,7 +10,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
 
 - [Apitest](#apitest)
   - [Installation](#installation)
-  - [Quick Start](#quick-start)
+  - [Get Started](#get-started)
   - [Features](#features)
     - [JSON-like DSL](#json-like-dsl)
     - [Cross Platform, Programming Language Agnostic](#cross-platform-programming-language-agnostic)
@@ -38,7 +38,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
 
  If you use `node`, you can install it by running `npm install -g @sigodenjs/apitest`
 
-## Quick Start
+## Get Started
 
 Write test file `httpbin.jsona`
 
@@ -92,8 +92,6 @@ apitest httpbin.jsona
 module main
    unit test1 (0.930) ✔
 ```
-
-Test passed.
 
 ## Features
 
