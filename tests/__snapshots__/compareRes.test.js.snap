@@ -6,80 +6,80 @@ exports[`compareRes eval 1`] = `
 `;
 
 exports[`compareRes every 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  @every[22m[32m ✔[39m
-[32m[39m[1m  @every throw[22m[31m ✘[39m
-[31m[39m[1m  @every must be array value[22m[31m ✘[39m
-[31m[39m
+"module main
+  @every ✔
+  @every throw ✘
+  @every must be array value ✘
+
 1. @every throw(main.test2)
-[31m   main.test2.res.v1@every: some test fail[39m
-[31m     main.test2.res.v1.0@eval: eval expr fail[39m
-[31m[39m
-[31m[39m2. @every must be array value(main.test3)
-[31m   main.test3.res.v1@every: should have array value[39m
-[31m[39m
-[31m[39m"
+   main.test2.res.v1@every: some test fail
+     main.test2.res.v1.0@eval: eval expr fail
+
+2. @every must be array value(main.test3)
+   main.test3.res.v1@every: should have array value
+
+"
 `;
 
 exports[`compareRes general 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  value not equal[22m[31m ✘[39m
-[31m[39m[1m  nest value not equal[22m[31m ✘[39m
-[31m[39m[1m  value type not equal[22m[31m ✘[39m
-[31m[39m[1m  object prop length not equal[22m[31m ✘[39m
-[31m[39m[1m  array elem length not equal[22m[31m ✘[39m
-[31m[39m
+"module main
+  value not equal ✘
+  nest value not equal ✘
+  value type not equal ✘
+  object prop length not equal ✘
+  array elem length not equal ✘
+
 1. value not equal(main.test1)
-[31m   main.test1.res.v1: 2 ≠ 3[39m
-[31m[39m
-[31m[39m2. nest value not equal(main.test2)
-[31m   main.test2.res.v1.v2.v3: b ≠ a[39m
-[31m[39m
-[31m[39m3. value type not equal(main.test3)
-[31m   main.test3.res.v1: type integer ≠ type string[39m
-[31m[39m
-[31m[39m4. object prop length not equal(main.test4)
-[31m   main.test4.res.v1: keys length 1 ≠ 2[39m
-[31m[39m
-[31m[39m5. array elem length not equal(main.test5)
-[31m   main.test5.res.v1: elements length 1 ≠ 2[39m
-[31m[39m
-[31m[39m"
+   main.test1.res.v1: 2 ≠ 3
+
+2. nest value not equal(main.test2)
+   main.test2.res.v1.v2.v3: b ≠ a
+
+3. value type not equal(main.test3)
+   main.test3.res.v1: type integer ≠ type string
+
+4. object prop length not equal(main.test4)
+   main.test4.res.v1: keys length 1 ≠ 2
+
+5. array elem length not equal(main.test5)
+   main.test5.res.v1: elements length 1 ≠ 2
+
+"
 `;
 
 exports[`compareRes partial 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  @partial for object[22m[32m ✔[39m
-[32m[39m[1m  @partial for array[22m[32m ✔[39m
-[32m[39m
+"module main
+  @partial for object ✔
+  @partial for array ✔
+
 "
 `;
 
 exports[`compareRes some 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  @some[22m[32m ✔[39m
-[32m[39m[1m  @some throw[22m[31m ✘[39m
-[31m[39m[1m  @some must be array value[22m[31m ✘[39m
-[31m[39m
+"module main
+  @some ✔
+  @some throw ✘
+  @some must be array value ✘
+
 1. @some throw(main.test2)
-[31m   main.test2.res.v1@some: no test pass[39m
-[31m     main.test2.res.v1.0@eval: eval expr fail[39m
-[31m     main.test2.res.v1.1@eval: eval expr fail[39m
-[31m[39m
-[31m[39m2. @some must be array value(main.test3)
-[31m   main.test3.res.v1@some: should have array value[39m
-[31m[39m
-[31m[39m"
+   main.test2.res.v1@some: no test pass
+     main.test2.res.v1.0@eval: eval expr fail
+     main.test2.res.v1.1@eval: eval expr fail
+
+2. @some must be array value(main.test3)
+   main.test3.res.v1@some: should have array value
+
+"
 `;
 
 exports[`compareRes type 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  @type[22m[32m ✔[39m
-[32m[39m[1m  @type null[22m[32m ✔[39m
-[32m[39m[1m  @type throw[22m[31m ✘[39m
-[31m[39m
+"module main
+  @type ✔
+  @type null ✔
+  @type throw ✘
+
 1. @type throw(main.test3)
-[31m   main.test3.res.v1@type: type float ≠ type integer[39m
-[31m[39m
-[31m[39m"
+   main.test3.res.v1@type: type float ≠ type integer
+
+"
 `;

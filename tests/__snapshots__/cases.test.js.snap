@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cases default-describe 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  group group1[22m
-[1m[22m[1m    unit unit1[22m[32m ✔[39m
-[32m[39m"
+"module main
+  group group1
+    unit unit1 ✔
+"
 `;
 
 exports[`cases invalid group value type 1`] = `
@@ -43,10 +43,10 @@ exports[`cases invalid unit value type 1`] = `
 `;
 
 exports[`cases merge mixin 1`] = `
-"[1mmodule main[22m
-[1m[22m[1m  single mixin[22m[32m ✔[39m
-[32m[39m[1m  multiple mixin[22m[32m ✔[39m
-[32m[39m[1m  omit mixin if exist prop[22m[32m ✔[39m
-[32m[39m[1m  nest mixin[22m[32m ✔[39m
-[32m[39m"
+"module main
+  single mixin ✔
+  multiple mixin ✔
+  omit mixin if exist prop ✔
+  nest mixin ✔
+"
 `;

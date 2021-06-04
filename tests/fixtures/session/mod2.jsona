@@ -1,0 +1,58 @@
+{
+  test1: { @client("echo")
+    req: {
+      v1: "a"
+    }
+  },
+  group1: { @group
+    test1: { @client("echo")
+      req: {
+        v1: "b"
+      }
+    },
+    test2: { @client("echo")
+      req: {
+        v1: "c"
+      }
+    },
+    test3: { @client("echo") @describe("access variables")
+      req: {
+        v1: "mod1.test1.req.v1", @eval
+        v2: "mod1.group1.test1.req.v1[1].v2", @eval
+        v3: "mod2.test1.req.v1", @eval
+        v4: "mod2.group1.test2.req.v1", @eval
+        v5: "group1.test2.req.v1", @eval
+        v6: "test2.req.v1", @eval
+        v7: "req.v1", @eval
+        v8: "test1.req.v1", @eval
+      },
+      res: {
+        v1: "a",
+        v2: "b",
+        v3: "a",
+        v4: "c",
+        v5: "c",
+        v6: "c",
+        v7: "a",
+        v8: "a"
+      }
+    }
+  },
+  mod2: { @group
+    test1: { @client("echo") @describe("no override parent")
+      req: {
+        v1: "mod2.group1.test2.req.v1", @eval
+      },
+    }
+  },
+  env1: { @group
+    test1: { @client("echo")  @describe("env variables")
+      req: {
+        v1: "env.FOO", @eval
+      },
+      res: {
+        v1: "bar"
+      }
+    }
+  }
+}

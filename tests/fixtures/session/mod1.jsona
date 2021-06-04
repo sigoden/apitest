@@ -1,0 +1,21 @@
+{
+  test1: { @client("echo")
+    req: {
+      v1: "a"
+    }
+  },
+  group1: { @group
+    test1: { @client("echo")
+      req: {
+        v1: [
+          {
+            v1: "a"
+          },
+          {
+            v2: "b"
+          }
+        ]
+      }
+    }
+  }
+}
