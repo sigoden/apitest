@@ -4,7 +4,7 @@
 [![release](https://img.shields.io/github/v/release/sigoden/apitest)](https://github.com/sigoden/apitest/releases)
 [![npm](https://img.shields.io/npm/v/@sigodenjs/apitest)](https://www.npmjs.com/package/@sigodenjs/apitest)
 
-Apitest 是一款接口自动化测试工具。
+Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具。
 
 其他语言版本: [English](./README.md)
 
