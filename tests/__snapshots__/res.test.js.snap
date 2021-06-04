@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`compareRes data 1`] = `
+exports[`res data 1`] = `
 "module main
   fail# value not equal ✘
   fail# nest value not equal ✘
@@ -26,7 +26,7 @@ exports[`compareRes data 1`] = `
 "
 `;
 
-exports[`compareRes eval 1`] = `
+exports[`res eval 1`] = `
 "module main
   @eval return true passes test ✔
   fail# @eval return false fails test ✘
@@ -38,7 +38,7 @@ exports[`compareRes eval 1`] = `
 "
 `;
 
-exports[`compareRes every 1`] = `
+exports[`res every 1`] = `
 "module main
   @every ✔
   fail# @every ✘
@@ -54,7 +54,7 @@ exports[`compareRes every 1`] = `
 "
 `;
 
-exports[`compareRes partial 1`] = `
+exports[`res partial 1`] = `
 "module main
   @partial for object ✔
   @partial for array ✔
@@ -62,7 +62,7 @@ exports[`compareRes partial 1`] = `
 "
 `;
 
-exports[`compareRes some 1`] = `
+exports[`res some 1`] = `
 "module main
   @some ✔
   fail# @some ✘
@@ -79,7 +79,7 @@ exports[`compareRes some 1`] = `
 "
 `;
 
-exports[`compareRes type 1`] = `
+exports[`res type 1`] = `
 "module main
   @type ✔
   @type null ✔

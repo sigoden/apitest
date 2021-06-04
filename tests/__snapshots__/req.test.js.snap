@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createReq eval 1`] = `
+exports[`req eval 1`] = `
 "module main
   @eval complex expr ✔
   fail# @eval syntax error ✘
@@ -15,7 +15,7 @@ exports[`createReq eval 1`] = `
 "
 `;
 
-exports[`createReq main 1`] = `
+exports[`req main 1`] = `
 "module main
   req variables ✔
   all kinds ✔
@@ -24,7 +24,7 @@ exports[`createReq main 1`] = `
 "
 `;
 
-exports[`createReq mock 1`] = `
+exports[`req mock 1`] = `
 "module main
   @mock ✔
   fail# @mock ✘
