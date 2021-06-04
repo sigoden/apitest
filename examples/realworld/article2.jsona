@@ -106,8 +106,8 @@
       body: {
         comment: { @partial
           id: 0, @type
-          createdAt: "", @type
-          updatedAt: "", @type
+          createdAt: "isDate($)", @eval
+          updatedAt: "isDate($)", @eval
           author: {}, @type
         }
       }

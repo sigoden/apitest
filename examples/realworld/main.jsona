@@ -8,6 +8,7 @@
     }
   })
   @mixin("mixin")
+  @jslib("lib")
   @module("auth")
   @module("article1")
   @module("article2")

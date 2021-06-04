@@ -8,7 +8,11 @@ import { JsonaObject, JsonaValue } from "../types";
 export default class HttpClient implements Client {
   private options: any;
   public constructor(options: any) {
-    this.options = options;
+    if (_.isObject(options)) {
+      this.options = _.pick(options, ["baseURL", "timeout", "withCredentials"]);
+    } else {
+      this.options = options;
+    }
   }
   public get name() {
     return "http";

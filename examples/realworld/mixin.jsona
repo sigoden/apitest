@@ -141,8 +141,8 @@
               title: "", @type
               slug: "", @type
               body: "", @type
-              createdAt: "", @type
-              updatedAt: "", @type
+              createdAt: "isDate($)", @eval
+              updatedAt: "isDate($)", @eval
               description: "", @type
               tagList: [], @type
               author: {}, @type
@@ -163,8 +163,8 @@
           title: "", @type
           slug: "", @type
           body: "", @type
-          createdAt: "", @type
-          updatedAt: "", @type
+          createdAt: "isDate($)", @eval
+          updatedAt: "isDate($)", @eval
           description: "", @type
           tagList: [], @type
           author: {}, @type
@@ -181,8 +181,8 @@
         comments: [ @partial
           { @partial
             id: 0, @type
-            createdAt: "", @type
-            updatedAt: "", @type
+            createdAt: "isDate($)", @eval
+            updatedAt: "isDate($)", @eval
             author: {}, @type
           }
         ]

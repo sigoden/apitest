@@ -45,7 +45,7 @@
     res: {
       body: {
         profile: {
-          following: false,
+          following: true, // here throws err
         }
       }
     }
