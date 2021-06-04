@@ -9,8 +9,8 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
 其他语言版本: [English](./README.md)
 
 - [Apitest](#apitest)
-  - [示例](#示例)
   - [安装](#安装)
+  - [开始](#开始)
   - [特性](#特性)
     - [类JSON的DSL编写用例](#类json的dsl编写用例)
     - [跨平台，跨编程语言](#跨平台跨编程语言)
@@ -32,56 +32,6 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
     - [常规模式](#常规模式)
     - [CI模式](#ci模式)
  
-## 示例
-
-终端中执行
-```
-apitest examples/realworld
-```
-
-命令输出如下
-```
-module main
-  prepare ✔
-module auth
-  Register (0.869) ✔
-  Login (0.644) ✔
-  Current User (0.578) ✔
-  Update User (0.598) ✔
-module article1
-  All Articles (0.762) ✔
-  Articles by Author (0.507) ✔
-  Articles Favorited by Username (0.490) ✔
-  Articles by Tag (0.832) ✔
-module article2
-  Create Article (0.625) ✔
-  Feed (0.591) ✔
-  All Articles with auth (1.193) ✔
-  Articles by Author with auth (0.573) ✔
-  Articles Favorited by Username with auth (0.569) ✔
-  Single Article by slug (0.623) ✔
-  Articles by Tag (0.879) ✔
-  Update Article (0.739) ✔
-  Favorite Article (0.619) ✔
-  Unfavorite Article (0.617) ✔
-  Create Comment for Article (0.618) ✔
-  All Comments for Article (0.594) ✔
-  All Comments for Article without auth (0.616) ✔
-  Delete Comment for Article (0.602) ✔
-  Delete Article (0.635) ✔
-module profile
-  Register Celeb (0.659) ✔
-  Profile (0.552) ✔
-  Follow Profile (0.606) ✔
-  Unfollow Profile (0.526) ✘
-module tag
-  All Tags (1.561) ✔
-
-1. Unfollow Profile(profile.unfollowProfile)
-   profile.unfollowProfile.res.body.profile.following: true ≠ false
-```
-
-Apitest 会依序执行测试用例并打印测试结果。
 
 ## 安装
 
@@ -90,6 +40,62 @@ Apitest 会依序执行测试用例并打印测试结果。
 Apitest工具是单可执行文件，不需要安装，放到`PATH`路径下面就可以直接运行
 
 如果你使用 node，可以通过运行 `npm install -g @sigodenjs/apitest` 安装
+## 开始
+
+编写测试文件 `httpbin.jsona`
+
+```
+{
+  test1: {
+    req: {
+      url: "https://httpbin.org/post",
+      method: "post",
+      header: {
+        'content-type': 'application/json',
+      },
+      body: {
+        v1: "bar1",
+        v2: "Bar2",
+      },
+    },
+    res: {
+      status: 200,
+      body: { @partial
+        json: {
+          v1: "bar1",
+          v2: "bar2"
+        }
+      }
+    }
+  }
+}
+
+```
+
+运行测试
+
+```
+apitest httpbin.jsona
+
+module main
+  unit test1 (0.944) ✘
+  main.test1.res.body.json.v2: bar2 ≠ Bar2
+
+  ...
+```
+
+用例测试失败，从Apitest打印的错误信息中可以看到, `main.test1.res.body.json.v2` 的实际值是 `Bar2` 而不是 `bar2`。
+
+我们修改 `bar2` 成 `Bar2` 后，再次执行 Apitest
+
+```
+apitest httpbin.jsona
+
+module main
+  unit test1 (0.930) ✔
+```
+
+这次测试通过了。
 
 ## 特性
 

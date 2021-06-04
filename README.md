@@ -9,8 +9,8 @@ Apitest is declarative api testing tool with JSON-like DSL for easy testing.
 Read this in other languages: [中文](./README.zh-CN.md)
 
 - [Apitest](#apitest)
-  - [Examples](#examples)
   - [Installation](#installation)
+  - [Quick Start](#quick-start)
   - [Features](#features)
     - [JSON-like DSL](#json-like-dsl)
     - [Cross Platform, Programming Language Agnostic](#cross-platform-programming-language-agnostic)
@@ -32,62 +32,68 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [Normal Mode](#normal-mode)
     - [CI Mode](#ci-mode)
 
-## Examples
-
-Execute in the terminal
-```
-apitest examples/realworld
-```
-
-The command output is as follows
-```
-module main
-  prepare ✔
-module auth
-  Register (0.869) ✔
-  Login (0.644) ✔
-  Current User (0.578) ✔
-  Update User (0.598) ✔
-module article1
-  All Articles (0.762) ✔
-  Articles by Author (0.507) ✔
-  Articles Favorited by Username (0.490) ✔
-  Articles by Tag (0.832) ✔
-module article2
-  Create Article (0.625) ✔
-  Feed (0.591) ✔
-  All Articles with auth (1.193) ✔
-  Articles by Author with auth (0.573) ✔
-  Articles Favorited by Username with auth (0.569) ✔
-  Single Article by slug (0.623) ✔
-  Articles by Tag (0.879) ✔
-  Update Article (0.739) ✔
-  Favorite Article (0.619) ✔
-  Unfavorite Article (0.617) ✔
-  Create Comment for Article (0.618) ✔
-  All Comments for Article (0.594) ✔
-  All Comments for Article without auth (0.616) ✔
-  Delete Comment for Article (0.602) ✔
-  Delete Article (0.635) ✔
-module profile
-  Register Celeb (0.659) ✔
-  Profile (0.552) ✔
-  Follow Profile (0.606) ✔
-  Unfollow Profile (0.526) ✘
-module tag
-  All Tags (1.561) ✔
-
-1. Unfollow Profile(profile.unfollowProfile)
-   profile.unfollowProfile.res.body.profile.following: true ≠ false
-```
-
-Apites will execute the test cases in sequence and print the test results.
-
 ## Installation
 
  Binaries are available in [releases](https://github.com/sigoden/apitest/releases). Make sure to put the path to the binary into your `PATH`.
 
  If you use `node`, you can install it by running `npm install -g @sigodenjs/apitest`
+
+## Quick Start
+
+Write test file `httpbin.jsona`
+
+```
+{
+   test1: {
+     req: {
+       url: "https://httpbin.org/post",
+       method: "post",
+       header: {
+         'content-type':'application/json',
+       },
+       body: {
+         v1: "bar1",
+         v2: "Bar2",
+       },
+     },
+     res: {
+       status: 200,
+       body: {@partial
+         json: {
+           v1: "bar1",
+           v2: "bar2"
+         }
+       }
+     }
+   }
+}
+
+```
+
+Run test
+
+```
+apitest httpbin.jsona
+
+module main
+   unit test1 (0.944) ✘
+   main.test1.res.body.json.v2: bar2 ≠ Bar2
+
+   ...
+```
+
+The use case test failed. From the error message printed by Apitest, you can see that the actual value of `main.test1.res.body.json.v2` is `Bar2` instead of `bar2`.
+
+After we modify `bar2` to `Bar2`, execute Apitest again
+
+```
+apitest httpbin.jsona
+
+module main
+   unit test1 (0.930) ✔
+```
+
+Test passed.
 
 ## Features
 
