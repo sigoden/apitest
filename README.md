@@ -1,9 +1,10 @@
-# apitest
+# Apitest
 
-**apitest** is a declartive api testing tool.
+Apitest is a declartive api testing tool.
 
+Read this in other languages: [中文](./README.zh-CN.md)
 
-- [apitest](#apitest)
+- [Apitest](#apitest)
   - [Introduction](#introduction)
   - [Installation](#installation)
   - [Features](#features)
@@ -27,16 +28,11 @@
     - [Normal Mode](#normal-mode)
     - [CI Mode](#ci-mode)
 
-[中文文档](./README.zh-CN.md)
-
 ## Introduction
 
 ```
 apitest examples/realworld
-```
 
-command output:
-```
 module main
   prepare ✔
 module auth
