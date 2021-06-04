@@ -58,7 +58,6 @@ exports[`res partial 1`] = `
 "module main
   @partial for object ✔
   @partial for array ✔
-
 "
 `;
 
