@@ -524,7 +524,7 @@ The `http` client handles http/https requests/responses.
 }
 ```
 
-## CLI
+## Cli
 
 ```
 usage: apitest [options] [target]
