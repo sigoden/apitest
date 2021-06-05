@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import * as _ from "lodash";
 import { Client } from ".";
 import { Unit } from "../Cases";
-import { toPosString } from "../Loader";
+import { toPosString } from "../utils";
 import { JsonaObject, JsonaValue } from "../types";
 
 export default class HttpClient implements Client {

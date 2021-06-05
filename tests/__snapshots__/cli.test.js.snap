@@ -1,5 +1,93 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`cli restart failed run group 1`] = `
+"module main
+  fail# retry
+    unit test1 ✔
+    unit test3 ✘
+    main.group3.test3.res.v1: b ≠ a
+
+    {
+      \\"req\\": {
+        \\"v1\\": \\"a\\"
+      },
+      \\"res\\": {
+        \\"v1\\": \\"a\\"
+      }
+    }
+    unit test1 ✔
+    unit test3 ✘
+    main.group3.test3.res.v1: b ≠ a
+
+    {
+      \\"req\\": {
+        \\"v1\\": \\"a\\"
+      },
+      \\"res\\": {
+        \\"v1\\": \\"a\\"
+      }
+    }
+    unit test1 ✔
+    unit test3 ✘
+    main.group3.test3.res.v1: b ≠ a
+
+    {
+      \\"req\\": {
+        \\"v1\\": \\"a\\"
+      },
+      \\"res\\": {
+        \\"v1\\": \\"a\\"
+      }
+    }
+"
+`;
+
+exports[`cli run group 1`] = `
+"module main
+  unit vars ✔
+  skip ⌾
+  delay
+    unit test2 ✔
+  fail# retry
+    unit test1 ✔
+    unit test3 ✘
+    main.group3.test3.res.v1: b ≠ a
+
+    {
+      \\"req\\": {
+        \\"v1\\": \\"a\\"
+      },
+      \\"res\\": {
+        \\"v1\\": \\"a\\"
+      }
+    }
+    unit test1 ✔
+    unit test3 ✘
+    main.group3.test3.res.v1: b ≠ a
+
+    {
+      \\"req\\": {
+        \\"v1\\": \\"a\\"
+      },
+      \\"res\\": {
+        \\"v1\\": \\"a\\"
+      }
+    }
+    unit test1 ✔
+    unit test3 ✘
+    main.group3.test3.res.v1: b ≠ a
+
+    {
+      \\"req\\": {
+        \\"v1\\": \\"a\\"
+      },
+      \\"res\\": {
+        \\"v1\\": \\"a\\"
+      }
+    }
+"
+`;
+
 exports[`cli start from first 1`] = `
 "module main
   unit test1 ✔

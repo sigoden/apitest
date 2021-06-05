@@ -409,7 +409,7 @@ Run the test case after waiting for a period of time
         },
         run: {
             retry: {
-                stop:'$run.retry.count> 2', @eval
+                stop:'$run.count > 2', @eval
                 delay: 1000,
             }
         },
@@ -417,7 +417,10 @@ Run the test case after waiting for a period of time
 }
 ```
 
-- `$run.retry.count` records the number of retries.
+variables:
+- `$run.count` records the number of retries.
+
+options:
 - `run.retry.stop`  whether to stop retry
 - `run.retry.delay` interval between each retry (ms)
 
@@ -427,13 +430,13 @@ Run the test case after waiting for a period of time
 {
     test1: { @client("echo")
         req: {
-            v1:'$run.loop.index', @eval
-            v1:'$run.loop.item', @eval
+            v1:'$run.index', @eval
+            v2:'$run.item', @eval
         },
         run: {
             loop: {
                 delay: 1000,
-                data: [
+                items: [
                     'a',
                     'b',
                     'c',
@@ -444,10 +447,30 @@ Run the test case after waiting for a period of time
 }
 ```
 
-- `$run.loop.item` current loop data
-- `$run.loop.index` current loop data index
-- `run.loop.data`  loop fill to `$run.loop` data
+variables:
+- `$run.item` current loop data
+- `$run.index` current loop data index
+
+options:
+- `run.loop.items` iter pass to `$run.item`
 - `run.loop.delay`  interval between each cycle (ms)
+
+#### dump
+
+```
+{
+    test1: { @client("echo")
+        req: {
+        },
+        run: {
+            dump: true,
+        }
+    }
+}
+```
+
+- `run.dump` force print req/res data when true
+
 
 ## Annotation
 

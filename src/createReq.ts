@@ -5,11 +5,10 @@ import * as fake from "@sigodenjs/fake/lib/exec";
 import "@sigodenjs/fake/lib/cn";
 import * as _ from "lodash";
 import { VmContext } from "./Session";
-import { RunUnitError } from "./Reporter";
+import { RunCaseError } from "./Reporter";
 
 export default function createReq(unit: Unit, ctx: VmContext): any {
   const nextPaths = unit.paths.concat(["req"]);
-  _.set(ctx.state, ["req"], _.get(ctx.state, nextPaths));
   return createValue(nextPaths, ctx, unit.req);
 }
 
@@ -25,17 +24,19 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
       _.set(ctx.state, paths, mockValue);
       return mockValue;
     } catch(err) {
-      throw new RunUnitError(paths, "mock", `bad mock '${value}'`);
+      throw new RunCaseError(paths, "mock", `bad mock '${value}'`);
     }
   } else {
     if (jsa.type === "Array") {
-      const output = [];
+      _.set(ctx.state, paths, _.get(ctx.state, paths, []));
+      const output = _.get(ctx.state, paths);
       for (const [i, ele] of jsa.elements.entries()) {
         output.push(createValue(paths.concat([String(i)]), ctx, ele));
       }
       return output;
     } else if (jsa.type === "Object") {
-      const output = { } as {[k: string]: any};
+      _.set(ctx.state, paths, _.get(ctx.state, paths, {}));
+      const output = _.get(ctx.state, paths);
       for (const prop of jsa.properties) {
         output[prop.key] = createValue(paths.concat([prop.key]), ctx, prop.value);
       }
@@ -64,7 +65,7 @@ export function evalValue(paths: string[], ctx: VmContext, code: string): any {
     script.runInNewContext(ctx.state);
     return ctx.state[EXPORT_KEY];
   } catch (err) {
-    throw new RunUnitError(paths, "eval", `throw err, ${err.message}`);
+    throw new RunCaseError(paths, "eval", `throw err, ${err.message}`);
   }
 }
 
@@ -74,5 +75,5 @@ export function existAnno(paths: string[], value: JsonaValue, name: string, type
   if (type === "any" || value.type.toLowerCase() === type) {
     return true;
   }
-  throw new RunUnitError(paths, name, `should have ${type} value`);
+  throw new RunCaseError(paths, name, `should have ${type} value`);
 }

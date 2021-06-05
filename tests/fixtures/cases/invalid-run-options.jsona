@@ -1,0 +1,52 @@
+{
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("fail# invalid unit.skip")
+    req: {
+    },
+    run: {
+      skip: "a"
+    }
+  },
+  test2: { @describe("fail# invalid unit.delay")
+    req: {
+    },
+    run: {
+      delay: "a"
+    }
+  },
+  test3: { @describe("fail# invalid unit.retry")
+    req: {
+    },
+    run: {
+      retry: []
+    }
+  },
+  test4: { @describe("fail# invalid unit.retry.stop")
+    req: {
+    },
+    run: {
+      retry: {
+        stop: 1,
+      }
+    }
+  },
+  test4: { @describe("fail# invalid unit.retry.stop")
+    req: {
+    },
+    run: {
+      retry: {
+        stop: "$run.count > 1",
+      }
+    }
+  },
+  test5: { @describe("fail# invalid unit.loop.items")
+    req: {
+    },
+    run: {
+      loop: {
+        delay: 50,
+        items: {},
+      }
+    }
+  },
+}

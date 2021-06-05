@@ -2,7 +2,6 @@ export interface Position {
   index: number;
   line: number;
   col: number;
-  mixin?: boolean;
 }
 
 export interface JsonaAnnotation {
@@ -59,7 +58,6 @@ export interface JsonaObject extends JsonaValueBase {
   type: "Object";
   properties: JsonaProperty[];
 }
-
 
 export interface JsonaArray extends JsonaValueBase {
   type: "Array";

@@ -3,7 +3,9 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import * as crypto from "crypto";
 import * as _ from "lodash";
-import { Unit } from "./Cases";
+import { Case, Unit } from "./Cases";
+
+export const EMPTY_CACHE = { cursor: "", tests: {} };
 
 export default class Session {
   private cacheFile: string;
@@ -30,38 +32,53 @@ export default class Session {
     return this.cache.cursor;
   }
 
-  public async getCtx(unit: Unit): Promise<VmContext> {
-    const idx = this.unitIds.findIndex(v => v === unit.id);
+  public async getCtx(testcase: Case): Promise<VmContext> {
+    const idx = this.unitIds.findIndex(v => v === testcase.id);
     const state = { env: _.clone(process.env) };
     if (idx > -1) {
       for (let i = 0; i <= idx; i++) {
         const paths = this.unitIds[i].split(".");
-        const obj = _.get(this.cache.tests, paths, {req: {}, res: {}});
-        _.set(state, paths, _.clone(obj));
+        const obj = _.get(this.cache.tests, paths);
+        if (obj) _.set(state, paths, _.clone(obj));
       }
     }
-    for (let i = 1; i < unit.paths.length; i++) {
-      const scope = _.get(state, unit.paths.slice(0, i));
+    for (let i = 1; i < testcase.paths.length; i++) {
+      const scope = _.get(state, testcase.paths.slice(0, i));
       for (const key in scope) {
         const value = _.get(state, key);
         if (!value) _.set(state, key, scope[key]);
       }
     }
+    const local = _.get(state, testcase.paths);
+    if (local) Object.assign(state, local);
+    if (
+      !testcase.group &&
+      typeof _.get(state, ["req"]) === "undefined" &&
+      (testcase as Unit).req.type === "Object") {
+      const req = {};
+      _.set(state, ["req"], req);
+      _.set(this.cache.tests, testcase.paths.concat(["req"]), req);
+    }
     return { state, jslibs: this.jslibs };
   }
 
-  public async saveReq(unit: Unit, req: any) {
-    _.set(this.cache.tests, unit.paths, { req, res: {} });
+  public async saveValue(testcase: Case, key: string, value: any, persist = true) {
+    const data = _.get(this.cache.tests, testcase.paths);
+    if (!data) {
+      _.set(this.cache.tests, testcase.paths.concat([key]), value);
+    } else {
+      data[key] = value;
+    }
+    if (persist) await saveCache(this.cacheFile, this.cache);
+  }
+
+  public async clearCache() {
+    this.cache = EMPTY_CACHE;
     await saveCache(this.cacheFile, this.cache);
   }
-  public async saveRes(unit: Unit, res: any) {
-    const test = _.get(this.cache.tests, unit.paths);
-    test.res = res;
-    await saveCache(this.cacheFile, this.cache);
-  }
-  
-  public async saveCursor(unit: Unit) {
-    this.cache.cursor = unit.id;
+
+  public async saveCursor(id: string) {
+    this.cache.cursor = id;
     await saveCache(this.cacheFile, this.cache);
   }
 
@@ -92,7 +109,7 @@ async function loadCache(cacheFile: string): Promise<Cache> {
     const cache = JSON.parse(content);
     return cache;
   } catch (err) {
-    return { cursor: "", tests: {} };
+    return EMPTY_CACHE;
   }
 }
 

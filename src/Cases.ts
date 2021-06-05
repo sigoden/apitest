@@ -1,9 +1,10 @@
 import * as _ from "lodash";
 import Clients, { UnitClient } from "./Clients";
-import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue } from "./types";
-import { getType, toPosString } from "./Loader";
+import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue, Position } from "./types";
+import { getType, toPosString } from "./utils";
 
 const DEFAULT_CLIENT: UnitClient = { name: "default", options: {} };
+const ZERO_POSITION: Position = { col: 0, index: 0, line: 0 };
 
 export type Case = Group | Unit;
 
@@ -13,8 +14,10 @@ export interface Group {
   paths: string[];
   group: true;
   cases: Case[];
-  client?: UnitClient;
+  prev?: string;
   mixins: JsonaObject[];
+  client?: UnitClient;
+  run?: JsonaValue;
 }
 
 export interface Unit {
@@ -24,11 +27,12 @@ export interface Unit {
   client: UnitClient;
   req: JsonaValue;
   res?: JsonaValue;
+  run?: JsonaValue;
 }
 
 export default class Cases {
   public describes: {[k: string]: string} = {};
-  public units: Unit[] = [];
+  public caseIds: string[] = [];
   public cases: Case[] = [];
   private clients: Clients;
   private mixin: JsonaObject;
@@ -53,39 +57,53 @@ export default class Cases {
       throw new Error(`${nextPaths.join(".")}: should have object value${toPosString(prop.position)}`);
     }
     if (prop.value.annotations.find(v => v.name === "group")) {
-      const group: Group = {
-        id: nextPaths.join("."),
-        paths: nextPaths,
-        cases: [],
-        mixins: [],
-        group: true,
-      };
-      if (parent) {
-        group.mixins = parent.mixins.slice();
-        parent.cases.push(group);
-      }
-      this.addGroup(nextPaths, prop.value, group);
+      this.addGroup(nextPaths, prop.value, parent);
     } else {
       this.addUnit(nextPaths, prop.value, parent);
     }
   }
 
-  private addGroup(paths: string[], value: JsonaValue, group: Group) {
+  private addGroup(paths: string[], value: JsonaValue, parent?: Group) {
     if (value.type !== "Object") {
       throw new Error(`${paths.join(".")}: should have object value${toPosString(value.position)}`);
     }
+
+    const group: Group = {
+      id: paths.join("."),
+      paths,
+      cases: [],
+      mixins: [],
+      group: true,
+    };
+
     const valueObject = value as JsonaObject;
     let describe = this.retriveAnnoDescribe(paths, value);
     if (!describe) describe = "group " + _.last(paths);
     this.describes[paths.join(".")] = describe;
 
-    if (group) {
-      const client = this.retriveAnnoClient(paths, value);
-      if (client) group.client = client;
-      group.mixins = [ ...this.retriveAnnoMixins(paths, value), ...group.mixins ];
+    const client = this.retriveAnnoClient(paths, value);
+    if (client) {
+      group.client = client;
+    } else if (parent?.client) {
+      group.client = parent.client;
     }
 
+    const parentMixins = parent?.mixins || [];
+
+    group.mixins = [ ...this.retriveAnnoMixins(paths, value), ...parentMixins ];
+
+    this.caseIds.push(group.paths.join("."));
+
+    const cases = parent ? parent.cases : this.cases;
+    const prevCase = cases[cases.length - 1];
+    if (prevCase) group.prev = prevCase.id;
+    cases.push(group);
+
     for (const prop of valueObject.properties) {
+      if (prop.key === "run") {
+        group.run = this.retriveRun(paths, prop);
+        continue;
+      }
       this.addProp(paths, prop, group);
     }
   }
@@ -109,7 +127,6 @@ export default class Cases {
     let mixins = this.retriveAnnoMixins(paths, value);
     if (parent) mixins = [...mixins, ...parent.mixins];
 
-
     for (const mixin of mixins) {
       mergeMixin(valueObject, mixin);
     }
@@ -127,15 +144,27 @@ export default class Cases {
       unit.res = resProp.value;
     }
 
+    const runProp = value.properties.find(v => v.key === "run");
+    if (runProp) {
+      unit.run = this.retriveRun(paths, runProp);
+    }
+
     this.clients.validateUnit(unit);
 
-    this.units.push(unit);
+    this.caseIds.push(unit.id);
 
     if (!parent) {
       this.cases.push(unit);
     } else {
       parent.cases.push(unit);
     }
+  }
+
+  private retriveRun(paths: string[], prop: JsonaProperty): JsonaValue {
+    if (prop.value.type !== "Object") {
+      throw new Error(`${paths.join(".")}: should be object value${toPosString(prop.position)}`);
+    }
+    return prop.value;
   }
 
   private retriveAnnoDescribe(paths: string[], value: JsonaValue): string {
@@ -191,7 +220,7 @@ function cloneMixin(value: JsonaValue) {
     const newValue: JsonaArray = {
       type: "Array",
       elements: value.elements.map(v => cloneMixin(v)),
-      position: { ...value.position, mixin: true },
+      position: _.clone(ZERO_POSITION),
       annotations: value.annotations.map(v => cloneMixinAnnotation(v)),
     };
     result = newValue;
@@ -199,21 +228,21 @@ function cloneMixin(value: JsonaValue) {
     const newValue: JsonaObject = {
       type: "Object",
       properties: value.properties.map(v => cloneMixinProperty(v)),
-      position: { ...value.position, mixin: true },
+      position: _.clone(ZERO_POSITION),
       annotations: value.annotations.map(v => cloneMixinAnnotation(v)),
     };
     result = newValue;
   } else if (value.type === "Null") {
     result = {
       type: value.type,
-      position: { ...value.position, mixin: true },
+      position: _.clone(ZERO_POSITION),
       annotations: value.annotations.map(v => cloneMixinAnnotation(v)),
     };
   } else {
     result = {
       type: value.type,
       value: value.value,
-      position: { ...value.position, mixin: true },
+      position: _.clone(ZERO_POSITION),
       annotations: value.annotations.map(v => cloneMixinAnnotation(v)),
     } as JsonaValue; 
   }
@@ -223,7 +252,7 @@ function cloneMixin(value: JsonaValue) {
 function cloneMixinAnnotation(anno: JsonaAnnotation): JsonaAnnotation {
   return {
     name: anno.name,
-    position: { ...anno.position, mixin: true },
+    position: _.clone(ZERO_POSITION),
     value: _.clone(anno.value),
   };
 }
@@ -231,7 +260,7 @@ function cloneMixinAnnotation(anno: JsonaAnnotation): JsonaAnnotation {
 function cloneMixinProperty(prop: JsonaProperty): JsonaProperty {
   return {
     key: prop.key,
-    position: { ...prop.position, mixin: true },
+    position: _.clone(ZERO_POSITION),
     value: cloneMixin(prop.value),
   };
 }

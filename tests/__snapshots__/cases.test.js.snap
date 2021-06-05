@@ -15,6 +15,28 @@ exports[`cases invalid prop key 1`] = `
 "
 `;
 
+exports[`cases invalid run options 1`] = `
+"module main
+  fail# invalid unit.skip
+  main.test1.run.skip: should be boolean value
+  fail# invalid unit.delay
+  main.test2.run.delay: should be integer value
+  fail# invalid unit.retry
+  main.test3.run.retry: should be object value
+  fail# invalid unit.retry.stop
+  main.test4.run.retry.stop: should be boolean value
+  fail# invalid unit.retry.stop
+  main.test4.run.retry.stop: should be boolean value
+  fail# invalid unit.loop.items
+  main.test5.run.loop.items: should be array value
+"
+`;
+
+exports[`cases invalid run type 1`] = `
+"main.test1: should be object value at line 5 col 5
+"
+`;
+
 exports[`cases invalid unit client type 1`] = `
 "main.test1@client: should have string or object value at line 2 col 13
 "
@@ -41,5 +63,97 @@ exports[`cases merge mixin 1`] = `
   multiple mixin ✔
   omit mixin if exist prop ✔
   nest mixin ✔
+"
+`;
+
+exports[`cases run --reset 1`] = `
+"module main
+  unit vars ✔
+  dump ✔
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"run\\": {
+      \\"dump\\": true
+    }
+  }
+  skip ⌾
+  delay ✔
+  fail# retry ✘
+  main.test3.res.v1: b ≠ a
+  fail# retry ✘
+  main.test3.res.v1: b ≠ a
+  fail# retry ✘
+  main.test3.res.v1: b ≠ a
+"
+`;
+
+exports[`cases run 1`] = `
+"module main
+  unit vars ✔
+  skip ⌾
+  delay
+    unit test2 ✔
+  fail# retry
+    unit test1 ✔
+    unit test3 ✘
+    unit test1 ✔
+    unit test3 ✘
+    unit test1 ✔
+    unit test3 ✘
+  loop
+    unit test1 ✔
+    unit test4 ✔
+    unit test1 ✔
+    unit test4 ✔
+
+1. unit test3(main.group3.test3)
+   main.group3.test3.res.v1: b ≠ a
+
+2. unit test3(main.group3.test3)
+   main.group3.test3.res.v1: b ≠ a
+
+3. unit test3(main.group3.test3)
+   main.group3.test3.res.v1: b ≠ a
+
+"
+`;
+
+exports[`cases run group 1`] = `
+"module main
+  unit vars ✔
+  dump ✔
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"run\\": {
+      \\"dump\\": true
+    }
+  }
+  skip ⌾
+  delay ✔
+  fail# retry ✘
+  fail# retry ✘
+  fail# retry ✘
+  loop ✔
+  loop ✔
+
+1. fail# retry(main.test3)
+   main.test3.res.v1: b ≠ a
+
+2. fail# retry(main.test3)
+   main.test3.res.v1: b ≠ a
+
+3. fail# retry(main.test3)
+   main.test3.res.v1: b ≠ a
+
 "
 `;

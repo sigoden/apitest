@@ -56,4 +56,14 @@ describe("cli", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("run group", async () => {
+    const { stdout, code } = await spwanTest("cases/run-group.jsona", ["--reset"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("restart failed run group", async () => {
+    const { stdout, code } = await spwanTest("cases/run-group.jsona", []);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
 });
