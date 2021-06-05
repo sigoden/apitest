@@ -350,7 +350,7 @@ Use functions
          },
          res: {
              body: {
-                // $ indicates the field to be verified, corresponding to the response data `res.body.createdAt`
+                // $ indicates the field to be verified, here is `res.body.createdAt`
                 createdAt:'isDate($)', @eval
 
                 // Of course you can use regex directly
@@ -436,7 +436,8 @@ JSON describes data and annotation describes logic.
                     "$> 2", @eval
                     "$ <= 2", @eval
                 ],
-                // Using @partial, we only verify the part of the object we are interested in `a`, ignore `b`
+                // Using @partial, we only verify the part of the object.
+                // We are interested in `a`, ignore `b`
                 v5: { @partial
                     a: 3,
                 },
