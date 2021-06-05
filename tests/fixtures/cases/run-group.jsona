@@ -1,0 +1,68 @@
+{
+  @client({name:"default",kind:"echo"})
+  vars: {
+    req: {
+      skip: true,
+      items: [
+        "a",
+        "b",
+      ]
+    }
+  },
+  group1: { @group  @describe("skip")
+    test1: {
+      req: {
+      },
+    },
+    run: {
+      skip: "vars.req.skip", @eval
+    }
+  },
+  group2: { @group @describe("delay")
+    test2: { 
+      req: {
+      },
+    },
+    run: {
+      delay: 500,
+    }
+  },
+  group3: { @group @describe("fail# retry")
+    test1: {
+      req: {
+      },
+    },
+    test3: { 
+      req: {
+        v1: "a",
+      },
+      res: {
+        v1: "b",
+      },
+    },
+    run: {
+      retry: {
+        stop:'$run.count > 2', @eval
+        delay: 500,
+      }
+    },
+  },
+  group4: { @group @describe("loop") 
+    test1: {
+      req: {
+      },
+    },
+    test4: {
+      req: {
+        v1:'$run.index', @eval
+        v1:'$run.item', @eval
+      },
+    },
+    run: {
+      loop: {
+        delay: 500,
+        items: "vars.req.items", @eval
+      }
+    },
+  }
+}

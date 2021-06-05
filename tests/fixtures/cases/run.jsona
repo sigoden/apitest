@@ -1,0 +1,60 @@
+{
+  @client({name:"default",kind:"echo"})
+  vars: {
+    req: {
+      skip: true,
+      items: [
+        "a",
+        "b",
+      ]
+    }
+  },
+  test0: { @describe("dump")
+    req: {
+      v1: "a"
+    },
+    run: {
+      dump: true
+    }
+  },
+  test1: { @describe("skip")
+    req: {
+    },
+    run: {
+      skip: "vars.req.skip", @eval
+    }
+  },
+  test2: { @describe("delay")
+    req: {
+    },
+    run: {
+      delay: 500,
+    }
+  },
+  test3: { @describe("fail# retry")
+    req: {
+      v1: "a",
+    },
+    res: {
+      v1: "b",
+    },
+    run: {
+      retry: {
+        stop:'$run.count > 2', @eval
+        delay: 500,
+      }
+    },
+  },
+  test4: { @describe("loop") 
+    req: {
+      v1:'$run.index', @eval
+      v2:'$run.item', @eval
+    },
+    run: {
+      loop: {
+        delay: 500,
+        items: "vars.req.items", @eval
+      }
+    },
+  },
+}

@@ -1,11 +1,11 @@
 import * as path from "path";
 import * as fs from "fs/promises";
-import { parse } from "jsona-js";
-import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue, Position } from "./types";
 import * as vm from "vm";
 import * as _ from "lodash";
 import Cases from "./Cases";
 import Clients from "./Clients";
+import { loadJsonaFile, getType, toPosString  } from "./utils";
+import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "./types";
 
 export default class Loader {
   private workDir: string;
@@ -154,42 +154,5 @@ export default class Loader {
     } else {
       throw new Error(`main@module: should have string value${toPosString(anno.position)}`);
     }
-  }
-}
-
-async function loadJsonaFile(file: string): Promise<JsonaValue> {
-  try {
-    const content = await fs.readFile(file, "utf8");
-    return parse(content);
-  } catch (err) {
-    if (err.position) throw new Error(`${err.info}${toPosString(err.position)}`);
-    throw err;
-  }
-}
-
-export function toPosString(position: Position) {
-  if (position.mixin) {
-    return " at mixin";
-  }
-  return ` at line ${position.line} col ${position.col}`;
-}
-
-export function getType(value) {
-  if (value === null) {
-    return "null";
-  } else if (typeof value === "object") {
-    if (Array.isArray(value)) {
-      return "array";
-    } else {
-      return "object";
-    }
-  } else {
-    if (typeof value === "number") {
-      if (Number.isInteger(value)) {
-        return "integer";
-      }
-      return "float";
-    }
-    return typeof value;
   }
 }

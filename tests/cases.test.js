@@ -20,6 +20,16 @@ describe("cases", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("invalid run options", async () => {
+    const { stdout, code } = await spwanTest("cases/invalid-run-options.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("invalid run type", async () => {
+    const { stdout, code } = await spwanTest("cases/invalid-run-type.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
   test("invalid unit client type", async () => {
     const { stdout, code } = await spwanTest("cases/invalid-unit-client-type.jsona", ["--ci"]);
     expect(code).toEqual(1);
@@ -47,6 +57,21 @@ describe("cases", () => {
   test("merge mixin", async () => {
     const { stdout, code } = await spwanTest("cases/merge-mixin.jsona", ["--ci"]);
     expect(code).toEqual(0);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("run group", async () => {
+    const { stdout, code } = await spwanTest("cases/run.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("run", async () => {
+    const { stdout, code } = await spwanTest("cases/run-group.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("run --reset", async () => {
+    const { stdout, code } = await spwanTest("cases/run.jsona", ["--reset"]);
+    expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
 });

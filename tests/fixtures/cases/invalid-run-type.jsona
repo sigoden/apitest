@@ -1,0 +1,7 @@
+{
+  test1: { @describe("fail@ invalid unit value type")
+    req: {
+    },
+    run: 'a'
+  }
+}

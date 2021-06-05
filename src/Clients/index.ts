@@ -1,6 +1,6 @@
 import { Unit } from "../Cases";
 import { JsonaAnnotation } from "../types";
-import { toPosString } from "../Loader";
+import { toPosString } from "../utils";
 
 import Session from "../Session";
 import EchoClient from "./EchoClient";
