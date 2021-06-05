@@ -3,17 +3,33 @@ import Clients, { UnitClient } from "./Clients";
 import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue } from "./types";
 import { getType, toPosString } from "./Loader";
 
+const DEFAULT_CLIENT: UnitClient = { name: "default", options: {} };
+
+export type Case = Group | Unit;
+
+
+export interface Group {
+  id: string;
+  paths: string[];
+  group: true;
+  cases: Case[];
+  client?: UnitClient;
+  mixins: JsonaObject[];
+}
+
 export interface Unit {
   id: string;
   paths: string[];
+  group: false;
   client: UnitClient;
-  req: JsonaValue,
-  res?: JsonaValue,
+  req: JsonaValue;
+  res?: JsonaValue;
 }
 
 export default class Cases {
   public describes: {[k: string]: string} = {};
   public units: Unit[] = [];
+  public cases: Case[] = [];
   private clients: Clients;
   private mixin: JsonaObject;
 
@@ -28,7 +44,7 @@ export default class Cases {
     }
   }
 
-  private addProp(paths: string[], prop: JsonaProperty) {
+  private addProp(paths: string[], prop: JsonaProperty, parent?: Group) {
     if (!/^\w+$/.test(prop.key)) {
       throw new Error(`${paths.join(".")}: prop '${prop.key}' should satify rules of variable name${toPosString(prop.position)}`);
     }
@@ -37,13 +53,24 @@ export default class Cases {
       throw new Error(`${nextPaths.join(".")}: should have object value${toPosString(prop.position)}`);
     }
     if (prop.value.annotations.find(v => v.name === "group")) {
-      this.addGroup(nextPaths, prop.value);
+      const group: Group = {
+        id: nextPaths.join("."),
+        paths: nextPaths,
+        cases: [],
+        mixins: [],
+        group: true,
+      };
+      if (parent) {
+        group.mixins = parent.mixins.slice();
+        parent.cases.push(group);
+      }
+      this.addGroup(nextPaths, prop.value, group);
     } else {
-      this.addUnit(nextPaths, prop.value);
+      this.addUnit(nextPaths, prop.value, parent);
     }
   }
 
-  private addGroup(paths: string[], value: JsonaValue) {
+  private addGroup(paths: string[], value: JsonaValue, group: Group) {
     if (value.type !== "Object") {
       throw new Error(`${paths.join(".")}: should have object value${toPosString(value.position)}`);
     }
@@ -52,12 +79,18 @@ export default class Cases {
     if (!describe) describe = "group " + _.last(paths);
     this.describes[paths.join(".")] = describe;
 
+    if (group) {
+      const client = this.retriveAnnoClient(paths, value);
+      if (client) group.client = client;
+      group.mixins = [ ...this.retriveAnnoMixins(paths, value), ...group.mixins ];
+    }
+
     for (const prop of valueObject.properties) {
-      this.addProp(paths, prop);
+      this.addProp(paths, prop, group);
     }
   }
 
-  private addUnit(paths: string[], value: JsonaValue) {
+  private addUnit(paths: string[], value: JsonaValue, parent?: Group) {
     if (value.type !== "Object") {
       throw new Error(`${paths.join(".")}: should have object value${toPosString(value.position)}`);
     }
@@ -67,9 +100,16 @@ export default class Cases {
     if (!describe) describe = "unit " + _.last(paths);
     this.describes[paths.join(".")] = describe;
 
-    const client = this.retriveAnnoClient(paths, value);
+    let client = this.retriveAnnoClient(paths, value);
 
-    const mixins = this.retriveAnnoMixins(paths, value);
+    if (!client) {
+      client = parent?.client || _.clone(DEFAULT_CLIENT);
+    }
+
+    let mixins = this.retriveAnnoMixins(paths, value);
+    if (parent) mixins = [...mixins, ...parent.mixins];
+
+
     for (const mixin of mixins) {
       mergeMixin(valueObject, mixin);
     }
@@ -80,7 +120,7 @@ export default class Cases {
     }
     const req = reqProp.value;
 
-    const unit: Unit = { id: paths.join("."), client, paths, req };
+    const unit: Unit = { id: paths.join("."), paths, group: false, client, req };
 
     const resProp = value.properties.find(v => v.key === "res");
     if (resProp) {
@@ -90,6 +130,12 @@ export default class Cases {
     this.clients.validateUnit(unit);
 
     this.units.push(unit);
+
+    if (!parent) {
+      this.cases.push(unit);
+    } else {
+      parent.cases.push(unit);
+    }
   }
 
   private retriveAnnoDescribe(paths: string[], value: JsonaValue): string {
@@ -128,7 +174,7 @@ export default class Cases {
 
   private retriveAnnoClient(paths: string[], value: JsonaValue): UnitClient {
     const clientAnno = value.annotations.find(v => v.name === "client");
-    if (!clientAnno) return { name: "default", options: {} };
+    if (!clientAnno) return;
     if (typeof clientAnno.value === "string") {
       return { name: clientAnno.value, options: { } };
     } else if (getType(clientAnno.value) === "object") {
@@ -191,16 +237,18 @@ function cloneMixinProperty(prop: JsonaProperty): JsonaProperty {
 }
 
 function mergeMixin(v1: JsonaObject, v2: JsonaObject) {
+  const v2MatchKeys = [];
   for (const prop of v1.properties) {
     const findIdx = v2.properties.findIndex(v => v.key === prop.key);
     if (findIdx > -1) {
-      const matchProp = v2.properties.splice(findIdx, 1)[0];
+      const matchProp = v2.properties[findIdx];
+      v2MatchKeys.push(matchProp.key);
       if (prop.value.type === "Object" && matchProp.value.type === "Object") {
         mergeMixin(prop.value, matchProp.value);
       }
     }
   }
-  v1.properties = v1.properties.concat(v2.properties);
+  v1.properties = v1.properties.concat(v2.properties.filter(v => v2MatchKeys.indexOf(v.key) === -1));
   for (const anno of v2.annotations) {
     const matchAnno = v1.annotations.find(v => v.name === anno.name);
     if (!matchAnno) v1.annotations.push(anno);

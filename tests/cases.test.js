@@ -1,6 +1,10 @@
 const { spwanTest } = require("./utils");
 
 describe("cases", () => {
+  test("group", async () => {
+    const { code } = await spwanTest("cases/group.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+  });
   test("invalid group value type", async () => {
     const { stdout, code } = await spwanTest("cases/invalid-group-value-type.jsona", ["--ci"]);
     expect(code).toEqual(1);

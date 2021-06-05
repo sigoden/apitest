@@ -1,0 +1,61 @@
+{
+  @mixin("mixin3")
+  group1: { @group @mixin("req1")
+    test1: { @describe("unit merge group mixin") @client("echo")
+      req: {},
+      res: {
+        v1: "a"
+      }
+    },
+    group2: { @group 
+      test2: { @describe("unit merge none parent group mixin") @client("echo")
+        req: {},
+        res: {
+          v1: "a"
+        }
+      }
+    },
+    group3: { @mixin("req2") @group
+      test3: { @describe("unit merge multiple level group mixin") @client("echo") 
+        req: { 
+        },
+        res: {
+          v1: "a",
+          v2: "b"
+        }
+      }
+    },
+    group4: { @mixin("req3") @group
+      test4: {  @describe("nearly group mixin first") @client("echo")
+        req: {},
+        res: {
+          v1: "b"
+        }
+      }
+    }
+  },
+  group5: { @group @client({options:{baseURL:"https://httpbin.org/anything/a"}})
+    test5: {  @describe("unit use group client")
+      req: {
+        url: "/x"
+      },
+      res: {
+        body: { @partial
+          url: "https://httpbin.org/anything/a/x",
+        }
+      }
+    },
+    group6: { @group @client({options:{baseURL:"https://httpbin.org/anything/b"}}) 
+      test5: { @describe("nearly group client first") 
+        req: {
+          url: "/x"
+        },
+        res: {
+          body: { @partial
+            url: "https://httpbin.org/anything/b/x",
+          }
+        }
+      }
+    }
+  }
+}

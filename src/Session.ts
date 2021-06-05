@@ -64,6 +64,11 @@ export default class Session {
     this.cache.cursor = unit.id;
     await saveCache(this.cacheFile, this.cache);
   }
+
+  public async clearCursor() {
+    this.cache.cursor = "";
+    await saveCache(this.cacheFile, this.cache);
+  }
 }
 
 export interface VmContext {
