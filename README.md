@@ -58,7 +58,7 @@ Write test file `httpbin.jsona`
      },
      res: {
        status: 200,
-       body: {@partial
+       body: { @partial
          json: {
            v1: "bar1",
            v2: "bar2"
@@ -241,7 +241,8 @@ The following test cases can use all the data of the previous test cases.
     test2: { @describe("create article")
         req: {
             header: {
-                authorization: `"Bearer " + test1.res.body.token`, @eval // We access the response data of the previous test case test1.
+                // We access the response data of the previous test case test1.
+                authorization: `"Bearer " + test1.res.body.token`, @eval
             },
         }
     },
@@ -343,15 +344,17 @@ Use functions
      test1: {
          req: {
              body: {
-                 color:'makeColor()', @eval // call the `randColor` function to generate random colors
+                // call the `randColor` function to generate random colors
+                color:'makeColor()', @eval 
              }
          },
          res: {
              body: {
-                 createdAt:'isDate($)', @eval // $ indicates the field to be verified, corresponding to the response data `res.body.createdAt`
+                // $ indicates the field to be verified, corresponding to the response data `res.body.createdAt`
+                createdAt:'isDate($)', @eval
 
-                 // Of course you can use regex directly
-                 updatedAt: `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ .test($)`, @eval
+                // Of course you can use regex directly
+                updatedAt: `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ .test($)`, @eval
              }
          }
      }
@@ -422,7 +425,8 @@ JSON describes data and annotation describes logic.
                 ]
             },
             res: {
-                v1: 0, @type // Using @type, we only verify that the `v1` value is an integer type, regardless of its specific value.
+                // Using @type, we only verify that the `v1` value is an integer type
+                v1: 0, @type
                 v2: "$.length === 8", @eval
                 v3: [ @every
                     "$> 3", @eval
@@ -432,10 +436,12 @@ JSON describes data and annotation describes logic.
                     "$> 2", @eval
                     "$ <= 2", @eval
                 ],
-                v5: { @partial // Using @partial, we only verify the part of the object we are interested in `a`, ignore `b`
+                // Using @partial, we only verify the part of the object we are interested in `a`, ignore `b`
+                v5: { @partial
                     a: 3,
                 },
-                v6: [ @partial // Using @partial, we only check the first element in the array
+                // Using @partial, we only check the first element in the array
+                v6: [ @partial
                     3
                 ]
             }
@@ -481,12 +487,15 @@ The `http` client handles http/https requests/responses.
         req: {
             url: "https://httpbin.org/anything/{id}", // request url
             method: "post", // http method
-            query: { // query string, will append to url like `?foo=v1&bar=v2
+            // query string, will append to url like `?foo=v1&bar=v2
+            query: {
                 foo: "v1",
                 bar: "v2",
             },
+
+            // url path params, `/anything/{id}` => `/anything/33`
             params: {
-                id: 33, // url path params, will fill the placefolder in path `/anything/{id}` => `/anything/33`
+                id: 33, 
             },
             header: { // http request headers
                 'x-key': 'v1'
