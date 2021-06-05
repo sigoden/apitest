@@ -455,7 +455,7 @@ options:
 - `run.loop.items` iter pass to `$run.item`
 - `run.loop.delay`  interval between each cycle (ms)
 
-#### dump
+#### Dump
 
 ```
 {
