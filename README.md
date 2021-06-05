@@ -21,6 +21,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [CI Support](#ci-support)
     - [TDD Support](#tdd-support)
     - [User-defined Functions](#user-defined-functions)
+    - [Skip, Delay, Retry, Loop](#skip-delay-retry-loop)
   - [Annotation](#annotation)
     - [Entrypoint Annotation](#entrypoint-annotation)
     - [Test Case Annotation](#test-case-annotation)
@@ -360,6 +361,93 @@ Use functions
      }
 }
 ```
+
+### Skip, Delay, Retry, Loop
+
+In some scenarios, use cases may not need to be executed, or they may need to be executed repeatedly. It is necessary to add a `run` option to support this feature.
+
+#### Skip
+
+```
+{
+    test1: { @client("echo")
+        req: {
+        },
+        run: {
+            skip: `mod1.test1.res.status === 200`, @eval
+        }
+    }
+}
+```
+
+- `run.skip` skip the test when true
+
+#### Delay
+
+Run the test case after waiting for a period of time
+
+```
+{
+    test1: { @client("echo")
+        req: {
+        },
+        run: {
+            delay: 1000,
+        }
+    }
+}
+```
+
+- `run.delay` delay in ms
+
+#### Retry
+
+```
+{
+    test1: { @client("echo")
+        req: {
+        },
+        run: {
+            retry: {
+                stop:'$run.retry.count> 2', @eval
+                delay: 1000,
+            }
+        },
+    }
+}
+```
+
+- `$run.retry.count` records the number of retries.
+- `run.retry.stop`  whether to stop retry
+- `run.retry.delay` interval between each retry (ms)
+
+#### Loop
+
+```
+{
+    test1: { @client("echo")
+        req: {
+            v1:'$run.loop.index', @eval
+            v1:'$run.loop.item', @eval
+        },
+        run: {
+            loop: {
+                delay: 1000,
+                data: [
+                    'a',
+                    'b',
+                    'c',
+                ]
+            }
+        },
+    }
+}
+```
+
+- `$run.loop.item` current loop data
+- `$run.loop.index` current loop data index
+- `run.loop.data`  loop fill to `$run.loop` data
+- `run.loop.delay`  interval between each cycle (ms)
 
 ## Annotation
 
