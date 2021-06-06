@@ -1,0 +1,9 @@
+{
+  @client({
+    name:"client1",
+    kind: "http",
+    options: {
+      timeout: "a",
+    }
+  })
+}

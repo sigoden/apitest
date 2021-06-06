@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { Case } from "./Cases";
 import { JsonaString, JsonaValue } from "jsona-js";
-import {  existAnno, evalValue, validate } from "./utils";
+import {  existAnno, evalValue, schemaValidate } from "./utils";
 import { VmContext } from "./Session";
 import { RunCaseError } from "./Reporter";
 
@@ -63,7 +63,7 @@ export default function createRun(testcase: Case, ctx: VmContext) {
   const nextPaths = testcase.paths.concat(["run"]);
   const run: CaseRun = createValue(nextPaths, ctx, testcase.run);
   try {
-    validate(run, nextPaths, CASE_RUN_SCHEMA, false);
+    schemaValidate(run, nextPaths, CASE_RUN_SCHEMA, false);
   } catch (err) {
     if (err.paths) throw new RunCaseError(err.paths, "", err.message);
     throw new RunCaseError(nextPaths, "", "run is invalid");

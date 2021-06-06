@@ -895,6 +895,9 @@ The `http` client handles http/https requests/responses.
   // `withCredentials` indicates whether or not cross-site Access-Control requests
   // should be made using credentials
   withCredentials: false, // default
+  // `headers` is default request headers
+  headers: {
+  }
 }
 ```
 

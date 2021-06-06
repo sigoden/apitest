@@ -5,6 +5,11 @@ exports[`loader invalid client 1`] = `
 "
 `;
 
+exports[`loader invalid client options 1`] = `
+"[main@client(client1)[timeout] should be integer value
+"
+`;
+
 exports[`loader invalid jslib 1`] = `
 "[main@jslib] should have string value at line 2 col 4
 "

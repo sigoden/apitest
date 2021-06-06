@@ -2,19 +2,54 @@ import axios, { AxiosRequestConfig } from "axios";
 import * as _ from "lodash";
 import { Client } from ".";
 import { Unit } from "../Cases";
-import { checkValue, existAnno, toPosString } from "../utils";
+import { checkValue, existAnno, schemaValidate, toPosString } from "../utils";
 import { JsonaObject, JsonaString, JsonaValue } from "jsona-js";
 
+export interface HttpClientOptions {
+  baseUrl?: string;
+  timeout?: number;
+  withCredentials?: boolean;
+  headers?: Record<string, string>;
+}
+
+export const HTTP_OPTIONS_SCHEMA = {
+  type: "object",
+  properties: {
+    baseURL: {
+      type: "string",
+    },
+    timeout: {
+      type: "integer",
+    },
+    withCredentials: {
+      type: "boolean",
+    },
+    headers: {
+      type: "object",
+      anyProperties: {
+        type: "string",
+      },
+    },
+  },
+};
+
+
 export default class HttpClient implements Client {
-  private options: any;
-  public constructor(options: any) {
-    if (_.isObject(options)) {
-      this.options = _.pick(options, ["baseURL", "timeout", "withCredentials"]);
+  private options: HttpClientOptions;
+  public constructor(name: string, options: any) {
+    if (options) {
+      try {
+        schemaValidate(options, [], HTTP_OPTIONS_SCHEMA, true);
+        this.options = _.pick(options, ["baseURL", "timeout", "withCredentials", "headers"]);
+      } catch (err) {
+        throw new Error(`[main@client(${name})[${err.paths.join(".")}] ${err.message}`);
+      }
     } else {
-      this.options = options;
+      this.options = {};
     }
   }
-  public get name() {
+
+  public get kind() {
     return "http";
   }
 
@@ -25,7 +60,7 @@ export default class HttpClient implements Client {
 
   public async run(unit: Unit, req: any) {
     const opts: AxiosRequestConfig = {
-      ...(this.options || {}),
+      ..._.clone(this.options),
       ...(unit.client.options || {}),
       url: req.url,
       method: req.method || "get",

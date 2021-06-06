@@ -908,6 +908,9 @@ Apitest 提供两种客户端。
   timeout: 1000, // default is `0` (no timeout)
   // `withCredentials` 表示是否跨站访问控制请求
   withCredentials: false, // default
+  // `headers` 默认请求头
+  headers: {
+  }
 }
 ```
 

@@ -1,6 +1,11 @@
 const { spwanTest } = require("./utils");
 
 describe("loader", () => {
+  test("invalid client options", async () => {
+    const { stdout, code } = await spwanTest("loader/invalid-client-options.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
   test("invalid client", async () => {
     const { stdout, code } = await spwanTest("loader/invalid-client.jsona", ["--ci"]);
     expect(code).toEqual(1);

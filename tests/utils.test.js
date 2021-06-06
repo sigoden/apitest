@@ -1,8 +1,9 @@
-const { validate  } = require("../dist/utils");
+const { schemaValidate  } = require("../dist/utils");
 const { CASE_RUN_SCHEMA  } = require("../dist/createRun");
+const { HTTP_OPTIONS_SCHEMA  } = require("../dist/Clients/HttpClient");
 test("validate", () => {
   expect(() => {
-    validate(
+    schemaValidate(
       undefined,
       [], 
       CASE_RUN_SCHEMA, 
@@ -10,7 +11,7 @@ test("validate", () => {
     );
   }).not.toThrow();
   expect(() => {
-    validate(
+    schemaValidate(
       {
         skip: true,
         delay: 100,
@@ -30,7 +31,7 @@ test("validate", () => {
   }).not.toThrow();
 
   expect(() => {
-    validate(
+    schemaValidate(
       {
         skip: "abc",
       },
@@ -41,7 +42,7 @@ test("validate", () => {
   }).toThrow();
 
   expect(() => {
-    validate(
+    schemaValidate(
       {
         retry: {
           stop: "abc",
@@ -54,7 +55,7 @@ test("validate", () => {
     );
   }).toThrow();
   expect(() => {
-    validate(
+    schemaValidate(
       {
         retry: {
           delay: 100,
@@ -63,6 +64,33 @@ test("validate", () => {
       [], 
       CASE_RUN_SCHEMA, 
       false,
+    );
+  }).toThrow();
+  expect(() => {
+    schemaValidate(
+      {
+        baseURL: "abc",
+        timeout: 5000,
+        withCredentials: false,
+        headers: {
+          "x-key": "abc",
+        },
+      },
+      [], 
+      HTTP_OPTIONS_SCHEMA, 
+      true,
+    );
+  }).not.toThrow();
+  expect(() => {
+    schemaValidate(
+      {
+        headers: {
+          "x-key": [],
+        },
+      },
+      [], 
+      HTTP_OPTIONS_SCHEMA, 
+      true,
     );
   }).toThrow();
 });

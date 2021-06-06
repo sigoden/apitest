@@ -12,7 +12,7 @@ export async function sleep(ms: number) {
   });
 }
 
-export function validate(target: any, paths: string[], schema: any, required: boolean) {
+export function schemaValidate(target: any, paths: string[], schema: any, required: boolean) {
   const type = getType(target);
   const schemaTypes = Array.isArray(schema?.type) ? schema.type : [schema?.type];
   if (schemaTypes.indexOf(type) === -1) {
@@ -21,15 +21,24 @@ export function validate(target: any, paths: string[], schema: any, required: bo
   }
   if (type === "object") {
     const required = schema?.required || [];
+    const keys = [];
     if (schema?.properties) {
       for (const key in schema.properties) {
-        validate(target[key], paths.concat(key), schema.properties[key], required.indexOf(key) > -1);
+        keys.push(key);
+        schemaValidate(target[key], paths.concat(key), schema.properties[key], required.indexOf(key) > -1);
+      }
+    }
+    if (schema?.anyProperties) {
+      for (const key in target) {
+        if (keys.indexOf(key) === -1) {
+          schemaValidate(target[key], paths.concat(key), schema.anyProperties, false);
+        }
       }
     }
   } else if (type === "array") {
     if (schema?.items) {
       for (const [i, item] of target.entries()) {
-        validate(item, paths.concat(i), schema.items, true);
+        schemaValidate(item, paths.concat(i), schema.items, true);
       }
     }
   }
