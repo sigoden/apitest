@@ -82,7 +82,9 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
         const v1Keys = v1.properties.map(v => v.key);
         const v2Keys = Object.keys(v2);
         if (v1Keys.length !== v2Keys.length) {
-          throw new RunCaseError(paths, "", `keys length ${v1Keys.length} ≠ ${v2Keys.length}`);
+          const v1x = _.difference(v1Keys, v2Keys);
+          const v2x = _.difference(v2Keys, v1Keys);
+          throw new RunCaseError(paths, "", `${JSON.stringify(v1x)} ≠ ${JSON.stringify(v2x)}`);
         }
       }
       for (const prop of v1.properties) {
@@ -91,7 +93,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     } else if (v1.type === "Array") {
       if (!existAnno(paths, v1, "partial", "array")) {
         if (v1.elements.length !== v2.length) {
-          throw new RunCaseError(paths, "", `elements length ${v1.elements.length} ≠ ${v2.length}`);
+          throw new RunCaseError(paths, "", `size ${v1.elements.length} ≠ ${v2.length}`);
         }
       }
       for (const [i, ele] of v1.elements.entries()) {

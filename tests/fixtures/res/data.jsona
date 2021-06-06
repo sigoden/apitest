@@ -32,7 +32,7 @@
       v1: "3"
     }
   },
-  test4: { @describe("fail# object prop length not equal")
+  test4: { @describe("fail# object not equal")
     req: {
       v1: {
         a: 3,
@@ -45,7 +45,7 @@
       }
     }
   },
-  test5: { @describe("fail# array elem length not equal")
+  test5: { @describe("fail# array not equal")
     req: {
       v1: [
         3,

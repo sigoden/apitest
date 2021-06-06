@@ -5,8 +5,8 @@ exports[`res data 1`] = `
   fail# value not equal ✘
   fail# nest value not equal ✘
   fail# value type not equal ✘
-  fail# object prop length not equal ✘
-  fail# array elem length not equal ✘
+  fail# object not equal ✘
+  fail# array not equal ✘
 
 1. fail# value not equal(main.test1)
    main.test1.res.v1: 2 ≠ 3
@@ -17,11 +17,11 @@ exports[`res data 1`] = `
 3. fail# value type not equal(main.test3)
    main.test3.res.v1: type integer ≠ type string
 
-4. fail# object prop length not equal(main.test4)
-   main.test4.res.v1: keys length 1 ≠ 2
+4. fail# object not equal(main.test4)
+   main.test4.res.v1: [] ≠ [\\"a\\"]
 
-5. fail# array elem length not equal(main.test5)
-   main.test5.res.v1: elements length 1 ≠ 2
+5. fail# array not equal(main.test5)
+   main.test5.res.v1: size 1 ≠ 2
 
 "
 `;

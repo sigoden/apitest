@@ -6,7 +6,7 @@ import EchoClient from "./EchoClient";
 import HttpClient from "./HttpClient";
 
 export abstract class Client {
-  constructor(options: any) {}
+  constructor(_options: any) {}
   abstract validate(unit: Unit);
   abstract get name(): string;
   abstract run(unit: Unit, req: any): Promise<any>; 
