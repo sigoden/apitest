@@ -1,8 +1,7 @@
 import * as _ from "lodash";
 import { Case } from "./Cases";
 import { JsonaString, JsonaValue } from "jsona-js";
-import { existAnno, evalValue } from "./createReq";
-import { validate } from "./utils";
+import {  existAnno, evalValue, validate } from "./utils";
 import { VmContext } from "./Session";
 import { RunCaseError } from "./Reporter";
 

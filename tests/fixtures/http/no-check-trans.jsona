@@ -1,0 +1,26 @@
+{
+  test1: {
+    req: {
+      url: {}, @trans(`"https://httpbin.org/anything/{id}"`)
+      method: {}, @trans(`"post"`)
+      header:{
+        'xkey': {}, @trans(`"abc"`)
+      },
+      params:{
+        id: {}, @trans(`1`)
+      },
+      query: {
+        'foo': {}, @trans(`"abc"`)
+      },
+      body: {
+      }
+    },
+    res: {
+      status: { @trans(`{code: $}`)
+        code: 200,
+      },
+      body: { @partial
+      }
+    }
+  },
+}

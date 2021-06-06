@@ -90,4 +90,8 @@ describe("http", () => {
     const { code } = await spwanTest("http", ["--ci"]);
     expect(code).toEqual(0);
   }, 60000);
+  test("no-check-trans", async () => {
+    const { code } = await spwanTest("http/no-check-trans.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+  }, 60000);
 });

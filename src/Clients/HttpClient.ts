@@ -2,8 +2,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import * as _ from "lodash";
 import { Client } from ".";
 import { Unit } from "../Cases";
-import { toPosString } from "../utils";
-import { JsonaObject, JsonaValue } from "jsona-js";
+import { checkValue, existAnno, toPosString } from "../utils";
+import { JsonaObject, JsonaString, JsonaValue } from "jsona-js";
 
 export default class HttpClient implements Client {
   private options: any;
@@ -73,70 +73,43 @@ export default class HttpClient implements Client {
   }
 
   private validateReq(paths: string[], req: JsonaValue) {
-    if (req.type !== "Object") {
-      throw new Error(`${paths.join(".")}: should be object value${toPosString(req.position)}`);
-    }
-    const urlProp = req.properties.find(v => v.key === "url");
-    if (!urlProp) {
-      throw new Error(`${paths.concat(["url"]).join(".")}: is required${toPosString(req.position)}`);
-    }
-    if (urlProp.value.type !== "String") {
-      throw new Error(`${paths.concat(["url"]).join(".")}: should be string value${toPosString(urlProp.position)}`);
-    }
-
-    const urlParamKeys =  _.uniq(urlProp.value.value.split("/").filter(v => /^\{\w+\}$/.test(v)).map(v => v.slice(1, -1)));
-
-    const methodProp = req.properties.find(v => v.key === "method");
-    if (methodProp) {
-      if (methodProp.value.type !== "String") {
-        throw new Error(`${paths.concat(["method"]).join(".")}: should be string value${toPosString(methodProp.position)}`);
-      }
-      const method = methodProp.value.value;
-      if (["post", "get", "put", "delete", "patch"].indexOf(method) === -1) {
-        throw new Error(`${paths.concat(["method"]).join(".")}: is not valid http method${toPosString(methodProp.position)}`);
-      }
-    }
-
-    const paramsProp = req.properties.find(v => v.key === "params");
-    if (paramsProp) {
-      if (paramsProp.value.type !== "Object") {
-        throw new Error(`${paths.concat(["params"]).join(".")}: should be object value${toPosString(paramsProp.position)}`);
-      }
-      const paramKeys = [];
-      for (const prop of paramsProp.value.properties) {
-        if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${paths.concat(["params"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
+    checkValue(paths, req, [
+      { paths: [], required: true, type: "Object" },
+      { paths: ["url"], required: true, type: "String" },
+      { 
+        paths: ["method"], 
+        type: "String", 
+        check: (paths: string[], method: JsonaString) => {
+          if (["post", "get", "put", "delete", "patch"].indexOf(method.value) === -1) {
+            throw new Error(`${paths.join(".")}: is not valid http method${toPosString(method.position)}`);
+          }
+        },
+      },
+      { paths: ["params"], type: "Object" },
+      { paths: ["params", "*"], type: "Scalar", required: true },
+      { paths: ["header"], type: "Object" },
+      { paths: ["header", "*"], type: "Scalar", required: true  },
+      { paths: ["query"], type: "Object" },
+      { paths: ["query", "*"], type: "Scalar", required: true  },
+    ]);
+    if (req.type === "Object" && !existAnno(paths, req, "@trans", "any")) {
+      const urlValue = req.properties.find(v => v.key === "url").value as JsonaString;
+      if (!existAnno(paths, urlValue, "trans", "any")) {
+        const urlParamKeys =  _.uniq(urlValue.value.split("/").filter(v => /^\{\w+\}$/.test(v)).map(v => v.slice(1, -1)));
+        if (urlParamKeys.length === 0) return;
+        const paramsProp = req.properties.find(v => v.key === "params");
+        if (!paramsProp) {
+          throw new Error(`${paths.join(".")}: must have url params ${urlParamKeys.join(",")}`);
         }
-        paramKeys.push(prop.key);
-      }
-      if (!_.isEqual(_.sortBy(urlParamKeys), _.sortBy(paramKeys))) {
-        throw new Error(`${paths.concat(["params"]).join(".")}: should match url params${toPosString(paramsProp.position)}`);
-      }
-    } else {
-      if (urlParamKeys.length > 0) {
-        throw new Error(`${[paths]} must have url params ${urlParamKeys.join(".")}`);
-      }
-    }
-
-    const headerProp = req.properties.find(v => v.key === "header");
-    if (headerProp) {
-      if (headerProp.value.type !== "Object") {
-        throw new Error(`${paths.concat(["header"]).join(".")}: should be object value${toPosString(headerProp.position)}`);
-      }
-      for (const prop of headerProp.value.properties) {
-        if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${paths.concat(["header"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
-        }
-      }
-    }
-    const queryProp = req.properties.find(v => v.key === "query");
-    if (queryProp) {
-      if (queryProp.value.type !== "Object") {
-        throw new Error(`${paths.concat(["query"]).join(".")}: should be object value${toPosString(queryProp.position)}`);
-      }
-      for (const prop of queryProp.value.properties) {
-        if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${paths.concat(["query"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
+        if (!existAnno(paths, req, "@anno", "any")) {
+          const paramKeys = [];
+          const paramsPropValue = paramsProp.value as JsonaObject;
+          for (const prop of paramsPropValue.properties) {
+            paramKeys.push(prop.key);
+          }
+          if (!_.isEqual(_.sortBy(urlParamKeys), _.sortBy(paramKeys))) {
+            throw new Error(`${paths.concat(["params"]).join(".")}: should match url params${toPosString(paramsPropValue.position)}`);
+          }
         }
       }
     }
@@ -144,25 +117,11 @@ export default class HttpClient implements Client {
 
   private validateRes(paths: string[], res: JsonaValue) {
     if (!res) return;
-    if (res.type !== "Object") {
-      throw new Error(`${[paths.join(".")]} should be object value${toPosString(res.position)}`);
-    }
-    const headerProp = res.properties.find(v => v.key === "header");
-    if (headerProp) {
-      if (headerProp.value.type !== "Object") {
-        throw new Error(`${paths.concat(["header"]).join(".")}: should be object value${toPosString(headerProp.position)}`);
-      }
-      for (const prop of headerProp.value.properties) {
-        if (prop.value.type === "Object" || prop.value.type === "Array") {
-          throw new Error(`${paths.concat(["query"]).join(".")}: should be scalar value${toPosString(prop.position)}`);
-        }
-      }
-    }
-    const statusProp = res.properties.find(v => v.key === "status");
-    if (statusProp) {
-      if (statusProp.value.type !== "Integer") {
-        throw new Error(`${paths.concat(["status"]).join(".")}: should be integer value${toPosString(statusProp.position)}`);
-      }
-    }
+    checkValue(paths, res, [
+      { paths: [], type: "Object", required: true },
+      { paths: ["status"], type: "Integer" },
+      { paths: ["header"], type: "Object" },
+      { paths: ["header", "*"], type: "Scalar", required: true },
+    ]);
   }
 }

@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { Unit } from "./Cases";
 import { JsonaArray, JsonaString, JsonaValue } from "jsona-js";
-import { existAnno, evalValue } from "./createReq";
+import { existAnno, evalValue } from "./utils";
 import { getType } from "./utils";
 import { VmContext } from "./Session";
 import { RunCaseError } from "./Reporter";
