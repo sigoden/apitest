@@ -89,12 +89,13 @@ export function evalValue(paths: string[], ctx: VmContext, code: string, anno = 
   if (!expressions[lastIdx].trim().startsWith("return")) {
     expressions[lastIdx] = "return " + expressions[lastIdx];
   }
-  const patchedCode = ctx.jslibs.join("\n") + expressions.join(";");
+  const patchedCode = expressions.join(";");
   const EXPORT_KEY = "__exports__";
   ctx.state[EXPORT_KEY] = null;
   try {
     const wrapCode = `${EXPORT_KEY} = (function(){${patchedCode};}())`;
     const script = new vm.Script(wrapCode);
+    _.merge(ctx.state, ctx.jslib);
     script.runInNewContext(ctx.state);
     return ctx.state[EXPORT_KEY];
   } catch (err) {

@@ -11,11 +11,6 @@ describe("loader", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("invalid jslib js2", async () => {
-    const { stdout, code } = await spwanTest("loader/invalid-jslib-js2.jsona", ["--ci"]);
-    expect(code).toEqual(1);
-    expect(stdout).toMatchSnapshot();
-  });
   test("invalid jslib", async () => {
     const { stdout, code } = await spwanTest("loader/invalid-jslib.jsona", ["--ci"]);
     expect(code).toEqual(1);
@@ -66,7 +61,10 @@ describe("loader", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-
+  test("jslib", async () => {
+    const { code } = await spwanTest("loader/jslib.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+  });
   test("target file not found", async () => {
     const { stdout, code } = await spwanTest("loader/notfound.jsona", ["--ci"]);
     expect(code).toEqual(1);

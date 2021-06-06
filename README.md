@@ -330,7 +330,7 @@ Write functions `lib.js`
 
 ```js
 // Make random color e.g. #34FFFF
-function randColor() {
+exports.makeColor = function () {
   const letters = '0123456789ABCDEF';
   let color = '#';
   for (let i = 0; i < 6; i++) {
@@ -340,7 +340,7 @@ function randColor() {
 }
 
 // Detect date in ISO8601(e.g. 2021-06-02:00:00.000Z) format
-function isDate(date) {
+exports.isDate = function (date) {
   return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(date)
 }
 ```
@@ -354,7 +354,7 @@ Use functions
    test1: {
      req: {
        body: {
-        // call the `randColor` function to generate random colors
+        // call the `makeColor` function to generate random colors
         color:'makeColor()', @eval 
        }
      },

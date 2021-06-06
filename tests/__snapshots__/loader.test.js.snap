@@ -11,11 +11,6 @@ exports[`loader invalid jslib 1`] = `
 `;
 
 exports[`loader invalid jslib js 1`] = `
-"main@jslib(invalid-jslib-404): load invalid-jslib-404.js failed
-"
-`;
-
-exports[`loader invalid jslib js2 1`] = `
 "main@jslib(invalid-jslib): load invalid-jslib.js throw Unexpected end of input at line 2 col 4
 "
 `;

@@ -13,10 +13,13 @@ export interface Module {
   describe: string;
 }
 
+export interface JSLib {
+}
+
 export default class Loader {
   private workDir: string;
   private cases: Cases;
-  private jslibs: string[] = [];
+  private jslib: JSLib = {};
   private clients: Clients = new Clients();
   private modules: Module[] = [];
   private mixin: JsonaObject;
@@ -58,7 +61,7 @@ export default class Loader {
       mainFile,
       cases: this.cases,
       clients: this.clients,
-      jslibs: this.jslibs,
+      jslibs: this.jslib,
     };
   }
 
@@ -128,18 +131,11 @@ export default class Loader {
       const  libFile = path.resolve(this.workDir, libFileName);
       let jslib;
       try {
-        jslib = await fs.readFile(libFile, "utf8");
-      } catch (err) {
-        throw new Error(`main@jslib(${libName}): load ${libFileName} failed`);
-      }
-      try {
-        const context = {};
-        const script = new vm.Script(jslib);
-        script.runInNewContext(context);
+        jslib = require(libFile);
       } catch (err) {
         throw new Error(`main@jslib(${libName}): load ${libFileName} throw ${err.message}${toPosString(anno.position)}`);
       }
-      this.jslibs.push(jslib);
+      _.merge(this.jslib, jslib);
     } else {
       throw new Error(`[main@jslib] should have string value${toPosString(anno.position)}`);
     }

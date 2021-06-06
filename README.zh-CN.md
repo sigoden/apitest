@@ -327,9 +327,9 @@ Apitest 使用JSONA格式描述测试用例。 JSON描述数据，注解描述�
 ```js
 
 // 创建随机颜色
-function randColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
+exports.makeColor = function () {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
@@ -337,7 +337,7 @@ function randColor() {
 }
 
 // 判断是否是ISO8601(2021-06-02:00:00.000Z)风格的时间字符串
-function isDate(date) {
+exports.isDate = function (date) {
   return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(date)
 }
 ```
@@ -350,7 +350,7 @@ function isDate(date) {
   test1: {
     req: {
       body: {
-        color: 'makeColor()', @eval // 调用 `randColor` 函数生成随机颜色
+        color: 'makeColor()', @eval // 调用 `makeColor` 函数生成随机颜色
       }
     },
     res: {

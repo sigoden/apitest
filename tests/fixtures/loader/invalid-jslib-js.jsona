@@ -1,3 +1,3 @@
 {
-  @jslib("invalid-jslib-404")
+  @jslib("invalid-jslib")
 }

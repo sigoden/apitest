@@ -1,0 +1,11 @@
+{
+  @jslib("jslib")
+  test1: { @client("echo")
+    req: {
+      color: 'makeColor()', @eval 
+    },
+    res: {
+      color: `/#[0-9A-F]{6}/.test($)`, @eval
+    }
+  }
+}

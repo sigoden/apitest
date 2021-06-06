@@ -4,6 +4,7 @@ import * as fs from "fs/promises";
 import * as crypto from "crypto";
 import * as _ from "lodash";
 import { Case, Unit } from "./Cases";
+import { JSLib } from "./Loader";
 
 export const EMPTY_CACHE = { cursor: "", tests: {} };
 
@@ -11,16 +12,16 @@ export default class Session {
   private cacheFile: string;
   private cache: Cache;
   private unitIds: string[];
-  private jslibs: string[] = [];
+  private jslib: JSLib;
 
-  public constructor(cacheFile: string, unitIds: string[], cache: Cache, jslibs: string[]) {
+  public constructor(cacheFile: string, unitIds: string[], cache: Cache, jslib: JSLib) {
     this.cacheFile = cacheFile;
     this.unitIds = unitIds;
     this.cache = cache;
-    this.jslibs = jslibs;
+    this.jslib = jslib;
   }
 
-  public static async create(mainFile: string, unitIds: string[], jslibs: string[]) {
+  public static async create(mainFile: string, unitIds: string[], jslibs: any) {
     const cacheFileName = "apitest" + md5(mainFile) + ".json";
     const cacheFile = path.resolve(os.tmpdir(), cacheFileName);
     const cache = await loadCache(cacheFile);
@@ -59,7 +60,7 @@ export default class Session {
       _.set(state, ["req"], req);
       _.set(this.cache.tests, testcase.paths.concat(["req"]), req);
     }
-    return { state, jslibs: this.jslibs };
+    return { state, jslib: this.jslib };
   }
 
   public async saveValue(testcase: Case, key: string, value: any, persist = true) {
@@ -89,7 +90,7 @@ export default class Session {
 }
 
 export interface VmContext {
-  jslibs: string[],
+  jslib: JSLib,
   state: any;
 }
 
