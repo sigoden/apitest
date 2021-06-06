@@ -12,20 +12,36 @@ Read this in other languages: [中文](./README.zh-CN.md)
   - [Installation](#installation)
   - [Get Started](#get-started)
   - [Features](#features)
-    - [JSON-like DSL](#json-like-dsl)
     - [Cross Platform, Programming Language Agnostic](#cross-platform-programming-language-agnostic)
-    - [Mock](#mock)
+    - [JSON-like DSL](#json-like-dsl)
     - [Data Is Assertion](#data-is-assertion)
-    - [Data Is Variable](#data-is-variable)
-    - [Mixin](#mixin)
+    - [Data Is Accessable](#data-is-accessable)
+    - [Support Mock](#support-mock)
+    - [Support Mixin](#support-mixin)
     - [CI Support](#ci-support)
     - [TDD Support](#tdd-support)
-    - [User-defined Functions](#user-defined-functions)
-    - [Skip, Delay, Retry, Loop](#skip-delay-retry-loop)
+    - [User-defiend Functions](#user-defiend-functions)
+    - [Skip, Delay, Retry & Loop](#skip-delay-retry--loop)
   - [Annotation](#annotation)
-    - [Entrypoint Annotation](#entrypoint-annotation)
-    - [Test Case Annotation](#test-case-annotation)
-  - [Client](#client)
+    - [@module](#module)
+    - [@jslib](#jslib)
+    - [@mixin](#mixin)
+    - [@client](#client)
+    - [@describe](#describe)
+    - [@group](#group)
+    - [@eval](#eval)
+    - [@mock](#mock)
+    - [@every](#every)
+    - [@some](#some)
+    - [@partial](#partial)
+    - [@type](#type)
+  - [Run](#run)
+    - [Skip](#skip)
+    - [Delay](#delay)
+    - [Retry](#retry)
+    - [Loop](#loop)
+    - [Dump](#dump)
+  - [Client](#client-1)
     - [Echo](#echo)
     - [Http](#http)
   - [Cli](#cli)
@@ -45,28 +61,28 @@ Write test file `httpbin.jsona`
 
 ```
 {
-   test1: {
-     req: {
-       url: "https://httpbin.org/post",
-       method: "post",
-       header: {
-         'content-type':'application/json',
-       },
-       body: {
-         v1: "bar1",
-         v2: "Bar2",
-       },
-     },
-     res: {
-       status: 200,
-       body: { @partial
-         json: {
-           v1: "bar1",
-           v2: "bar2"
-         }
-       }
-     }
-   }
+  test1: {
+    req: {
+      url: "https://httpbin.org/post",
+      method: "post",
+      header: {
+        'content-type':'application/json',
+      },
+      body: {
+        v1: "bar1",
+        v2: "Bar2",
+      },
+    },
+    res: {
+      status: 200,
+      body: { @partial
+        json: {
+          v1: "bar1",
+          v2: "bar2"
+        }
+      }
+    }
+  }
 }
 
 ```
@@ -76,8 +92,8 @@ Run test
 ```
 apitest httpbin.jsona
 
-module main
-   unit test1 (0.944) ✘
+main
+   test1 (0.944) ✘
    main.test1.res.body.json.v2: bar2 ≠ Bar2
 
    ...
@@ -90,36 +106,40 @@ After we modify `bar2` to `Bar2`, execute Apitest again
 ```
 apitest httpbin.jsona
 
-module main
-   unit test1 (0.930) ✔
+main
+   test1 (0.930) ✔
 ```
 
 ## Features
 
+### Cross Platform, Programming Language Agnostic
+
+Apitest is a command line tool that supports linux, windows, mac systems. Its own test cases are written using DSL and do not rely on specific language experience.
+
 ### JSON-like DSL
 
-The test case itself can be used as an auxiliary reference document for the api.
+Use JSON-like DSL to write tests. The document is the test.
 
 ```
 {
-    test1: { @describe("user login")
-        req: {
-            url: 'http://localhost:3000/login'
-            method: 'post',
-            body: {
-                user: 'jason',
-                pass: 'a123456,
-            }
-        },
-        res: {
-            status: 200
-            body: {
-                user: 'jason',
-                token: '', @type
-                expireIn: 0, @type
-            }
-        }
+  test1: { @describe("user login")
+    req: {
+      url: 'http://localhost:3000/login'
+      method: 'post',
+      body: {
+        user: 'jason',
+        pass: 'a123456,
+      }
+    },
+    res: {
+      status: 200
+      body: {
+        user: 'jason',
+        token: '', @type
+        expireIn: 0, @type
+      }
     }
+  }
 }
 ```
 
@@ -129,42 +149,9 @@ The working principle of Apitest is to construct the request according to the de
 
 Please don't be scared by DSL. In fact, it is JSON, which loosens some grammatical restrictions (double quotes are not mandatory, comments are supported, etc.), and only one feature is added: comments. In the above example, `@describe`, `@type` is [Annotation](#Annotation).
 
+JSON describes data and annotation describes logic.
+
 > By the way, there is a vscode extension supports DSL (jsona) format.
-
-
-### Cross Platform, Programming Language Agnostic
-
-Apitest is a command line tool that supports linux, windows, mac systems. Its own test cases are written using DSL and do not rely on specific language experience.
-
-### Mock
-
-With Mock, no longer entangled in fabricating data
-
-Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fake.js](https://github.com/sigoden/fake-js#doc)
-
-```
-{
-    test1: {
-        req: {
-            email: 'email', @mock
-            username: 'username', @mock
-            integer: 'integer(-5, 5)', @mock
-            image: 'image("200x100")', @mock
-            string: 'string("alpha", 5)', @mock
-            date: 'date', @mock  // iso8601 format // 2021-06-03T07:35:55Z
-            date1: 'date("yyyy-mm-dd HH:MM:ss")' @mock // 2021-06-03 15:35:55
-            date2: 'date("unix")', @mock // unix epoch 1622705755
-            date3: 'date("","3 hours 15 minutes")', @mock 
-            date4: 'date("","2 weeks ago")', @mock 
-            ipv6: 'ipv6', @mock
-            sentence: 'sentence', @mock
-            cnsentence: 'cnsentence', @mock 
-        }
-    }
-}
-```
-
-> Apitest uses its own mock library (refer to mock.js), and mock functions can be added freely. If you have any mocks you want, please submit an issue.
 
 ### Data Is Assertion
 
@@ -172,12 +159,12 @@ How to understand? See below.
 
 ```json
 {
-    "foo1": 3,
-    "foo2": ["a", "b"],
-    "foo3": {
-        "a": 3,
-        "b": 4
-    }
+  "foo1": 3,
+  "foo2": ["a", "b"],
+  "foo3": {
+    "a": 3,
+    "b": 4
+  }
 }
 ```
 
@@ -185,20 +172,20 @@ Assuming that the response data is as above, the test case is as follows:
 
 ```
 {
-    test1: {
-        req: {
-        },
-        res: {
-            body: {
-                "foo1": 3,
-                "foo2": ["a", "b"],
-                "foo3": {
-                    "a": 3,
-                    "b": 4
-                }
-            }
+  test1: {
+    req: {
+    },
+    res: {
+      body: {
+        "foo1": 3,
+        "foo2": ["a", "b"],
+        "foo3": {
+          "a": 3,
+          "b": 4
         }
+      }
     }
+  }
 }
 ```
 
@@ -210,76 +197,204 @@ For example, the previous test case
 
 ```
 {
-    test1: { @describe("user login")
-        ...
-        res: {
-            body: {
-                user: 'jason',
-                token: '', @type
-                expireIn: 0, @type
-            }
-        }
+  test1: { @describe("user login")
+    ...
+    res: {
+      body: {
+        user: 'jason',
+        token: '', @type
+        expireIn: 0, @type
+      }
     }
+  }
 }
 ```
 
 We still checked all the fields. Because the values of `token` and `expireIn` are changed, we use `@type` to tell Apitest to only check the type of the field and ignore the specific value.
 
-### Data Is Variable
+### Data Is Accessable
+
+Any data of the test case can be testd by subsequent test cases
 
 The following test cases can use all the data of the previous test cases.
 
 ```
 {
-    test1: { @describe("user login")
-        ...
-        res: {
-            body: {
-                token: '', @type
-            }
-        }
-    },
-    test2: { @describe("create article")
-        req: {
-            header: {
-                // We access the response data of the previous test case test1.
-                authorization: `"Bearer " + test1.res.body.token`, @eval
-            },
-        }
-    },
-    test3: {  @client('echo')
-        req: {
-            foo: "env.FOO", @eval // Use environment variables
-        }
+  test1: { @describe("user login")
+    ...
+    res: {
+      body: {
+        token: '', @type
+      }
     }
+  },
+  test2: { @describe("create article")
+    req: {
+      header: {
+        // We access the response data of the previous test case test1.
+        authorization: `"Bearer " + test1.res.body.token`, @eval
+      },
+    }
+  },
 }
 ```
 
-### Mixin 
+### Support Mock
 
-Use Mixin skillfully, get rid of copy and paste.
-
-Generally, an api will not be used by only one test case. We can extract the routing into the mixin to avoid the need to replicate the routing information for each test case.
+With Mock, no longer entangled in fabricating data
 
 ```
 {
-    createPost: { // Extract routing information to mixin
-        req: {
-            url: '/posts',
-            method: 'post',
-        },
-    },
-    auth1: { // Extract authorization
-        req: {
-            header: {
-                authorization: `"Bearer " + test1.res.body.token`, @eval
-            }
-        }
+  test1: {
+    req: {
+      email: 'email', @mock
+      username: 'username', @mock
+      integer: 'integer(-5, 5)', @mock
+      image: 'image("200x100")', @mock
+      string: 'string("alpha", 5)', @mock
+      date: 'date', @mock  // iso8601 format // 2021-06-03T07:35:55Z
+      date1: 'date("yyyy-mm-dd HH:MM:ss")' @mock // 2021-06-03 15:35:55
+      date2: 'date("unix")', @mock // unix epoch 1622705755
+      date3: 'date("","3 hours 15 minutes")', @mock 
+      date4: 'date("","2 weeks ago")', @mock 
+      ipv6: 'ipv6', @mock
+      sentence: 'sentence', @mock
+      cnsentence: 'cnsentence', @mock 
     }
+  }
+}
+```
+
+> Apitest uses its own mock library (refer to mock.js), and mock functions can be added freely. If you have any mocks you want, please submit an issue.
+
+### Support Mixin 
+
+Use Mixin skillfully, get rid of copy and paste. See [@mixin](#mixin)
+
+
+### CI Support
+
+As a command line tool itself, it is very easy to integrate with the back-end ci. And apitest also provides the `--ci` option to optimize ci.
+
+### TDD Support
+
+You can even write only the `req` part, and after the api has a response, paste the response data directly as the `res` part. Talk of experience 🐶
+
+In the default mode (not ci), when Apitest encounters a failed test, it will print an error and exit. Apitest has cached test data. You can repeatedly execute wrong test cases, develop and test at the same time, and then enter the follow-up test until you get through.
+
+At the same time, you can also select a test case to execute through the `--only` option.
+
+### User-defiend Functions
+
+You don't need to use this function at all. But I still worry about the need in certain extreme or corner scenes, so I still support it.
+
+Apitest allows users to write custom functions through js to construct request data or verify response data. (Dare to call it a cross-programming language? 🐶)
+
+See [@jslib](#jslib)
+
+### Skip, Delay, Retry & Loop
+
+See [#Skip](#skip)
+
+## Annotation
+
+Apitest uses JSONA format to describe test cases.
+
+JSON describes data and annotation describes logic.
+
+### @module
+
+**Import submodule**
+
+```
+// main.jsona
+{
+  @module("mod1")
+}
+
+// mod1.jsona
+{
+  test1: {
+    req: {
+    }
+  }
+}
+```
+
+### @jslib
+
+**Import user-defined functions**
+
+Write functions `lib.js`
+
+```js
+// Make random color e.g. #34FFFF
+function randColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// Detect date in ISO8601(e.g. 2021-06-02:00:00.000Z) format
+function isDate(date) {
+return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(date)
+}
+```
+
+Use functions
+
+```
+@jslib("lib") // Import js files
+
+{
+   test1: {
+     req: {
+       body: {
+        // call the `randColor` function to generate random colors
+        color:'makeColor()', @eval 
+       }
+     },
+     res: {
+       body: {
+        // $ indicates the field to be verified, here is `res.body.createdAt`
+        createdAt:'isDate($)', @eval
+
+        // Of course you can use regex directly
+        updatedAt: `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ .test($)`, @eval
+       }
+     }
+   }
+}
+```
+
+### @mixin
+
+**Import mixin file**
+
+First create a file to store the file defined by Mixin
+```
+{
+  createPost: { // Extract routing information to mixin
+    req: {
+      url: '/posts',
+      method: 'post',
+    },
+  },
+  auth1: { // Extract authorization
+    req: {
+      header: {
+        authorization: `"Bearer " + test1.res.body.token`, @eval
+      }
+    }
+  }
 }
 ```
 
 ```
+@mixin("mixin") // include mixin.jsona
 {
     createPost1: { @describe("create article 1") @mixin(["createPost", "auth1"])
         req: {
@@ -299,121 +414,319 @@ Generally, an api will not be used by only one test case. We can extract the rou
 }
 ```
 
-### CI Support
+The more frequently used part, the more suitable it is to be extracted to Mixin.
 
-As a command line tool itself, it is very easy to integrate with the back-end ci. And apitest also provides the `--ci` option to optimize ci.
+### @client
 
-### TDD Support
 
-You can even write only the `req` part, and after the api has a response, paste the response data directly as the `res` part. Talk of experience 🐶
+**Setup clients** ,
 
-In the default mode (not ci), when Apitest encounters a failed test, it will print an error and exit. Apitest has cached test data. You can repeatedly execute wrong test cases, develop and test at the same time, and then enter the follow-up test until you get through.
-
-At the same time, you can also select a test case to execute through the `--only` option.
-
-### User-defined Functions
-
-You don't need to use this function at all. But I still worry about the need in certain extreme or corner scenes, so I still support it.
-
-Apitest allows users to write custom functions through js to construct request data or verify response data. (Dare to call it a cross-programming language? 🐶)
-
-Write functions `lib.js`
-
-```js
-// Make random color e.g. #34FFFF
-function randColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
-// Detect date in ISO8601(e.g. 2021-06-02:00:00.000Z) format
-function isDate(date) {
-    return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(date)
-}
-```
-
-Use functions
+[Client](#client) is responsible for constructing a request according to `req`, sending it to the server, receiving the response from the server, and constructing `res` response data.
 
 ```
-@jslib("lib") // Import js files
-
 {
-     test1: {
-         req: {
-             body: {
-                // call the `randColor` function to generate random colors
-                color:'makeColor()', @eval 
-             }
-         },
-         res: {
-             body: {
-                // $ indicates the field to be verified, here is `res.body.createdAt`
-                createdAt:'isDate($)', @eval
-
-                // Of course you can use regex directly
-                updatedAt: `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/ .test($)`, @eval
-             }
-         }
-     }
+  @client({
+    name: "apiv1",
+    kind: "http",
+    options: {
+      baseURL: "http://localhost:3000/api/v1",
+      timeout: 30000,
+    }
+  })
+  @client({
+    name: "apiv2",
+    kind: "http",
+    options: {
+      baseURL: "http://localhost:3000/api/v2",
+      timeout: 30000,
+    }
+  })
+  test1: { @client("apiv1") 
+    req: {
+      url: "/posts" // 使用apiv1客户端，所以请求路径是  http://localhost:3000/api/v1/posts
+    }
+  },
+  test2: { @client({name:"apiv2",options:{timeout:30000}})
+    req: {
+      url: "/key" // 使用apiv2客户端，所以请求路径是 http://localhost:3000/api/v2/posts
+    }
+  },
 }
 ```
 
-### Skip, Delay, Retry, Loop
+### @describe
+
+
+**Give a title**
+
+```
+{
+  @client({name:"default",kind:"echo"})
+  @describe("This is a module")
+  group1: { @group @describe("This is a group")
+    test1: { @describe("A unit in group")
+      req: {
+      }
+    },
+    group2: { @group @describe("This is a nested group")
+      test1: { @describe("A unit in nested group")
+        req: {
+        }
+      }
+    }
+  }
+}
+```
+
+It will be printed as follows
+
+```
+This is a module
+  This is a group
+    A unit in group ✔
+    This is a nested group
+      A unit in nested group ✔
+```
+
+If the `@description` is removed, it will be printed as follows
+
+```
+main
+  group1
+    test1 ✔
+    group2
+      test1 ✔
+```
+
+### @group
+
+**Mark as case group**
+
+The test cases in the group will inherit the group's `@client` and `@mixin`. The group also supports [Run](#run).
+
+
+```
+{
+  group1: { @group @mixin("auth1") @client("apiv1")
+    test1: {
+
+    },
+    // The mixin of the use case and the mixin of the group will be merged into @mixin(["route1","auth1"])
+    test2: { @mixin("route1") 
+
+    },
+    // The client of the use case will overwrite the client of the group
+    test3: { @client("echo") 
+
+    },
+    group2: { @group // nest group
+
+    },
+    run: {
+
+    }
+  }
+}
+```
+
+### @eval
+
+**Use js expr to generate data (in `req`) and verify data(in `res`)**
+
+`@eval` features:
+
+- can use js builtin functions
+- can use jslib functions
+- can access environment variables
+- can use the data from the previous test
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: "JSON.stringify({a:3,b:4})", @eval // 使用JS内置函数
+      v2: `
+        let x = 3;
+        let y = 4;
+        return x + y;
+        `, @eval  // 支持代码块
+      v3: "env.FOO", @eval // 访问环境变量
+      v4: 'mod1.test1.res.body.id`, @eval // 访问前面测试的数据
+    }
+  }
+}
+
+```
+
+`@eval` in `res` part with additional features:
+
+- `$` repersent response data in the position
+- return value true means that the verification passed
+- if the return value is not of type bool, the return value and the response data will be checked for congruent matching
+
+```
+{
+  rest2: {
+    res: {
+      v1: "JSON.parse($).a === 3",  @eval // $ is `res.v1`
+      v2: "true", @eval // true force test passed
+      v4: 'mod1.test1.res.body.id`, @eval // return value congruent matching
+    }
+  }
+}
+```
+
+**`@eval` accessing use case data with elision**
+
+```
+{
+  test1: {
+    req: {
+      v1: 3,
+    },
+    res: {
+      v1: "main.test1.req.v1", @eval
+   // v1:      "test1.req.v1", @eval
+   // v1:            "req.v1", @eval
+    }
+  }
+}
+```
+
+### @mock
+
+**Use mock function to generate data**
+
+Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fake.js](https://github.com/sigoden/fake-js#doc)
+
+###  @every
+
+**A set of assertions are passed before the test passes**
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: "integer(1, 10)", @mock
+    },
+    res: {
+      v1: [ @every
+        "$ > -1", @eval
+        "$ > 0", @eval
+      ]
+    }
+  }
+
+}
+```
+
+### @some
+
+**If one of a set of assertions passes, the test passes**
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: "integer(1, 10)", @mock
+    },
+    res: {
+      v1: [ @some
+        "$ > -1", @eval
+        "$ > 10", @eval
+      ]
+    }
+  }
+}
+```
+
+### @partial
+
+**Mark only partial verification instead of congruent verification**
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: 2,
+      v2: "a",
+    },
+    res: { @partial
+      v1: 2,
+    }
+  },
+  test2: { @client("echo")
+    req: {
+      v1: [
+        1,
+        2
+      ]
+    },
+    res: {
+      v1: [ @partial
+        1
+      ]
+    }
+  }
+}
+```
+
+### @type
+
+**Mark only verifies the type of data**
+
+## Run
 
 In some scenarios, use cases may not need to be executed, or they may need to be executed repeatedly. It is necessary to add a `run` option to support this feature.
 
-#### Skip
+### Skip
 
 ```
 {
-    test1: { @client("echo")
-        req: {
-        },
-        run: {
-            skip: `mod1.test1.res.status === 200`, @eval
-        }
+  test1: { @client("echo")
+    req: {
+    },
+    run: {
+      skip: `mod1.test1.res.status === 200`, @eval
     }
+  }
 }
 ```
 
 - `run.skip` skip the test when true
 
-#### Delay
+### Delay
 
 Run the test case after waiting for a period of time
 
 ```
 {
-    test1: { @client("echo")
-        req: {
-        },
-        run: {
-            delay: 1000,
-        }
+  test1: { @client("echo")
+    req: {
+    },
+    run: {
+      delay: 1000,
     }
+  }
 }
 ```
 
 - `run.delay` delay in ms
 
-#### Retry
+### Retry
 
 ```
 {
-    test1: { @client("echo")
-        req: {
-        },
-        run: {
-            retry: {
-                stop:'$run.count > 2', @eval
-                delay: 1000,
-            }
-        },
-    }
+  test1: { @client("echo")
+    req: {
+    },
+    run: {
+      retry: {
+        stop:'$run.count > 2', @eval
+        delay: 1000,
+      }
+    },
+  }
 }
 ```
 
@@ -424,26 +737,26 @@ options:
 - `run.retry.stop`  whether to stop retry
 - `run.retry.delay` interval between each retry (ms)
 
-#### Loop
+### Loop
 
 ```
 {
-    test1: { @client("echo")
-        req: {
-            v1:'$run.index', @eval
-            v2:'$run.item', @eval
-        },
-        run: {
-            loop: {
-                delay: 1000,
-                items: [
-                    'a',
-                    'b',
-                    'c',
-                ]
-            }
-        },
-    }
+  test1: { @client("echo")
+    req: {
+      v1:'$run.index', @eval
+      v2:'$run.item', @eval
+    },
+    run: {
+      loop: {
+        delay: 1000,
+        items: [
+          'a',
+          'b',
+          'c',
+        ]
+      }
+    },
+  }
 }
 ```
 
@@ -455,112 +768,22 @@ options:
 - `run.loop.items` iter pass to `$run.item`
 - `run.loop.delay`  interval between each cycle (ms)
 
-#### Dump
+### Dump
 
 ```
 {
-    test1: { @client("echo")
-        req: {
-        },
-        run: {
-            dump: true,
-        }
+  test1: { @client("echo")
+    req: {
+    },
+    run: {
+      dump: true,
     }
+  }
 }
 ```
 
 - `run.dump` force print req/res data when true
 
-
-## Annotation
-
-Apitest uses JSONA format to describe test cases.
-
-JSONA is actually JSON. Some grammatical restrictions are loosened (double quotes are not mandatory, comments are supported, etc.), and a feature is added: annotations. That is, JSONA = JSON + Annotation.
-
-JSON describes data and annotation describes logic.
-
-### Entrypoint Annotation
-
-- @module:  import submodules
-- @jslib: import user-defined function files
-- @mixin: import mixin files
-- @client: configure the clients
-
-```
-{
-    @client({
-        name: "apiv1",
-        kind: "http",
-        options: {
-            baseURL: "http://localhost:3000/apiv1",
-            timeout: 30000,
-        }
-    })
-    @module("auth")
-    @jslib("lib")
-    @mixin("mixin")
-}
-```
-
-### Test Case Annotation
-
-- @mixin: import mixins
-- @client: pick client
-- @group:  mark as case group
-
-- @eval: uses js expr to generate data (in `req`) and verify data(in `res`)
-- @mock: Use mock function to generate data
-
-- @every: A set of assertions are passed before the test passes
-- @some: If one of a set of assertions passes, the test passes
-- @parital: mark only partial verification instead of congruent verification
-- @type: mark only verifies the type of data
-
-```
-{
-    group1 {@group // Use @group to mark the test case group
-        test1: {@client("echo") @mixin(["createPost","auth1"])
-            req: {
-                v1: "Date.now()", @eval
-                v2: "string(8)", @mock
-                v3: "integer(2,6)", @mock
-                v4: "integer(2,6)", @mock
-                v5: {
-                    a: 3,
-                    b: 4,
-                },
-                v6: [
-                    3.
-                    4,
-                ]
-            },
-            res: {
-                // Using @type, we only verify that the `v1` value is an integer type
-                v1: 0, @type
-                v2: "$.length === 8", @eval
-                v3: [ @every
-                    "$> 3", @eval
-                    "$> 4", @eval
-                ],
-                v4: [ @some
-                    "$> 2", @eval
-                    "$ <= 2", @eval
-                ],
-                // Using @partial, we only verify the part of the object.
-                // We are interested in `a`, ignore `b`
-                v5: { @partial
-                    a: 3,
-                },
-                // Using @partial, we only check the first element in the array
-                v6: [ @partial
-                    3
-                ]
-            }
-        }
-    }
-}
-```
 
 ## Client
 
@@ -580,12 +803,12 @@ The `echo` client does not send any request, and directly returns the data in th
 
 ```
 {
-     test1: {@client("echo")
-         req: {// Just fill in any data
-         },
-         res: {// equal to req
-         }
+   test1: {@client("echo")
+     req: {// Just fill in any data
+     },
+     res: {// equal to req
      }
+   }
 }
 ```
 
@@ -595,36 +818,36 @@ The `http` client handles http/https requests/responses.
 
 ```
 {
-    test1: { @client({options:{timeout: 10000}}) // Custom client parameters
-        req: {
-            url: "https://httpbin.org/anything/{id}", // request url
-            method: "post", // http method
-            // query string, will append to url like `?foo=v1&bar=v2
-            query: {
-                foo: "v1",
-                bar: "v2",
-            },
+  test1: { @client({options:{timeout: 10000}}) // Custom client parameters
+    req: {
+      url: "https://httpbin.org/anything/{id}", // request url
+      // http methods, `post`, `get`, `delete`, `put`, `patch`
+      method: "post",
+      query: { // ?foo=v1&bar=v2
+        foo: "v1",
+        bar: "v2",
+      },
 
-            // url path params, `/anything/{id}` => `/anything/33`
-            params: {
-                id: 33, 
-            },
-            header: { // http request headers
-                'x-key': 'v1'
-            },
-            body: { // request body
-            }
-        },
-        res: {
-            status: 200, // http status code
-            header: { // http response headers
-                "X-Amzn-Trace-Id": "Root=1-60b59dd1-1a896caf5291bbae089ffe26"
-            },
-            body: { // response body
+      // url path params, `/anything/{id}` => `/anything/33`
+      params: {
+        id: 33, 
+      },
+      header: {
+        'x-key': 'v1'
+      },
+      body: { // request body
+      }
+    },
+    res: {
+      status: 200,
+      header: {
+        'x-key': 'v1'
+      },
+      body: { // response body
 
-            }
-        }
+      }
     }
+  }
 }
 ```
 
@@ -632,16 +855,16 @@ The `http` client handles http/https requests/responses.
 
 ```js
 {
-    // `baseURL` will be prepended to `url` unless `url` is absolute.
-    // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
-    // to methods of that instance.
-    baseURL: 'https://some-domain.com/api/',
-    // `timeout` specifies the number of milliseconds before the request times out.
-    // If the request takes longer than `timeout`, the request will be aborted.
-    timeout: 1000, // default is `0` (no timeout)
-    // `withCredentials` indicates whether or not cross-site Access-Control requests
-    // should be made using credentials
-    withCredentials: false, // default
+  // `baseURL` will be prepended to `url` unless `url` is absolute.
+  // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
+  // to methods of that instance.
+  baseURL: 'https://some-domain.com/api/',
+  // `timeout` specifies the number of milliseconds before the request times out.
+  // If the request takes longer than `timeout`, the request will be aborted.
+  timeout: 1000, // default is `0` (no timeout)
+  // `withCredentials` indicates whether or not cross-site Access-Control requests
+  // should be made using credentials
+  withCredentials: false, // default
 }
 ```
 
@@ -667,25 +890,25 @@ Apitest supports multiple test environments, which can be specified by the `--en
 ```
 // Pre-release environment main.jsona
 {
-     @client({
-         options: {
-             url: "http://pre.example.com/api"
-         }
-     })
-     @module("mod1")
+   @client({
+     options: {
+       url: "http://pre.example.com/api"
+     }
+   })
+   @module("mod1")
 }
 ```
 
 ```
 // Local environment main.local.jsona
 {
-     @client({
-         options: {
-             url: "http://localhost:3000/api"
-         }
-     })
-     @module("mod1")
-     @module("mod2") // Only local test module
+   @client({
+     options: {
+       url: "http://localhost:3000/api"
+     }
+   })
+   @module("mod1")
+   @module("mod2") // Only local test module
 }
 ```
 
