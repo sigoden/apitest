@@ -32,7 +32,7 @@ export default class Session {
     return this.cache.cursor;
   }
 
-  public async getCtx(testcase: Case): Promise<VmContext> {
+  public async getCtx(testcase: Case, reset = false): Promise<VmContext> {
     const idx = this.unitIds.findIndex(v => v === testcase.id);
     const state = { env: _.clone(process.env) };
     if (idx > -1) {
@@ -53,7 +53,7 @@ export default class Session {
     if (local) Object.assign(state, local);
     if (
       !testcase.group &&
-      typeof _.get(state, ["req"]) === "undefined" &&
+      (typeof _.get(state, ["req"]) === "undefined" || reset) &&
       (testcase as Unit).req.type === "Object") {
       const req = {};
       _.set(state, ["req"], req);
