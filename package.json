@@ -1,7 +1,7 @@
 {
   "name": "@sigodenjs/apitest",
   "description": "declartive api testing tool",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "bin": {
     "apitest": "dist/bin.js"
   },
