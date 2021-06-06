@@ -151,7 +151,7 @@ Apitest 的工作原理就是根据`req`部分的描述构造请求传给后端�
 
 拜托不要被DSL吓到啊。其实就是JSON，减轻了一些语法限制(不强制要求双引号，支持注释等)，只添加了一个特性：注解。上面例子中的`@describe`,`@type`就是[注解](#注解)。
 
-JSON描述数据，注解描述逻辑。
+点击[jsona/spec](https://github.com/jsona/spec)查看JSONA规范
 
 > 顺便说一句，有款vscode插件提供了DSL(jsona)格式的支持哦。
 

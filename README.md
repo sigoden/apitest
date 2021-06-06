@@ -149,7 +149,7 @@ The working principle of Apitest is to construct the request according to the de
 
 Please don't be scared by DSL. In fact, it is JSON, which loosens some grammatical restrictions (double quotes are not mandatory, comments are supported, etc.), and only one feature is added: comments. In the above example, `@describe`, `@type` is [Annotation](#Annotation).
 
-JSON describes data and annotation describes logic.
+Click [jsona/spec](https://github.com/jsona/spec) to view the JSONA specification
 
 > By the way, there is a vscode extension supports DSL (jsona) format.
 
