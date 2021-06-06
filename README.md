@@ -341,7 +341,7 @@ function randColor() {
 
 // Detect date in ISO8601(e.g. 2021-06-02:00:00.000Z) format
 function isDate(date) {
-return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(date)
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(date)
 }
 ```
 
