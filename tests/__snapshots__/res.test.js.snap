@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`res data 1`] = `
-"module main
+"main
   fail# value not equal ✘
   fail# nest value not equal ✘
   fail# value type not equal ✘
@@ -27,7 +27,7 @@ exports[`res data 1`] = `
 `;
 
 exports[`res eval 1`] = `
-"module main
+"main
   @eval return true passes test ✔
   fail# @eval return false fails test ✘
   @eval return value equal ✔
@@ -39,7 +39,7 @@ exports[`res eval 1`] = `
 `;
 
 exports[`res every 1`] = `
-"module main
+"main
   @every ✔
   fail# @every ✘
   fail# @every must be array value ✘
@@ -55,14 +55,14 @@ exports[`res every 1`] = `
 `;
 
 exports[`res partial 1`] = `
-"module main
+"main
   @partial for object ✔
   @partial for array ✔
 "
 `;
 
 exports[`res some 1`] = `
-"module main
+"main
   @some ✔
   fail# @some ✘
   fail# @some must be array value ✘
@@ -79,7 +79,7 @@ exports[`res some 1`] = `
 `;
 
 exports[`res type 1`] = `
-"module main
+"main
   @type ✔
   @type null ✔
   fail# @type ✘

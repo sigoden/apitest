@@ -41,7 +41,7 @@ export default class Cases {
     this.clients = clients;
     this.mixin = mixin;
     for (const [moduleName, props] of modules) {
-      this.describes[moduleName] = "module " + moduleName;
+      this.describes[moduleName] = moduleName;
       for (const prop of props) {
         this.addProp([moduleName], prop);
       }
@@ -78,7 +78,7 @@ export default class Cases {
 
     const valueObject = value as JsonaObject;
     let describe = this.retriveAnnoDescribe(paths, value);
-    if (!describe) describe = "group " + _.last(paths);
+    if (!describe) describe =  _.last(paths);
     this.describes[paths.join(".")] = describe;
 
     const client = this.retriveAnnoClient(paths, value);
@@ -95,7 +95,7 @@ export default class Cases {
     this.caseIds.push(group.paths.join("."));
 
     const cases = parent ? parent.cases : this.cases;
-    const prevCase = cases[cases.length - 1];
+    const prevCase = _.last(cases);
     if (prevCase) group.prev = prevCase.id;
     cases.push(group);
 
@@ -115,7 +115,7 @@ export default class Cases {
     const valueObject = value as JsonaObject;
 
     let describe = this.retriveAnnoDescribe(paths, value);
-    if (!describe) describe = "unit " + _.last(paths);
+    if (!describe) describe = _.last(paths);
     this.describes[paths.join(".")] = describe;
 
     let client = this.retriveAnnoClient(paths, value);

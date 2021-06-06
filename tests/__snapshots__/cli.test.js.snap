@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cli restart failed run group 1`] = `
-"module main
+"main
   fail# retry
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
     main.group3.test3.res.v1: b ≠ a
 
     {
@@ -15,8 +15,8 @@ exports[`cli restart failed run group 1`] = `
         \\"v1\\": \\"a\\"
       }
     }
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
     main.group3.test3.res.v1: b ≠ a
 
     {
@@ -27,8 +27,8 @@ exports[`cli restart failed run group 1`] = `
         \\"v1\\": \\"a\\"
       }
     }
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
     main.group3.test3.res.v1: b ≠ a
 
     {
@@ -43,14 +43,14 @@ exports[`cli restart failed run group 1`] = `
 `;
 
 exports[`cli run group 1`] = `
-"module main
-  unit vars ✔
+"main
+  vars ✔
   skip ⌾
   delay
-    unit test2 ✔
+    test2 ✔
   fail# retry
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
     main.group3.test3.res.v1: b ≠ a
 
     {
@@ -61,8 +61,8 @@ exports[`cli run group 1`] = `
         \\"v1\\": \\"a\\"
       }
     }
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
     main.group3.test3.res.v1: b ≠ a
 
     {
@@ -73,8 +73,8 @@ exports[`cli run group 1`] = `
         \\"v1\\": \\"a\\"
       }
     }
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
     main.group3.test3.res.v1: b ≠ a
 
     {
@@ -89,9 +89,9 @@ exports[`cli run group 1`] = `
 `;
 
 exports[`cli start from first 1`] = `
-"module main
-  unit test1 ✔
-  unit test2 ✘
+"main
+  test1 ✔
+  test2 ✘
   main.test2.res.v1: b ≠ a
 
   {
@@ -106,8 +106,8 @@ exports[`cli start from first 1`] = `
 `;
 
 exports[`cli start from last failed 1`] = `
-"module main
-  unit test2 ✘
+"main
+  test2 ✘
   main.test2.res.v1: b ≠ a
 
   {
@@ -122,8 +122,8 @@ exports[`cli start from last failed 1`] = `
 `;
 
 exports[`cli still start from last failed 1`] = `
-"module main
-  unit test2 ✘
+"main
+  test2 ✘
   main.test2.res.v1: b ≠ a
 
   {
@@ -138,9 +138,9 @@ exports[`cli still start from last failed 1`] = `
 `;
 
 exports[`cli target folder 1`] = `
-"module main
-  unit test1 ✔
-  unit test2 ✘
+"main
+  test1 ✔
+  test2 ✘
   main.test2.res.v1: b ≠ a
 
   {
@@ -155,10 +155,10 @@ exports[`cli target folder 1`] = `
 `;
 
 exports[`cli target folder with options --env 1`] = `
-"module main
-  unit test1 ✔
-module mod1
-  unit test1 ✘
+"main
+  test1 ✔
+mod1
+  test1 ✘
   mod1.test1.res.v1: b ≠ a
 
   {
@@ -173,44 +173,44 @@ module mod1
 `;
 
 exports[`cli with options --ci 1`] = `
-"module main
-  unit test1 ✔
-  unit test2 ✘
-  unit test3 ✘
-  unit test4 ✔
-module mod1
-  unit test1 ✘
-  unit test2 ✔
+"main
+  test1 ✔
+  test2 ✘
+  test3 ✘
+  test4 ✔
+mod1
+  test1 ✘
+  test2 ✔
 
-1. unit test2(main.test2)
+1. test2(main.test2)
    main.test2.res.v1: b ≠ a
 
-2. unit test3(main.test3)
+2. test3(main.test3)
    main.test3.res.v1: b ≠ a
 
-3. unit test1(mod1.test1)
+3. test1(mod1.test1)
    mod1.test1.res.v1: b ≠ a
 
 "
 `;
 
 exports[`cli with options --dry-run 1`] = `
-"module main
-  unit test1 (main.test1)
-  unit test2 (main.test2)
-  unit test3 (main.test3)
-  unit test4 (main.test4)
-module mod1
-  unit test1 (mod1.test1)
-  unit test2 (mod1.test2)
+"main
+  test1 (main.test1)
+  test2 (main.test2)
+  test3 (main.test3)
+  test4 (main.test4)
+mod1
+  test1 (mod1.test1)
+  test2 (mod1.test2)
 "
 `;
 
 exports[`cli with options --env 1`] = `
-"module main
-  unit test1 ✔
-module mod1
-  unit test1 ✘
+"main
+  test1 ✔
+mod1
+  test1 ✘
   mod1.test1.res.v1: b ≠ a
 
   {
@@ -225,14 +225,14 @@ module mod1
 `;
 
 exports[`cli with options --only 1`] = `
-"module main
-  unit test4 ✔
+"main
+  test4 ✔
 "
 `;
 
 exports[`cli with options --only 2 1`] = `
-"module mod1
-  unit test1 ✘
+"mod1
+  test1 ✘
   mod1.test1.res.v1: b ≠ a
 
   {
@@ -247,9 +247,9 @@ exports[`cli with options --only 2 1`] = `
 `;
 
 exports[`cli with options --reset 1`] = `
-"module main
-  unit test1 ✔
-  unit test2 ✘
+"main
+  test1 ✔
+  test2 ✘
   main.test2.res.v1: b ≠ a
 
   {

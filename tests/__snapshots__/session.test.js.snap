@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`session main 1`] = `
-"module mod1
-  unit test1 ✔
-  group group1
-    unit test1 ✔
-module mod2
-  unit test1 ✔
-  group group1
-    unit test1 ✔
-    unit test2 ✔
+"mod1
+  test1 ✔
+  group1
+    test1 ✔
+mod2
+  test1 ✔
+  group1
+    test1 ✔
+    test2 ✔
     access variables ✔
-  group mod2
+  mod2
     no override parent ✔
-  group env1
+  env1
     env variables ✔
 "
 `;

@@ -16,7 +16,7 @@ exports[`cases invalid prop key 1`] = `
 `;
 
 exports[`cases invalid run options 1`] = `
-"module main
+"main
   fail# invalid unit.skip
   main.test1.run.skip: should be boolean value
   fail# invalid unit.delay
@@ -58,7 +58,7 @@ exports[`cases invalid unit value type 1`] = `
 `;
 
 exports[`cases merge mixin 1`] = `
-"module main
+"main
   single mixin ✔
   multiple mixin ✔
   omit mixin if exist prop ✔
@@ -67,8 +67,8 @@ exports[`cases merge mixin 1`] = `
 `;
 
 exports[`cases run --reset 1`] = `
-"module main
-  unit vars ✔
+"main
+  vars ✔
   dump ✔
   {
     \\"req\\": {
@@ -93,39 +93,39 @@ exports[`cases run --reset 1`] = `
 `;
 
 exports[`cases run 1`] = `
-"module main
-  unit vars ✔
+"main
+  vars ✔
   skip ⌾
   delay
-    unit test2 ✔
+    test2 ✔
   fail# retry
-    unit test1 ✔
-    unit test3 ✘
-    unit test1 ✔
-    unit test3 ✘
-    unit test1 ✔
-    unit test3 ✘
+    test1 ✔
+    test3 ✘
+    test1 ✔
+    test3 ✘
+    test1 ✔
+    test3 ✘
   loop
-    unit test1 ✔
-    unit test4 ✔
-    unit test1 ✔
-    unit test4 ✔
+    test1 ✔
+    test4 ✔
+    test1 ✔
+    test4 ✔
 
-1. unit test3(main.group3.test3)
+1. test3(main.group3.test3)
    main.group3.test3.res.v1: b ≠ a
 
-2. unit test3(main.group3.test3)
+2. test3(main.group3.test3)
    main.group3.test3.res.v1: b ≠ a
 
-3. unit test3(main.group3.test3)
+3. test3(main.group3.test3)
    main.group3.test3.res.v1: b ≠ a
 
 "
 `;
 
 exports[`cases run group 1`] = `
-"module main
-  unit vars ✔
+"main
+  vars ✔
   dump ✔
   {
     \\"req\\": {
