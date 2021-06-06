@@ -1,6 +1,16 @@
 const { spwanTest } = require("./utils");
 
 describe("cases", () => {
+  test("describe-default", async () => {
+    const { code, stdout } = await spwanTest("cases/describe-default.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+    expect(stdout).toMatchSnapshot();
+  });
+  test("describe", async () => {
+    const { code, stdout } = await spwanTest("cases/describe.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+    expect(stdout).toMatchSnapshot();
+  });
   test("group", async () => {
     const { code } = await spwanTest("cases/group.jsona", ["--ci"]);
     expect(code).toEqual(0);

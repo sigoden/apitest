@@ -1,0 +1,16 @@
+{
+  @client({name:"default",kind:"echo"})
+  @describe("This is a module")
+  group1: { @group @describe("This is a group")
+    test1: { @describe("A unit in group")
+      req: {
+      }
+    },
+    group2: { @group @describe("This is a nested group")
+      test1: { @describe("A unit in nested group")
+        req: {
+        }
+      }
+    }
+  }
+}

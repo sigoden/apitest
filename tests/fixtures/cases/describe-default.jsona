@@ -1,0 +1,15 @@
+{
+  @client({name:"default",kind:"echo"})
+  group1: { @group
+    test1: {
+      req: {
+      }
+    },
+    group2: { @group 
+      test1: {
+        req: {
+        }
+      }
+    }
+  }
+}

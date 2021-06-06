@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import Clients, { UnitClient } from "./Clients";
+import { Module } from "./Loader";
 import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue, Position } from "./types";
 import { getType, toPosString } from "./utils";
 
@@ -37,12 +38,13 @@ export default class Cases {
   private clients: Clients;
   private mixin: JsonaObject;
 
-  public constructor(clients: Clients, mixin: JsonaObject, modules: [string, JsonaProperty[]][]) {
+  public constructor(clients: Clients, mixin: JsonaObject, modules: Module[]) {
     this.clients = clients;
     this.mixin = mixin;
-    for (const [moduleName, props] of modules) {
-      this.describes[moduleName] = moduleName;
-      for (const prop of props) {
+    for (const mod of modules) {
+      const {  moduleName, properties, describe} = mod;
+      this.describes[moduleName] = describe || moduleName;
+      for (const prop of properties) {
         this.addProp([moduleName], prop);
       }
     }

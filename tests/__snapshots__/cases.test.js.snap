@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`cases describe 1`] = `
+"This is a module
+  This is a group
+    A unit in group ✔
+    This is a nested group
+      A unit in nested group ✔
+"
+`;
+
+exports[`cases describe-default 1`] = `
+"main
+  group1
+    test1 ✔
+    group2
+      test1 ✔
+"
+`;
+
 exports[`cases invalid group value type 1`] = `
 "main.group1: should have object value at line 2 col 3
 "

@@ -7,12 +7,18 @@ import Clients from "./Clients";
 import { loadJsonaFile, getType, toPosString  } from "./utils";
 import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "./types";
 
+export interface Module {
+  moduleName: string;
+  properties: JsonaProperty[];
+  describe: string;
+}
+
 export default class Loader {
   private workDir: string;
   private cases: Cases;
   private jslibs: string[] = [];
   private clients: Clients = new Clients();
-  private modules: [string, JsonaProperty[]][] = [];
+  private modules: Module[] = [];
   private mixin: JsonaObject;
 
   public async load(target: string, env: string) {
@@ -28,7 +34,11 @@ export default class Loader {
     if (jsa.type !== "Object") {
       throw new Error("main: should have object value");
     }
-    this.modules.push(["main", jsa.properties]);
+    this.modules.push({
+      moduleName: "main",
+      properties: jsa.properties,
+      describe: this.retriveModuleDescribe("main", jsa),
+    });
     for (const anno of jsa.annotations) {
       if (anno.name === "client") {
         await this.loadClient(anno);
@@ -150,9 +160,20 @@ export default class Loader {
       if (jsa.type !== "Object") {
         throw new Error(`main@module(${moduleName}): should have object value`);
       }
-      this.modules.push([moduleName, jsa.properties]);
+      const describe = this.retriveModuleDescribe(moduleName, jsa);
+      this.modules.push({moduleName, properties: jsa.properties, describe});
     } else {
       throw new Error(`main@module: should have string value${toPosString(anno.position)}`);
+    }
+  }
+
+  private retriveModuleDescribe(moduleName, value: JsonaValue) {
+    const describeAnno = value.annotations.find(v => v.name === "describe");
+    if (!describeAnno) return;
+    if (typeof describeAnno.value === "string") {
+      return describeAnno.value;
+    } else {
+      throw new Error(`${moduleName}@describe: should have string value${toPosString(describeAnno.position)}`);
     }
   }
 }
