@@ -1,0 +1,13 @@
+{
+  test1: { @client("echo")
+    req: {
+      v1: `{"v1":1,"v2":2}`,
+    },
+    res: {
+      v1: { @trans(`JSON.parse($)`)
+        v1: 1,
+        v2: 2,
+      }
+    }
+  }
+}

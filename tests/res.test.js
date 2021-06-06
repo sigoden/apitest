@@ -26,6 +26,10 @@ describe("res", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("trans", async () => {
+    const { code } = await spwanTest("res/trans.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+  });
   test("type", async () => {
     const { stdout, code } = await spwanTest("res/type.jsona", ["--ci"]);
     expect(code).toEqual(1);

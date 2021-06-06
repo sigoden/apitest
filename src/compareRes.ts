@@ -12,6 +12,12 @@ export default function compareRes(unit: Unit, ctx: VmContext, res: any) {
 }
 
 function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) {
+  if (existAnno(paths, v1, "trans", "any")) {
+    const transAnno = v1.annotations.find(v => v.name === "trans");
+    _.set(ctx.state, "$", v2);
+    v2 = evalValue(paths, ctx, transAnno.value, "trans");
+    _.set(ctx.state, "$", null);
+  }
   if (existAnno(paths, v1, "eval", "string")) {
     ctx.state.$ = v2;
     const value = evalValue(paths, ctx, (v1 as JsonaString).value);

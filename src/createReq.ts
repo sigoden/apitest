@@ -13,16 +13,17 @@ export default function createReq(unit: Unit, ctx: VmContext): any {
 }
 
 function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
+  let result: any;
   if (existAnno(paths, jsa, "eval", "string")) {
     const value = evalValue(paths, ctx, (jsa as JsonaString).value);
     _.set(ctx.state, paths, value);
-    return value;
+    result = value;
   } else if(existAnno(paths, jsa, "mock", "string")) {
     const value = (jsa as JsonaString).value;
     try {
       const mockValue = fake(value);
       _.set(ctx.state, paths, mockValue);
-      return mockValue;
+      result = mockValue;
     } catch(err) {
       throw new RunCaseError(paths, "mock", `bad mock '${value}'`);
     }
@@ -33,23 +34,32 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
       for (const [i, ele] of jsa.elements.entries()) {
         output.push(createValue(paths.concat([String(i)]), ctx, ele));
       }
-      return output;
+      result = output;
     } else if (jsa.type === "Object") {
       _.set(ctx.state, paths, _.get(ctx.state, paths, {}));
       const output = _.get(ctx.state, paths);
       for (const prop of jsa.properties) {
         output[prop.key] = createValue(paths.concat([prop.key]), ctx, prop.value);
       }
-      return output;
+      result = output;
     } else if (jsa.type === "Null") {
-      return null;
+      result = null;
     } else {
-      return jsa.value;
+      result = jsa.value;
     }
   }
+  if (existAnno(paths, jsa, "trans", "any")) {
+    const transAnno = jsa.annotations.find(v => v.name === "trans");
+    _.set(ctx.state, "$", result);
+    const value = evalValue(paths, ctx, transAnno.value, "trans");
+    _.set(ctx.state, "$", null);
+    _.set(ctx.state, paths, value);
+    result = value;
+  }
+  return result;
 }
 
-export function evalValue(paths: string[], ctx: VmContext, code: string): any {
+export function evalValue(paths: string[], ctx: VmContext, code: string, anno = "eval"): any {
   if (!code) return null;
   const expressions = _.trimEnd(code.trim(), ";").split(";").map(v => v.trim());
   const lastIdx = expressions.length - 1;
@@ -65,7 +75,7 @@ export function evalValue(paths: string[], ctx: VmContext, code: string): any {
     script.runInNewContext(ctx.state);
     return ctx.state[EXPORT_KEY];
   } catch (err) {
-    throw new RunCaseError(paths, "eval", `throw err, ${err.message}`);
+    throw new RunCaseError(paths, anno, `throw err, ${err.message}`);
   }
 }
 

@@ -31,6 +31,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [@group](#group)
     - [@eval](#eval)
     - [@mock](#mock)
+    - [@trans](#trans)
     - [@every](#every)
     - [@some](#some)
     - [@partial](#partial)
@@ -598,6 +599,37 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
 **Use mock function to generate data**
 
 Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fake.js](https://github.com/sigoden/fake-js#doc)
+
+### @trans
+
+**Transform data**
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: { @trans(`JSON.stringify($)`)
+        v1: 1,
+        v2: 2,
+      }
+    },
+    res: {
+      v1: `{"v1":1,"v2":2}`,
+    }
+  },
+  test2: { @client("echo")
+    req: {
+      v1: `{"v1":1,"v2":2}`,
+    },
+    res: {
+      v2: { @trans(`JSON.parse($)`)
+        v1: 1,
+        v2: 2,
+      }
+    }
+  }
+}
+```
 
 ###  @every
 
