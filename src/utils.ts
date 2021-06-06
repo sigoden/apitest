@@ -1,8 +1,7 @@
 import * as _ from "lodash";
 import * as fs from "fs/promises";
-import { RunCaseError } from "./Reporter";
 import { parse } from "jsona-js";
-import { JsonaValue, Position } from "./types";
+import { JsonaValue, Position } from "jsona-js";
 
 export async function sleep(ms: number) {
   return new Promise(resolve => {
@@ -34,13 +33,17 @@ export function validate(target: any, paths: string[], schema: any, required: bo
 }
 
 export async function loadJsonaFile(file: string): Promise<JsonaValue> {
+  let content: string;
   try {
-    const content = await fs.readFile(file, "utf8");
-    return parse(content);
+    content = await fs.readFile(file, "utf8");
   } catch (err) {
-    if (err.position) throw new Error(`${err.info}${toPosString(err.position)}`);
     throw err;
   }
+  const { jsona, error } =  parse(content);
+  if (error) {
+    if (error.position) throw new Error(`${error.info}${toPosString(error.position)}`);
+  }
+  return jsona;
 }
 
 export function toPosString(position: Position) {

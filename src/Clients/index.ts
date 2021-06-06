@@ -1,8 +1,7 @@
 import { Unit } from "../Cases";
-import { JsonaAnnotation } from "../types";
+import { JsonaAnnotation } from "jsona-js";
 import { toPosString } from "../utils";
 
-import Session from "../Session";
 import EchoClient from "./EchoClient";
 import HttpClient from "./HttpClient";
 

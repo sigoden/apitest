@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import Clients, { UnitClient } from "./Clients";
 import { Module } from "./Loader";
-import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue, Position } from "./types";
+import { JsonaAnnotation, JsonaArray, JsonaObject, JsonaProperty, JsonaValue, Position } from "jsona-js";
 import { getType, toPosString } from "./utils";
 
 const DEFAULT_CLIENT: UnitClient = { name: "default", options: {} };

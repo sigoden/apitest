@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import { Client } from ".";
 import { Unit } from "../Cases";
 import { toPosString } from "../utils";
-import { JsonaObject, JsonaValue } from "../types";
+import { JsonaObject, JsonaValue } from "jsona-js";
 
 export default class HttpClient implements Client {
   private options: any;

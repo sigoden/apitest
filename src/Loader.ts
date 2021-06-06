@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import Cases from "./Cases";
 import Clients from "./Clients";
 import { loadJsonaFile, getType, toPosString  } from "./utils";
-import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "./types";
+import { JsonaAnnotation, JsonaObject, JsonaProperty, JsonaValue } from "jsona-js";
 
 export interface Module {
   moduleName: string;

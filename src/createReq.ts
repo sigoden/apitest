@@ -1,6 +1,6 @@
 import { Unit } from "./Cases";
 import * as vm from "vm";
-import { JsonaString, JsonaValue } from "./types";
+import { JsonaString, JsonaValue } from "jsona-js";
 import * as fake from "@sigodenjs/fake/lib/exec";
 import "@sigodenjs/fake/lib/cn";
 import * as _ from "lodash";
