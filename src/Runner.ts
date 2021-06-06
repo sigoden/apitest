@@ -64,7 +64,7 @@ export default class Runner {
       if (first) {
         await this.session.saveValue(testcase, "$run", {}, false);
       }
-      const ctx = await this.session.getCtx(testcase);
+      const ctx = await this.session.getCtx(testcase, true);
       const run: CaseRun = createRun(testcase, ctx);
       if (run) await this.session.saveValue(testcase, "run", run);
       if (!this.options.dryRun && run) {
