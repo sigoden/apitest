@@ -17,9 +17,12 @@
 
   variables: { @describe("prepare") @client("echo")
     req: {
-      username: 'username(true)', @mock
-      email: 'email', @mock
+      username: 'username(3)', @mock
+      email: `req.username + "@gmail.com"`, @eval
       password: 'string(12)', @mock
+    },
+    run: {
+      dump: true,
     }
   }
 }
