@@ -545,14 +545,14 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
 {
   test1: { @client("echo")
     req: {
-      v1: "JSON.stringify({a:3,b:4})", @eval // 使用JS内置函数
+      v1: "JSON.stringify({a:3,b:4})", @eval // Use JS built-in functions
       v2: `
         let x = 3;
         let y = 4;
         return x + y;
-        `, @eval  // 支持代码块
-      v3: "env.FOO", @eval // 访问环境变量
-      v4: 'mod1.test1.res.body.id`, @eval // 访问前面测试的数据
+        `, @eval  // Support code block
+      v3: "env.FOO", @eval // Access environment variables
+      v4: 'mod1.test1.res.body.id`, @eval // Access the data of the previous test
     }
   }
 }
