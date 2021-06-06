@@ -2,7 +2,11 @@
   test1: {
     req: {
       url: "https://httpbin.org/get",
-      header: [],
+    },
+    res: {
+      headers: {
+        key: {}
+      },
     }
   },
 }

@@ -66,7 +66,7 @@ Write test file `httpbin.jsona`
     req: {
       url: "https://httpbin.org/post",
       method: "post",
-      header: {
+      headers: {
         'content-type':'application/json',
       },
       body: {
@@ -231,7 +231,7 @@ The following test cases can use all the data of the previous test cases.
   },
   test2: { @describe("create article")
     req: {
-      header: {
+      headers: {
         // We access the response data of the previous test case test1.
         authorization: `"Bearer " + test1.res.body.token`, @eval
       },
@@ -386,7 +386,7 @@ First create a file to store the file defined by Mixin
   },
   auth1: { // Extract authorization
     req: {
-      header: {
+      headers: {
         authorization: `"Bearer " + test1.res.body.token`, @eval
       }
     }
@@ -864,7 +864,7 @@ The `http` client handles http/https requests/responses.
       params: {
         id: 33, 
       },
-      header: {
+      headers: {
         'x-key': 'v1'
       },
       body: { // request body
@@ -872,7 +872,7 @@ The `http` client handles http/https requests/responses.
     },
     res: {
       status: 200,
-      header: {
+      headers: {
         'x-key': 'v1'
       },
       body: { // response body
@@ -888,8 +888,6 @@ The `http` client handles http/https requests/responses.
 ```js
 {
   // `baseURL` will be prepended to `url` unless `url` is absolute.
-  // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
-  // to methods of that instance.
   baseURL: 'https://some-domain.com/api/',
   // `timeout` specifies the number of milliseconds before the request times out.
   // If the request takes longer than `timeout`, the request will be aborted.

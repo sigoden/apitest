@@ -15,13 +15,13 @@ exports[`http invaid params type 1`] = `
 "
 `;
 
-exports[`http invalid header prop type 1`] = `
-"main.test1.req.header.key1: should be scalar value at line 6 col 15
+exports[`http invalid headers prop type 1`] = `
+"main.test1.req.headers.key1: should be scalar value at line 6 col 15
 "
 `;
 
-exports[`http invalid header type 1`] = `
-"main.test1.req.header: should be object value at line 5 col 15
+exports[`http invalid headers type 1`] = `
+"main.test1.req.headers: should be object value at line 5 col 16
 "
 `;
 
@@ -55,13 +55,13 @@ exports[`http invalid req value 1`] = `
 "
 `;
 
-exports[`http invalid res header prop type 1`] = `
-"main.test1.res.header.key: should be scalar value at line 8 col 14
+exports[`http invalid res headers prop type 1`] = `
+"main.test1.res.headers.key: should be scalar value at line 8 col 14
 "
 `;
 
-exports[`http invalid res header type 1`] = `
-"main.test1.res.header: should be object value at line 7 col 15
+exports[`http invalid res headers type 1`] = `
+"main.test1.res.headers: should be object value at line 7 col 16
 "
 `;
 

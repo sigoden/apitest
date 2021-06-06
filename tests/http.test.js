@@ -16,13 +16,13 @@ describe("http", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("invalid header prop type", async () => {
-    const { stdout, code } = await spwanTest("http/invalid-header-prop-type.jsona", ["--ci"]);
+  test("invalid headers prop type", async () => {
+    const { stdout, code } = await spwanTest("http/invalid-headers-prop-type.jsona", ["--ci"]);
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("invalid header type", async () => {
-    const { stdout, code } = await spwanTest("http/invalid-header-type.jsona", ["--ci"]);
+  test("invalid headers type", async () => {
+    const { stdout, code } = await spwanTest("http/invalid-headers-type.jsona", ["--ci"]);
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
@@ -56,13 +56,13 @@ describe("http", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("invalid res header prop type", async () => {
-    const { stdout, code } = await spwanTest("http/invalid-res-header-prop-type.jsona", ["--ci"]);
+  test("invalid res headers prop type", async () => {
+    const { stdout, code } = await spwanTest("http/invalid-res-headers-prop-type.jsona", ["--ci"]);
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
-  test("invalid res header type", async () => {
-    const { stdout, code } = await spwanTest("http/invalid-res-header-type.jsona", ["--ci"]);
+  test("invalid res headers type", async () => {
+    const { stdout, code } = await spwanTest("http/invalid-res-headers-type.jsona", ["--ci"]);
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });

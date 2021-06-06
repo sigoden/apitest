@@ -33,8 +33,8 @@ export default class HttpClient implements Client {
     if (req.query) {
       opts.params = req.query;
     }
-    if (req.header) {
-      opts.headers = req.header;
+    if (req.headers) {
+      opts.headers = req.headers;
     }
     if (req.params) {
       for (const key in req.params) {
@@ -42,7 +42,7 @@ export default class HttpClient implements Client {
       }
     }
     if (req.body) {
-      if (!(req.header && (req.header["content-type"] || req.header["Content-Type"]))) {
+      if (!(req.headers && (req.headers["content-type"] || req.headers["Content-Type"]))) {
         _.set(opts, ["headers", "content-type"], "application/json; charset=utf-8");
       }
       opts.data = req.body;
@@ -52,17 +52,17 @@ export default class HttpClient implements Client {
     let needStatus = false;
     if (unit.res) {
       const res_ = unit.res as JsonaObject;
-      needHeader = !!res_.properties.find(v => v.key === "header");
+      needHeader = !!res_.properties.find(v => v.key === "headers");
       needStatus = !!res_.properties.find(v => v.key === "status");
     }
     try {
       const axiosRes = await axios(opts);
-      if (needHeader) result.header = axiosRes.headers;
+      if (needHeader) result.headers = axiosRes.headers;
       if (needStatus) result.status = axiosRes.status;
       result.body = axiosRes.data;
     } catch (err) {
       if (err.response) {
-        if (needHeader) result.header = err.response.headers;
+        if (needHeader) result.headers = err.response.headers;
         if (needStatus) result.status = err.response.status;
         result.body = err.response.data;
       } else {
@@ -87,8 +87,8 @@ export default class HttpClient implements Client {
       },
       { paths: ["params"], type: "Object" },
       { paths: ["params", "*"], type: "Scalar", required: true },
-      { paths: ["header"], type: "Object" },
-      { paths: ["header", "*"], type: "Scalar", required: true  },
+      { paths: ["headers"], type: "Object" },
+      { paths: ["headers", "*"], type: "Scalar", required: true  },
       { paths: ["query"], type: "Object" },
       { paths: ["query", "*"], type: "Scalar", required: true  },
     ]);
@@ -120,8 +120,8 @@ export default class HttpClient implements Client {
     checkValue(paths, res, [
       { paths: [], type: "Object", required: true },
       { paths: ["status"], type: "Integer" },
-      { paths: ["header"], type: "Object" },
-      { paths: ["header", "*"], type: "Scalar", required: true },
+      { paths: ["headers"], type: "Object" },
+      { paths: ["headers", "*"], type: "Scalar", required: true },
     ]);
   }
 }

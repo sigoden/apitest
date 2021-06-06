@@ -108,7 +108,7 @@
   },
   auth1: {
     req: {
-      header: {
+      headers: {
         Authorization: `"Token " + auth.login.res.body.user.token` @eval
       }
     }

@@ -3,7 +3,7 @@
     req: {
       url: {}, @trans(`"https://httpbin.org/anything/{id}"`)
       method: {}, @trans(`"post"`)
-      header:{
+      headers:{
         'xkey': {}, @trans(`"abc"`)
       },
       params:{

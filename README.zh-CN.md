@@ -68,7 +68,7 @@ Apitest工具是单可执行文件，不需要安装，放到`PATH`路径下面�
     req: {
       url: "https://httpbin.org/post",
       method: "post",
-      header: {
+      headers: {
         'content-type': 'application/json',
       },
       body: {
@@ -230,7 +230,7 @@ Apitest 的工作原理就是根据`req`部分的描述构造请求传给后端�
   },
   test2: { @describe("发布文章")
     req: {
-      header: {
+      headers: {
         authorization: `"Bearer " + test1.res.body.token`, @eval // 此处访问了前面测试用例 test1 的响应数据
       },
     }
@@ -383,7 +383,7 @@ exports.isDate = function (date) {
   },
   auth1: { // 抽离鉴权到minxin
     req: {
-      header: {
+      headers: {
         authorization: `"Bearer " + test1.res.body.token`, @eval
       }
     }
@@ -880,7 +880,7 @@ Apitest 提供两种客户端。
       params: {
         id: 33, // 路径占位变量 `/anything/{id}` => `/anything/33`
       },
-      header: {
+      headers: {
         'x-key': 'v1'
       },
       body: { // 请求数据
@@ -888,7 +888,7 @@ Apitest 提供两种客户端。
     },
     res: {
       status: 200, // 状态码
-      header: {
+      headers: {
         'x-key': 'v1'
       },
       body: { // 响应数据
@@ -902,15 +902,11 @@ Apitest 提供两种客户端。
 
 ```js
 {
-  // `baseURL` will be prepended to `url` unless `url` is absolute.
-  // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
-  // to methods of that instance.
+  // `baseURL` 相对路径
   baseURL: 'https://some-domain.com/api/',
-  // `timeout` specifies the number of milliseconds before the request times out.
-  // If the request takes longer than `timeout`, the request will be aborted.
+  // `timeout` 指定请求超时前的毫秒数。 如果请求时间超过`timeout`，请求将被中止。
   timeout: 1000, // default is `0` (no timeout)
-  // `withCredentials` indicates whether or not cross-site Access-Control requests
-  // should be made using credentials
+  // `withCredentials` 表示是否跨站访问控制请求
   withCredentials: false, // default
 }
 ```

@@ -3,7 +3,7 @@
      req: {
        url: "https://httpbin.org/post",
        method: "post",
-       header: {
+       headers: {
          'content-type':'application/json',
        },
        body: {

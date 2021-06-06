@@ -34,7 +34,7 @@
       params: {
         id: 33,
       },
-      header: {
+      headers: {
         'x-key': 'v1'
       },
       body: {
@@ -43,7 +43,7 @@
     },
     res: {
       status: 200,
-      header: { @partial
+      headers: { @partial
       },
       body: { @partial
         json: {

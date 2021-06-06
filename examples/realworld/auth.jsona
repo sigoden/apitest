@@ -22,14 +22,14 @@
   },
   curentUser: { @describe("Current User") @mixin(["getUser", "userRes"])
     req: {
-      header: {
+      headers: {
         Authorization: `"Token " + login.res.body.user.token` @eval
       }
     },
   },
   updateUser: { @describe("Update User") @mixin(["updateUser", "userRes"])
     req: {
-      header: {
+      headers: {
         Authorization: `"Token " + login.res.body.user.token` @eval
       },
       body: {
