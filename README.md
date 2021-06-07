@@ -22,6 +22,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [TDD Support](#tdd-support)
     - [User-defiend Functions](#user-defiend-functions)
     - [Skip, Delay, Retry & Loop](#skip-delay-retry--loop)
+    - [Form,File Upload,GraphQL](#formfile-uploadgraphql)
   - [Annotation](#annotation)
     - [@module](#module)
     - [@jslib](#jslib)
@@ -301,6 +302,9 @@ See [@jslib](#jslib)
 ### Skip, Delay, Retry & Loop
 
 See [#Run](#run)
+
+### Form,File Upload,GraphQL
+See [#Http](#http)
 
 ## Annotation
 
