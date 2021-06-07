@@ -58,7 +58,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
 
 ## Installation
 
- Binaries are available in [releases](https://github.com/sigoden/apitest/releases). Make sure to put the path to the binary into your `PATH`.
+ Binaries are available in [Github Releases](https://github.com/sigoden/apitest/releases). Make sure to put the path to the binary into your `PATH`.
 
  If you use `node`, you can install it by running `npm install -g @sigodenjs/apitest`
 
@@ -1003,7 +1003,7 @@ Only need to add the request header `"content-type": "application/x-www-form-url
 
 
 Only need to add the request header `"content-type": "multipart/form-data"`
-Combined with `@file` annotation to realize file upload
+Combined with `@file` annotation to implement file upload
 
 ```
 {
