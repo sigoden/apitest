@@ -49,6 +49,7 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
       - [配置](#配置)
       - [x-www-form-urlencoded](#x-www-form-urlencoded)
       - [multipart/form-data](#multipartform-data)
+      - [graphql](#graphql)
   - [命令行](#命令行)
     - [多测试环境](#多测试环境)
     - [常规模式](#常规模式)
@@ -1016,6 +1017,48 @@ Apitest 提供两种客户端。
 }
 ```
 
+#### graphql
+
+```
+{
+  vars: { @describe("share variables") @client("echo")
+    req: {
+      v1: 10,
+    }
+  },
+  test1: { @describe("test graphql")
+    req: {
+      url: "https://api.spacex.land/graphql/",
+      body: {
+        query: `\`query {
+  launchesPast(limit: ${vars.req.v1}) {
+    mission_name
+    launch_date_local
+    launch_site {
+      site_name_long
+    }
+  }
+}\`` @eval
+      }
+    },
+    res: {
+      body: {
+        data: {
+          launchesPast: [ @partial
+            {
+              "mission_name": "", @type
+              "launch_date_local": "", @type
+              "launch_site": {
+                "site_name_long": "", @type
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
 
 ## 命令行
 

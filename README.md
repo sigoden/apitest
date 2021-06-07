@@ -49,6 +49,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
       - [Options](#options)
       - [x-www-form-urlencoded](#x-www-form-urlencoded)
       - [multipart/form-data](#multipartform-data)
+      - [graphql](#graphql)
   - [Cli](#cli)
     - [Multiple Test Environments](#multiple-test-environments)
     - [Normal Mode](#normal-mode)
@@ -1027,6 +1028,48 @@ Combined with `@file` annotation to realize file upload
 }
 ```
 
+#### graphql
+
+```
+{
+  vars: { @describe("share variables") @client("echo")
+    req: {
+      v1: 10,
+    }
+  },
+  test1: { @describe("test graphql")
+    req: {
+      url: "https://api.spacex.land/graphql/",
+      body: {
+        query: `\`query {
+  launchesPast(limit: ${vars.req.v1}) {
+    mission_name
+    launch_date_local
+    launch_site {
+      site_name_long
+    }
+  }
+}\`` @eval
+      }
+    },
+    res: {
+      body: {
+        data: {
+          launchesPast: [ @partial
+            {
+              "mission_name": "", @type
+              "launch_date_local": "", @type
+              "launch_site": {
+                "site_name_long": "", @type
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
 
 ## Cli
 

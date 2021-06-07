@@ -1,0 +1,38 @@
+{
+  vars: { @describe("share variables") @client("echo")
+    req: {
+      v1: 10,
+    }
+  },
+  test1: { @describe("test graphql")
+    req: {
+      url: "https://api.spacex.land/graphql/",
+      body: {
+        query: `\`query {
+  launchesPast(limit: ${vars.req.v1}) {
+    mission_name
+    launch_date_local
+    launch_site {
+      site_name_long
+    }
+  }
+}\`` @eval
+      }
+    },
+    res: {
+      body: {
+        data: {
+          launchesPast: [ @partial
+            {
+              "mission_name": "", @type
+              "launch_date_local": "", @type
+              "launch_site": {
+                "site_name_long": "", @type
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
