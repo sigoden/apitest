@@ -26,8 +26,8 @@ export default class Runner {
   public static async create(target: string, env: string) {
     const runner = new Runner();
     const loader = new Loader();
-    const { clients, cases, mainFile, jslibs } = await loader.load(target, env);
-    const session = await Session.create(mainFile, cases.caseIds, jslibs);
+    const { clients, cases, mainFile, jslib, workDir } = await loader.load(target, env);
+    const session = await Session.create(mainFile, cases.caseIds, jslib, workDir);
     runner.session = session;
     runner.cases = cases;
     runner.clients = clients;
@@ -65,7 +65,7 @@ export default class Runner {
         await this.session.saveValue(testcase, "$run", {}, false);
       }
       const ctx = await this.session.getCtx(testcase, true);
-      const run: CaseRun = createRun(testcase, ctx);
+      const run: CaseRun = await createRun(testcase, ctx);
       if (run) await this.session.saveValue(testcase, "run", run);
       if (!this.options.dryRun && run) {
         if (run.skip) {

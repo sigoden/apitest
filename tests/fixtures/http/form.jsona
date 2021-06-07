@@ -1,27 +1,5 @@
 {
-  test1: { @describe('test json')
-    req: {
-      url: "https://httpbin.org/post",
-      method: "post",
-      headers: {
-        'content-type':'application/json',
-      },
-      body: {
-        v1: "bar1",
-        v2: "Bar2",
-      },
-    },
-    res: {
-      status: 200,
-      body: {@partial
-        json: {
-          v1: "bar1",
-          v2: "Bar2"
-        }
-      }
-    }
-  },
-  test2: { @describe('test form')
+  test1: { @describe('test form')
     req: {
       url: "https://httpbin.org/post",
       method: "post",
@@ -43,7 +21,7 @@
       }
     }
   },
-  test3: { @describe('test multi-part')
+  test2: { @describe('test multi-part')
     req: {
       url: "https://httpbin.org/post",
       method: "post",
@@ -52,7 +30,7 @@
       },
       body: {
         v1: "bar1",
-        v2: "httpbin.jsona", @file
+        v2: "form.jsona", @file
       }
     },
     res: {

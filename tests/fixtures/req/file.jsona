@@ -1,0 +1,18 @@
+{
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@file")
+    req: {
+      v1: "eval.jsona", @file
+      v2: "eval.jsona", @file("utf8")
+    },
+    res: {
+      v1: `Object.prototype.toString.call($) === "[object Uint8Array]"`, @eval
+      v2: `$.startsWith("{")`,  @eval
+    }
+  },
+  test2: { @describe("@file")
+    req: {
+      v1: "notfound.jsona", @file
+    }
+  }
+}

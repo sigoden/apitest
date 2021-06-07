@@ -31,6 +31,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [@group](#group)
     - [@eval](#eval)
     - [@mock](#mock)
+    - [@file](#file)
     - [@trans](#trans)
     - [@every](#every)
     - [@some](#some)
@@ -45,6 +46,9 @@ Read this in other languages: [中文](./README.zh-CN.md)
   - [Client](#client-1)
     - [Echo](#echo)
     - [Http](#http)
+      - [Options](#options)
+      - [x-www-form-urlencoded](#x-www-form-urlencoded)
+      - [multipart/form-data](#multipartform-data)
   - [Cli](#cli)
     - [Multiple Test Environments](#multiple-test-environments)
     - [Normal Mode](#normal-mode)
@@ -306,6 +310,7 @@ JSON describes data and annotation describes logic.
 ### @module
 
 **Import submodule**
+> scope: entrypoint file
 
 ```
 // main.jsona
@@ -325,6 +330,7 @@ JSON describes data and annotation describes logic.
 ### @jslib
 
 **Import user-defined functions**
+> scope: entrypoint file
 
 Write functions `lib.js`
 
@@ -374,6 +380,7 @@ Use functions
 ### @mixin
 
 **Import mixin file**
+> scope: entrypoint file, group/unit head
 
 First create a file to store the file defined by Mixin
 ```
@@ -420,7 +427,8 @@ The more frequently used part, the more suitable it is to be extracted to Mixin.
 ### @client
 
 
-**Setup clients** ,
+**Setup clients**
+> scope: entrypoint file, group/unit head
 
 [Client](#client) is responsible for constructing a request according to `req`, sending it to the server, receiving the response from the server, and constructing `res` response data.
 
@@ -459,6 +467,7 @@ The more frequently used part, the more suitable it is to be extracted to Mixin.
 
 
 **Give a title**
+> scope: module file, group/unit head
 
 ```
 {
@@ -502,6 +511,7 @@ main
 ### @group
 
 **Mark as case group**
+> scope: group head
 
 The test cases in the group will inherit the group's `@client` and `@mixin`. The group also supports [Run](#run).
 
@@ -533,6 +543,7 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
 ### @eval
 
 **Use js expr to generate data (in `req`) and verify data(in `res`)**
+> scope: unit block
 
 `@eval` features:
 
@@ -597,12 +608,34 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
 ### @mock
 
 **Use mock function to generate data**
+> scope: unit req block
 
 Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fake.js](https://github.com/sigoden/fake-js#doc)
 
+### @file
+
+**Use file**
+> scope: unit req block
+
+```
+{
+  test1: {
+    req: {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      body: {
+        field: 'my value',
+        file: 'bar.jpg', @file // upload file `bar.jpg`
+      }
+    },
+  }
+}
+```
 ### @trans
 
 **Transform data**
+> scope: unit block
 
 ```
 {
@@ -634,6 +667,7 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fak
 ###  @every
 
 **A set of assertions are passed before the test passes**
+> scope: unit res block
 
 ```
 {
@@ -655,6 +689,7 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fak
 ### @some
 
 **If one of a set of assertions passes, the test passes**
+> scope: unit res block
 
 ```
 {
@@ -675,6 +710,7 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fak
 ### @partial
 
 **Mark only partial verification instead of congruent verification**
+> scope: unit res block
 
 ```
 {
@@ -706,6 +742,32 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fak
 ### @type
 
 **Mark only verifies the type of data**
+> scope: unit res block
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: null,
+      v2: true,
+      v3: "abc",
+      v4: 12,
+      v5: 12.3,
+      v6: [1, 2],
+      v7: {a:3,b:4},
+    },
+    res: {
+      v1: null, @type
+      v2: false, @type
+      v3: "", @type
+      v4: 0, @type
+      v5: 0.0, @type
+      v6: [], @type
+      v7: {}, @type
+    }
+  },
+}
+```
 
 ## Run
 
@@ -846,7 +908,7 @@ The `echo` client does not send any request, and directly returns the data in th
 
 ### Http
 
-The `http` client handles http/https requests/responses.
+`http` client handles http/https requests/responses.
 
 ```
 {
@@ -883,7 +945,7 @@ The `http` client handles http/https requests/responses.
 }
 ```
 
-`http` client options
+#### Options
 
 ```js
 {
@@ -900,6 +962,71 @@ The `http` client handles http/https requests/responses.
   }
 }
 ```
+
+#### x-www-form-urlencoded 
+
+Only need to add the request header `"content-type": "application/x-www-form-urlencoded"`
+
+```
+{
+  test2: { @describe('test form')
+    req: {
+      url: "https://httpbin.org/post",
+      method: "post",
+      headers: {
+        'content-type':"application/x-www-form-urlencoded"
+      },
+      body: {
+        v1: "bar1",
+        v2: "Bar2",
+      }
+    },
+    res: {
+      status: 200,
+      body: { @partial
+        form: {
+          v1: "bar1",
+          v2: "Bar2",
+        }
+      }
+    }
+  },
+}
+```
+
+#### multipart/form-data
+
+
+Only need to add the request header `"content-type": "multipart/form-data"`
+Combined with `@file` annotation to realize file upload
+
+```
+{
+  test3: { @describe('test multi-part')
+    req: {
+      url: "https://httpbin.org/post",
+      method: "post",
+      headers: {
+        'content-type': "multipart/form-data",
+      },
+      body: {
+        v1: "bar1",
+        v2: "httpbin.jsona", @file
+      }
+    },
+    res: {
+      status: 200,
+      body: { @partial
+        form: {
+          v1: "bar1",
+          v2: "", @type
+        }
+      }
+    }
+  }
+}
+```
+
 
 ## Cli
 

@@ -58,10 +58,10 @@ export const CASE_RUN_SCHEMA = {
   },
 };
 
-export default function createRun(testcase: Case, ctx: VmContext) {
+export default async function createRun(testcase: Case, ctx: VmContext) {
   if (!testcase.run) return;
   const nextPaths = testcase.paths.concat(["run"]);
-  const run: CaseRun = createValue(nextPaths, ctx, testcase.run);
+  const run: CaseRun = await createValue(nextPaths, ctx, testcase.run);
   try {
     schemaValidate(run, nextPaths, CASE_RUN_SCHEMA, false);
   } catch (err) {
@@ -71,7 +71,7 @@ export default function createRun(testcase: Case, ctx: VmContext) {
   return run;
 }
 
-function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
+async function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
   if (existAnno(paths, jsa, "eval", "string")) {
     const value = evalValue(paths, ctx, (jsa as JsonaString).value);
     _.set(ctx.state, paths, value);
@@ -81,14 +81,14 @@ function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
       _.set(ctx.state, paths, _.get(ctx.state, paths, []));
       const output = _.get(ctx.state, paths);
       for (const [i, ele] of jsa.elements.entries()) {
-        output.push(createValue(paths.concat([String(i)]), ctx, ele));
+        output.push(await createValue(paths.concat([String(i)]), ctx, ele));
       }
       return output;
     } else if (jsa.type === "Object") {
       _.set(ctx.state, paths, _.get(ctx.state, paths, {}));
       const output = _.get(ctx.state, paths);
       for (const prop of jsa.properties) {
-        output[prop.key] = createValue(paths.concat([prop.key]), ctx, prop.value);
+        output[prop.key] = await createValue(paths.concat([prop.key]), ctx, prop.value);
       }
       return output;
     } else if (jsa.type === "Null") {

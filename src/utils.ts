@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as fs from "fs/promises";
+import * as crypto from "crypto";
 import { parse } from "jsona-js";
 import * as vm from "vm";
 import { JsonaValue, JsonaObject, Position } from "jsona-js";
@@ -10,6 +11,11 @@ export async function sleep(ms: number) {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
+}
+
+export function md5(target: string) {
+  const md5 = crypto.createHash("md5");
+  return md5.update(target).digest("hex");
 }
 
 export function schemaValidate(target: any, paths: string[], schema: any, required: boolean) {
@@ -171,4 +177,45 @@ export function ensureType(paths: string[], value: JsonaValue, type: string) {
       throw new Error(`${[paths.join(".")]}: should be ${type.toLowerCase()} value${toPosString(value.position)}`);
     }
   }
+}
+
+export function JSONReplacer(_key, value) {
+  if (value?.type === "Buffer") {
+    return "Buffer:" + Buffer.from(value.data).toString("base64");
+  }
+  return value;
+}
+
+export function JSONReplacer2(_key, value) {
+  const MAX_BUFFER_SIZE = 512;
+  const MAX_ARRAY_ELEMENTS = 10;
+  const MAX_STRING_LENGTH = 1024;
+  if (value?.type === "Buffer") {
+    if (value.data.length > MAX_BUFFER_SIZE) {
+      return "Buffer:" + Buffer.from(value.data.slice(0, MAX_BUFFER_SIZE)).toString("base64") + "...";
+    } else {
+      return "Buffer:" + Buffer.from(value.data).toString("base64");
+    }
+  } else if (Array.isArray(value)) {
+    if (value.length > MAX_ARRAY_ELEMENTS)  {
+      const content = JSON.stringify(value, JSONReplacer);
+      if (content.length > MAX_STRING_LENGTH) {
+        return "BigArray:" + content.substr(0, MAX_STRING_LENGTH) + "...";
+      } else {
+        return value;
+      }
+    }
+  } else if (typeof value === "string") {
+    if (value.length > MAX_STRING_LENGTH) {
+      return value.substr(0, MAX_STRING_LENGTH) + "...";
+    }
+  }
+  return value;
+}
+
+export function JSONReceiver(_key, value) {
+  if (typeof value === "string" && value.startsWith("Buffer:")) {
+    return Buffer.from(value.slice("Buffer:".length), "base64");
+  }
+  return value;
 }

@@ -1,9 +1,9 @@
 import * as os from "os";
 import * as path from "path";
 import * as fs from "fs/promises";
-import * as crypto from "crypto";
 import * as _ from "lodash";
 import { Case, Unit } from "./Cases";
+import { JSONReceiver, JSONReplacer, md5 } from "./utils";
 import { JSLib } from "./Loader";
 
 export const EMPTY_CACHE = { cursor: "", tests: {} };
@@ -12,20 +12,22 @@ export default class Session {
   private cacheFile: string;
   private cache: Cache;
   private unitIds: string[];
+  private workDir: string;
   private jslib: JSLib;
 
-  public constructor(cacheFile: string, unitIds: string[], cache: Cache, jslib: JSLib) {
+  public constructor(cacheFile: string, unitIds: string[], cache: Cache, jslib: JSLib, workDir: string) {
     this.cacheFile = cacheFile;
     this.unitIds = unitIds;
     this.cache = cache;
     this.jslib = jslib;
+    this.workDir = workDir;
   }
 
-  public static async create(mainFile: string, unitIds: string[], jslibs: any) {
+  public static async create(mainFile: string, unitIds: string[], jslib: any, workDir: string) {
     const cacheFileName = "apitest" + md5(mainFile) + ".json";
     const cacheFile = path.resolve(os.tmpdir(), cacheFileName);
     const cache = await loadCache(cacheFile);
-    const session = new Session(cacheFile, unitIds, cache, jslibs);
+    const session = new Session(cacheFile, unitIds, cache, jslib, workDir);
     return session;
   }
 
@@ -60,7 +62,7 @@ export default class Session {
       _.set(state, ["req"], req);
       _.set(this.cache.tests, testcase.paths.concat(["req"]), req);
     }
-    return { state, jslib: this.jslib };
+    return { state, jslib: this.jslib, workDir: this.workDir };
   }
 
   public async saveValue(testcase: Case, key: string, value: any, persist = true) {
@@ -92,6 +94,7 @@ export default class Session {
 export interface VmContext {
   jslib: JSLib,
   state: any;
+  workDir: string;
 }
 
 export interface Cache {
@@ -107,7 +110,7 @@ export interface Cache {
 async function loadCache(cacheFile: string): Promise<Cache> {
   try {
     const content = await fs.readFile(cacheFile, "utf8");
-    const cache = JSON.parse(content);
+    const cache = JSON.parse(content, JSONReceiver);
     return cache;
   } catch (err) {
     return EMPTY_CACHE;
@@ -115,11 +118,6 @@ async function loadCache(cacheFile: string): Promise<Cache> {
 }
 
 async function saveCache(cacheFile: string, cache: Cache) {
-  const content = JSON.stringify(cache);
+  const content = JSON.stringify(cache, JSONReplacer);
   await fs.writeFile(cacheFile, content);
-}
-
-function md5(target: string) {
-  const md5 = crypto.createHash("md5");
-  return md5.update(target).digest("hex");
 }

@@ -2,6 +2,7 @@ import * as chalk from "chalk";
 import * as _ from "lodash";
 import Cases, { Case } from "./Cases";
 import { RunOptions } from "./Runner";
+import { JSONReplacer2 } from "./utils";
 
 export interface EndCaseArgs {
   testcase: Case,
@@ -128,14 +129,9 @@ export default class Reporter {
 
   private reportData(unit: Case, state: any) {
     const data = _.pick(_.get(state, unit.paths, {}), ["req", "res", "run"]);
-    const content = JSON.stringify(data, null, 2);
+    const content = JSON.stringify(data, JSONReplacer2, 2);
     const indent = (unit.paths.length - 1) * 2;
-    let lines = content.split("\n");
-    if (lines.length > 200) {
-      const ellipse = lines[100];
-      const spaces = ellipse.length - _.trimStart(ellipse).length;
-      lines = [...lines.slice(0, 99), `${" ".repeat(spaces)}...`, ...lines.slice(100)];
-    }
+    const lines = content.split("\n");
     const output = lines.map(v => " ".repeat(indent) + v).join("\n");
     process.stdout.write(chalk.gray(output + "\n"));
   }

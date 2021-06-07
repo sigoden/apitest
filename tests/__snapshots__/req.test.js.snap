@@ -15,6 +15,17 @@ exports[`req eval 1`] = `
 "
 `;
 
+exports[`req file 1`] = `
+"main
+  @file ✔
+  @file ✘
+
+1. @file(main.test2)
+   main.test2.req.v1@file: cannot read file
+
+"
+`;
+
 exports[`req main 1`] = `
 "main
   req variables ✔

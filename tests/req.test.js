@@ -6,6 +6,11 @@ describe("req", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("file", async () => {
+    const { stdout, code } = await spwanTest("req/file.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
   test("main", async () => {
     const { stdout, code } = await spwanTest("req", ["--ci"]);
     expect(code).toEqual(0);

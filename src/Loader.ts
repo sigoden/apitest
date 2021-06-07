@@ -60,8 +60,9 @@ export default class Loader {
     return {
       mainFile,
       cases: this.cases,
+      workDir: this.workDir,
       clients: this.clients,
-      jslibs: this.jslib,
+      jslib: this.jslib,
     };
   }
 

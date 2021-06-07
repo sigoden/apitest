@@ -1,5 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import * as _ from "lodash";
+import * as qs from "querystring";
+import * as FormData from "form-data";
 import { Client } from ".";
 import { Unit } from "../Cases";
 import { checkValue, existAnno, schemaValidate, toPosString } from "../utils";
@@ -63,7 +65,7 @@ export default class HttpClient implements Client {
       ..._.clone(this.options),
       ...(unit.client.options || {}),
       url: req.url,
-      method: req.method || "get",
+      method: req.method,
     };
     if (req.query) {
       opts.params = req.query;
@@ -77,10 +79,25 @@ export default class HttpClient implements Client {
       }
     }
     if (req.body) {
-      if (!(req.headers && (req.headers["content-type"] || req.headers["Content-Type"]))) {
-        _.set(opts, ["headers", "content-type"], "application/json; charset=utf-8");
+      if (!opts.method) opts.method = "post";
+      let reqContentType: string = _.get(req, ["headers", "content-type"], _.get(req, ["headers", "Content-Type"]));
+      if (!reqContentType) reqContentType =  _.get(opts, ["headers", "content-type"], _.get(opts, ["headers", "Content-Type"]));
+      if (!reqContentType) reqContentType = "application/json";
+      _.set(opts, ["headers", "content-type"], reqContentType);
+      delete opts.headers["Content-Type"];
+      if (reqContentType.indexOf("application/x-www-form-urlencoded") > -1) {
+        opts.data = qs.stringify(req.body);
+      } else if (reqContentType.indexOf("multipart/form-data") > -1) {
+        const form = new FormData();
+        for (const key in req.body) {
+          form.append(key, req.body[key]);
+        }
+        const formHeaders = form.getHeaders();
+        _.set(opts, ["headers", "content-type"], formHeaders["content-type"]);
+        opts.data = form;
+      } else {
+        opts.data = req.body;
       }
-      opts.data = req.body;
     }
     const result = {} as any;
     let needHeader = false;

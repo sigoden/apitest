@@ -6,12 +6,12 @@ import { getType } from "./utils";
 import { VmContext } from "./Session";
 import { RunCaseError } from "./Reporter";
 
-export default function compareRes(unit: Unit, ctx: VmContext, res: any) {
+export default async function compareRes(unit: Unit, ctx: VmContext, res: any) {
   if (!unit.res) return;
   return compareValue(unit.paths.concat(["res"]), ctx, unit.res, res);
 }
 
-function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) {
+async function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) {
   if (existAnno(paths, v1, "trans", "any")) {
     const transAnno = v1.annotations.find(v => v.name === "trans");
     _.set(ctx.state, "$", v2);
@@ -33,7 +33,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     const subErrors: RunCaseError[] = [];
     for (const [i, ele] of v1_.elements.entries()) {
       try {
-        compareValue(paths.concat([String(i)]), ctx, ele, v2);
+        await compareValue(paths.concat([String(i)]), ctx, ele, v2);
         pass = true;
         break;
       } catch (err) {
@@ -48,7 +48,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
     const subErrors: RunCaseError[] = [];
     for (const [i, ele] of v1_.elements.entries()) {
       try {
-        compareValue(paths.concat([String(i)]), ctx, ele, v2);
+        await compareValue(paths.concat([String(i)]), ctx, ele, v2);
       } catch (err) {
         pass = false;
         subErrors.push(err);
@@ -88,7 +88,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
         }
       }
       for (const prop of v1.properties) {
-        compareValue(paths.concat([prop.key]), ctx, prop.value, v2[prop.key]);
+        await compareValue(paths.concat([prop.key]), ctx, prop.value, v2[prop.key]);
       }
     } else if (v1.type === "Array") {
       if (!existAnno(paths, v1, "partial", "array")) {
@@ -97,7 +97,7 @@ function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2: any) 
         }
       }
       for (const [i, ele] of v1.elements.entries()) {
-        compareValue(paths.concat([String(i)]), ctx, ele, v2[i]);
+        await compareValue(paths.concat([String(i)]), ctx, ele, v2[i]);
       }
     }
   }
