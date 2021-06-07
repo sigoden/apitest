@@ -611,7 +611,7 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
 **Use mock function to generate data**
 > scope: unit req block
 
-Apitest supports nearly 40 mock functions. For a detailed list, see [sigodne/fake.js](https://github.com/sigoden/fake-js#doc)
+Apitest supports nearly 40 mock functions. For a detailed list, see [fake-js](https://github.com/sigoden/fake-js#doc)
 
 ### @file
 

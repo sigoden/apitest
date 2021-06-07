@@ -604,7 +604,7 @@ main
 - 功能: 使用mock函数生成数据
 - 使用范围: 用例`req`数据块
 
-Apitest 支持近40个mock函数。详细清单见[sigodne/fake.js](https://github.com/sigoden/fake-js#doc)。
+Apitest 支持近40个mock函数。详细清单见[fake-js](https://github.com/sigoden/fake-js#doc)。
 
 ### @file
 
