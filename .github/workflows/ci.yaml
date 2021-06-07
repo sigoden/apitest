@@ -14,3 +14,22 @@ jobs:
       - run: yarn
       - run: yarn lint
       - run: yarn test
+
+      - name: whether create tag
+        run: |
+          message="${{ github.event.head_commit.message }}"
+          if [[ "${{ github.event_name }}" == "push" &&  "$message" =~ ^upgrade\ to\ v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "to_create_tag=${message:12}" >> $GITHUB_ENV
+          fi
+      - name: create tag
+        uses: actions/github-script@v3
+        if: ${{ env.to_create_tag }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/v${{ env.to_create_tag }}",
+              sha: context.sha
+            })
