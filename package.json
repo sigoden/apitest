@@ -1,6 +1,6 @@
 {
   "name": "@sigodenjs/apitest",
-  "description": "declartive api testing tool",
+  "description": "Apitest is declarative api testing tool with JSON-like DSL.",
   "version": "0.9.1",
   "bin": {
     "apitest": "dist/bin.js"

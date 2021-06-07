@@ -4,7 +4,7 @@
 [![release](https://img.shields.io/github/v/release/sigoden/apitest)](https://github.com/sigoden/apitest/releases)
 [![npm](https://img.shields.io/npm/v/@sigodenjs/apitest)](https://www.npmjs.com/package/@sigodenjs/apitest)
 
-Apitest is declarative api testing tool with JSON-like DSL for easy testing.
+Apitest is declarative api testing tool with JSON-like DSL.
 
 Read this in other languages: [中文](./README.zh-CN.md)
 
