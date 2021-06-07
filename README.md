@@ -22,7 +22,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [TDD Support](#tdd-support)
     - [User-defiend Functions](#user-defiend-functions)
     - [Skip, Delay, Retry & Loop](#skip-delay-retry--loop)
-    - [Form,File Upload,GraphQL](#formfile-uploadgraphql)
+    - [Form, File Upload, GraphQL](#form-file-upload-graphql)
   - [Annotation](#annotation)
     - [@module](#module)
     - [@jslib](#jslib)
@@ -303,7 +303,7 @@ See [@jslib](#jslib)
 
 See [#Run](#run)
 
-### Form,File Upload,GraphQL
+### Form, File Upload, GraphQL
 See [#Http](#http)
 
 ## Annotation
