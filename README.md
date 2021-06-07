@@ -248,31 +248,8 @@ The following test cases can use all the data of the previous test cases.
 
 ### Support Mock
 
-With Mock, no longer entangled in fabricating data
+With Mock, no longer entangled in fabricating data, Seee [@mock](#mock)
 
-```
-{
-  test1: {
-    req: {
-      email: 'email', @mock
-      username: 'username', @mock
-      integer: 'integer(-5, 5)', @mock
-      image: 'image("200x100")', @mock
-      string: 'string("alpha", 5)', @mock
-      date: 'date', @mock  // iso8601 format // 2021-06-03T07:35:55Z
-      date1: 'date("yyyy-mm-dd HH:MM:ss")' @mock // 2021-06-03 15:35:55
-      date2: 'date("unix")', @mock // unix epoch 1622705755
-      date3: 'date("","3 hours 15 minutes")', @mock 
-      date4: 'date("","2 weeks ago")', @mock 
-      ipv6: 'ipv6', @mock
-      sentence: 'sentence', @mock
-      cnsentence: 'cnsentence', @mock 
-    }
-  }
-}
-```
-
-> Apitest uses its own mock library (refer to mock.js), and mock functions can be added freely. If you have any mocks you want, please submit an issue.
 
 ### Support Mixin 
 
@@ -295,9 +272,7 @@ At the same time, you can also select a test case to execute through the `--only
 
 You don't need to use this function at all. But I still worry about the need in certain extreme or corner scenes, so I still support it.
 
-Apitest allows users to write custom functions through js to construct request data or verify response data. (Dare to call it a cross-programming language? 🐶)
-
-See [@jslib](#jslib)
+Apitest allows users to write custom functions through js to construct request data or verify response data. (Dare to call it a cross-programming language? 🐶), See [@jslib](#jslib)
 
 ### Skip, Delay, Retry & Loop
 
@@ -616,6 +591,28 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
 > scope: unit req block
 
 Apitest supports nearly 40 mock functions. For a detailed list, see [fake-js](https://github.com/sigoden/fake-js#doc)
+
+```
+{
+  test1: {
+    req: {
+      email: 'email', @mock
+      username: 'username', @mock
+      integer: 'integer(-5, 5)', @mock
+      image: 'image("200x100")', @mock
+      string: 'string("alpha", 5)', @mock
+      date: 'date', @mock  // iso8601 format // 2021-06-03T07:35:55Z
+      date1: 'date("yyyy-mm-dd HH:MM:ss")' @mock // 2021-06-03 15:35:55
+      date2: 'date("unix")', @mock // unix epoch 1622705755
+      date3: 'date("","3 hours 15 minutes")', @mock 
+      date4: 'date("","2 weeks ago")', @mock 
+      ipv6: 'ipv6', @mock
+      sentence: 'sentence', @mock
+      cnsentence: 'cnsentence', @mock 
+    }
+  }
+}
+```
 
 ### @file
 
@@ -970,7 +967,7 @@ The `echo` client does not send any request, and directly returns the data in th
 
 #### x-www-form-urlencoded 
 
-Only need to add the request header `"content-type": "application/x-www-form-urlencoded"`
+Add the request header `"content-type": "application/x-www-form-urlencoded"`
 
 ```
 {
@@ -1002,7 +999,7 @@ Only need to add the request header `"content-type": "application/x-www-form-url
 #### multipart/form-data
 
 
-Only need to add the request header `"content-type": "multipart/form-data"`
+Add the request header `"content-type": "multipart/form-data"`
 Combined with `@file` annotation to implement file upload
 
 ```

@@ -248,33 +248,9 @@ Apitest 的工作原理就是根据`req`部分的描述构造请求传给后端�
 
 有了Mock, 从此不再纠结编造数据。详见[@mock](#mock)
 
-
-```
-{
-  test1: {
-    req: {
-      email: 'email', @mock
-      username: 'username', @mock
-      integer: 'integer(-5, 5)', @mock
-      image: 'image("200x100")', @mock
-      string: 'string("alpha", 5)', @mock
-      date: 'date', @mock  // iso8601格式的当前时间 // 2021-06-03T07:35:55Z
-      date1: 'date("yyyy-mm-dd HH:MM:ss")' @mock // 2021-06-03 15:35:55
-      date2: 'date("unix")', @mock // unix epoch 1622705755
-      date3: 'date("","3 hours 15 minutes")', @mock // 3小时15分钟后
-      date4: 'date("","2 weeks ago")', @mock // 2周前
-      ipv6: 'ipv6', @mock
-      sentence: 'sentence', @mock
-      cnsentence: 'cnsentence', @mock // 中文段落
-    }
-  }
-}
-```
-> Apitest 使用的是自己的mock库(参考了mock.js)，mock函数很自由添加的。有想要的mock欢迎提交issue。
-
 ### 支持Mixin
 
-巧用 Mixin，摆脱复制粘贴。详见[@mixin]
+巧用 Mixin，摆脱复制粘贴。详见[@mixin](#mixin)
 
 ### 支持CI
 
@@ -289,8 +265,6 @@ Apitest 的工作原理就是根据`req`部分的描述构造请求传给后端�
 默认模式下(非ci)，当 Apitest 碰到失败的测试会打印错误并退出。 Apitest 有缓存测试数据，你可以不停重复执行错误的用例，边开发边测试， 直到走通才进入后续的测试。
 
 同时，你还可以通过 `--only` 选项选择某个测试用例执行。
-
-tdd! tdd! tdd!
 
 ### 支持用户定义函数
 
@@ -610,6 +584,28 @@ main
 - 使用范围: 用例`req`数据块
 
 Apitest 支持近40个mock函数。详细清单见[fake-js](https://github.com/sigoden/fake-js#doc)。
+
+```
+{
+  test1: {
+    req: {
+      email: 'email', @mock
+      username: 'username', @mock
+      integer: 'integer(-5, 5)', @mock
+      image: 'image("200x100")', @mock
+      string: 'string("alpha", 5)', @mock
+      date: 'date', @mock  // iso8601格式的当前时间 // 2021-06-03T07:35:55Z
+      date1: 'date("yyyy-mm-dd HH:MM:ss")' @mock // 2021-06-03 15:35:55
+      date2: 'date("unix")', @mock // unix epoch 1622705755
+      date3: 'date("","3 hours 15 minutes")', @mock // 3小时15分钟后
+      date4: 'date("","2 weeks ago")', @mock // 2周前
+      ipv6: 'ipv6', @mock
+      sentence: 'sentence', @mock
+      cnsentence: 'cnsentence', @mock // 中文段落
+    }
+  }
+}
+```
 
 ### @file
 
@@ -960,7 +956,7 @@ Apitest 提供两种客户端。
 
 #### x-www-form-urlencoded 
 
-只需要配置请求头 `"content-type": "application/x-www-form-urlencoded"`
+配置请求头 `"content-type": "application/x-www-form-urlencoded"`
 
 ```
 {
@@ -992,7 +988,7 @@ Apitest 提供两种客户端。
 #### multipart/form-data
 
 
-只需要配置请求头 `"content-type": "multipart/form-data"`
+配置请求头 `"content-type": "multipart/form-data"`
 结合 `@file` 注解实现文件上传
 
 ```
