@@ -43,7 +43,7 @@ export default class Reporter {
   }
   public async endCase(args: EndCaseArgs) {
     let timeStr = "";
-    if (args.timeMs > 10) {
+    if (args.timeMs > 0) {
       timeStr = " (" + (args.timeMs / 1000).toFixed(3) + ")";
     }
     const dump = _.get(args.state, "run.dump");
