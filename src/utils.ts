@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as fs from "fs/promises";
 import * as crypto from "crypto";
-import { parse } from "jsona-js";
+import { JsonaAnnotation, parse } from "jsona-js";
 import * as vm from "vm";
 import { JsonaValue, JsonaObject, Position } from "jsona-js";
 import { RunCaseError } from "./Reporter";
@@ -66,6 +66,10 @@ export async function loadJsonaFile(file: string): Promise<JsonaValue> {
 
 export function toPosString(position: Position) {
   return ` at line ${position.line} col ${position.col}`;
+}
+
+export function createAnno(name: string, value: any): JsonaAnnotation {
+  return { name, value, position: {col:0,index:0,line:0} };
 }
 
 export function getType(value) {
@@ -172,7 +176,7 @@ export function checkValue(paths: string[], value: JsonaValue, rules: CheckValue
 export function ensureType(paths: string[], value: JsonaValue, type: string) {
   if (value.type !== type) {
     if (type === "Scalar" && (value.type !== "Object" && value.type !== "Array")) {
-
+    } else if (type === "Header" && (value.type === "String" || value.type === "Array")) {
     } else {
       throw new Error(`${[paths.join(".")]}: should be ${type.toLowerCase()} value${toPosString(value.position)}`);
     }

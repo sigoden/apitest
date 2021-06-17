@@ -48,6 +48,7 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
     - [Echo](#echo)
     - [Http](#http)
       - [配置](#配置)
+      - [cookie](#cookie)
       - [x-www-form-urlencoded](#x-www-form-urlencoded)
       - [multipart/form-data](#multipartform-data)
       - [graphql](#graphql)
@@ -943,14 +944,54 @@ Apitest 提供两种客户端。
 ```js
 {
   // `baseURL` 相对路径
-  baseURL: 'https://some-domain.com/api/',
+  baseURL: '',
   // `timeout` 指定请求超时前的毫秒数。 如果请求时间超过`timeout`，请求将被中止。
-  timeout: 1000, // default is `0` (no timeout)
-  // `withCredentials` 表示是否跨站访问控制请求
-  withCredentials: false, // default
+  timeout: 0,
+  // `withCredentials` 是否提供凭据信息 
+  withCredentials: true,
+  // `maxRedirects` 最大重定向数。如果设置为 0，则不会遵循重定向。
+  maxRedirects: 0, 
   // `headers` 默认请求头
-  headers: {
-  }
+  headers: {}
+}
+```
+
+#### cookie
+
+```
+{
+	test1: {
+		req: {
+			url: "https://httpbin.org/cookies/set",
+			query: {
+				k1: "v1",
+				k2: "v2",
+			},
+		},
+		res: {
+			status: 302,
+			headers: { @partial
+				'set-cookie': [], @type
+			},
+			body: "", @type
+		}
+	},
+	test2: {
+		req: {
+			url: "https://httpbin.org/cookies",
+			headers: {
+				Cookie: `test1.res.headers["set-cookie"]`, @eval
+			}
+		},
+		res: {
+			body: { @partial
+				cookies: {
+					k1: "v1",
+					k2: "v2",
+				}
+			}
+		},
+	},
 }
 ```
 

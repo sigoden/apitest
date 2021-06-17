@@ -48,6 +48,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [Echo](#echo)
     - [Http](#http)
       - [Options](#options)
+      - [cookie](#cookie)
       - [x-www-form-urlencoded](#x-www-form-urlencoded)
       - [multipart/form-data](#multipartform-data)
       - [graphql](#graphql)
@@ -952,16 +953,56 @@ The `echo` client does not send any request, and directly returns the data in th
 ```js
 {
   // `baseURL` will be prepended to `url` unless `url` is absolute.
-  baseURL: 'https://some-domain.com/api/',
+  baseURL: '',
   // `timeout` specifies the number of milliseconds before the request times out.
   // If the request takes longer than `timeout`, the request will be aborted.
-  timeout: 1000, // default is `0` (no timeout)
-  // `withCredentials` indicates whether or not cross-site Access-Control requests
-  // should be made using credentials
-  withCredentials: false, // default
+  timeout: 0,
+  // `withCredentials` Whether to provide credentials
+  withCredentials: true,
+  // `maxRedirects` defines the maximum number of redirects to follow in node.js. If set to 0, no redirects will be followed.
+  maxRedirects: 0,
   // `headers` is default request headers
   headers: {
   }
+}
+```
+
+#### cookie
+
+```js
+{
+	test1: {
+		req: {
+			url: "https://httpbin.org/cookies/set",
+			query: {
+				k1: "v1",
+				k2: "v2",
+			},
+		},
+		res: {
+			status: 302,
+			headers: { @partial
+				'set-cookie': [], @type
+			},
+			body: "", @type
+		}
+	},
+	test2: {
+		req: {
+			url: "https://httpbin.org/cookies",
+			headers: {
+				Cookie: `test1.res.headers["set-cookie"]`, @eval
+			}
+		},
+		res: {
+			body: { @partial
+				cookies: {
+					k1: "v1",
+					k2: "v2",
+				}
+			}
+		},
+	},
 }
 ```
 

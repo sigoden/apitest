@@ -1,16 +1,20 @@
 import axios, { AxiosRequestConfig } from "axios";
+import axiosCookieJarSupport from "axios-cookiejar-support";
 import * as _ from "lodash";
 import * as qs from "querystring";
 import * as FormData from "form-data";
 import { Client } from ".";
 import { Unit } from "../Cases";
-import { checkValue, existAnno, schemaValidate, toPosString } from "../utils";
+import { checkValue, createAnno, existAnno, schemaValidate, toPosString } from "../utils";
 import { JsonaObject, JsonaString, JsonaValue } from "jsona-js";
+
+axiosCookieJarSupport(axios);
 
 export interface HttpClientOptions {
   baseUrl?: string;
   timeout?: number;
   withCredentials?: boolean;
+  maxRedirects?: number;
   headers?: Record<string, string>;
 }
 
@@ -26,6 +30,9 @@ export const HTTP_OPTIONS_SCHEMA = {
     withCredentials: {
       type: "boolean",
     },
+    maxRedirects: {
+      type: "integer",
+    },
     headers: {
       type: "object",
       anyProperties: {
@@ -35,6 +42,12 @@ export const HTTP_OPTIONS_SCHEMA = {
   },
 };
 
+export const DEFAULT_OPTIONS: HttpClientOptions = {
+  timeout: 0,
+  withCredentials: true,
+  maxRedirects: 0,
+};
+
 
 export default class HttpClient implements Client {
   private options: HttpClientOptions;
@@ -42,12 +55,13 @@ export default class HttpClient implements Client {
     if (options) {
       try {
         schemaValidate(options, [], HTTP_OPTIONS_SCHEMA, true);
-        this.options = _.pick(options, ["baseURL", "timeout", "withCredentials", "headers"]);
+        this.options = _.pick(options, ["baseURL", "timeout", "withCredentials", "maxRedirects", "headers"]);
+        this.options = _.merge({}, DEFAULT_OPTIONS, this.options);
       } catch (err) {
         throw new Error(`[main@client(${name})[${err.paths.join(".")}] ${err.message}`);
       }
     } else {
-      this.options = {};
+      this.options = _.merge({}, DEFAULT_OPTIONS);
     }
   }
 
@@ -66,6 +80,9 @@ export default class HttpClient implements Client {
       ...(unit.client.options || {}),
       url: req.url,
       method: req.method,
+      validateStatus: () => true,
+      jar: true,
+      ignoreCookieErrors: true,
     };
     if (req.query) {
       opts.params = req.query;
@@ -99,29 +116,12 @@ export default class HttpClient implements Client {
         opts.data = req.body;
       }
     }
-    const result = {} as any;
-    let needHeader = false;
-    let needStatus = false;
-    if (unit.res) {
-      const res_ = unit.res as JsonaObject;
-      needHeader = !!res_.properties.find(v => v.key === "headers");
-      needStatus = !!res_.properties.find(v => v.key === "status");
-    }
     try {
-      const axiosRes = await axios(opts);
-      if (needHeader) result.headers = axiosRes.headers;
-      if (needStatus) result.status = axiosRes.status;
-      result.body = axiosRes.data;
+      const { headers, status, data } = await axios(opts);
+      return { headers, status, body: data };
     } catch (err) {
-      if (err.response) {
-        if (needHeader) result.headers = err.response.headers;
-        if (needStatus) result.status = err.response.status;
-        result.body = err.response.data;
-      } else {
-        throw err;
-      }
+      throw err;
     }
-    return result;
   }
 
   private validateReq(paths: string[], req: JsonaValue) {
@@ -169,11 +169,12 @@ export default class HttpClient implements Client {
 
   private validateRes(paths: string[], res: JsonaValue) {
     if (!res) return;
+    res.annotations.push(createAnno("partial", null));
     checkValue(paths, res, [
       { paths: [], type: "Object", required: true },
       { paths: ["status"], type: "Integer" },
       { paths: ["headers"], type: "Object" },
-      { paths: ["headers", "*"], type: "Scalar", required: true },
+      { paths: ["headers", "*"], type: "Header", required: true },
     ]);
   }
 }

@@ -105,3 +105,10 @@ describe("http form", () => {
     expect(code).toEqual(0);
   }, 60000);
 });
+
+describe("http cookie", () => {
+  test("cookie", async () => {
+    const { code } = await spwanTest("http/cookie.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+  }, 60000);
+});

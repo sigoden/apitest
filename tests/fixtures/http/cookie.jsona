@@ -1,0 +1,52 @@
+{
+	test1: {
+		req: {
+			url: "https://httpbin.org/cookies/set",
+			query: {
+				k1: "v1",
+				k2: "v2",
+			},
+		},
+		res: {
+			status: 302,
+			headers: { @partial
+				'set-cookie': [], @type
+			},
+			body: "", @type
+		}
+	},
+	test2: {  @client({options:{maxRedirects:1}})
+		req: {
+			url: "https://httpbin.org/cookies/set",
+			query: {
+				k1: "v1",
+				k2: "v2",
+			},
+		},
+		res: {
+			status: 200,
+			body: { @partial
+				cookies: {
+					k1: "v1",
+					k2: "v2",
+				}
+			}
+		}
+	},
+	test3: {
+		req: {
+			url: "https://httpbin.org/cookies",
+			headers: {
+				Cookie: `test1.res.headers["set-cookie"]`, @eval
+			}
+		},
+		res: {
+			body: { @partial
+				cookies: {
+					k1: "v1",
+					k2: "v2",
+				}
+			}
+		},
+	},
+}

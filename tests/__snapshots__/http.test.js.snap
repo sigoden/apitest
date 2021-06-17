@@ -56,7 +56,7 @@ exports[`http invalid req value 1`] = `
 `;
 
 exports[`http invalid res headers prop type 1`] = `
-"main.test1.res.headers.key: should be scalar value at line 8 col 14
+"main.test1.res.headers.key: should be header value at line 8 col 14
 "
 `;
 

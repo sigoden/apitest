@@ -41,10 +41,12 @@
     "@sigodenjs/fake": "^0.2.0",
     "@types/lodash": "^4.14.170",
     "axios": "^0.21.1",
+    "axios-cookiejar-support": "^1.0.1",
     "chalk": "^4.1.1",
     "form-data": "^4.0.0",
     "jsona-js": "^0.5.1",
     "lodash": "^4.17.21",
+    "tough-cookie": "^4.0.0",
     "yargs": "^17.0.1"
   },
   "devDependencies": {
