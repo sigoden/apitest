@@ -541,7 +541,7 @@ The test cases in the group will inherit the group's `@client` and `@mixin`. The
       v2: `
         let x = 3;
         let y = 4;
-        return x + y;
+        x + y
         `, @eval  // Support code block
       v3: "env.FOO", @eval // Access environment variables
       v4: 'mod1.test1.res.body.id`, @eval // Access the data of the previous test

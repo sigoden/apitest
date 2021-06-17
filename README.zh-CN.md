@@ -534,7 +534,7 @@ main
       v2: `
         let x = 3;
         let y = 4;
-        return x + y;
+        x + y
         `, @eval  // 支持代码块
       v3: "env.FOO", @eval // 访问环境变量
       v4: 'mod1.test1.res.body.id`, @eval // 访问前面测试的数据

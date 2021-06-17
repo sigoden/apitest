@@ -103,20 +103,14 @@ export function existAnno(paths: string[], value: JsonaValue, name: string, type
 
 export function evalValue(paths: string[], ctx: VmContext, code: string, anno = "eval"): any {
   if (!code) return null;
-  const expressions = _.trimEnd(code.trim(), ";").split(";").map(v => v.trim());
-  const lastIdx = expressions.length - 1;
-  if (!expressions[lastIdx].trim().startsWith("return")) {
-    expressions[lastIdx] = "return " + expressions[lastIdx];
+  const trimedCode = _.trim(code);
+  if (trimedCode.startsWith("{") && trimedCode.endsWith("}")) {
+    code  = "(" + code + ")";
   }
-  const patchedCode = expressions.join(";");
-  const EXPORT_KEY = "__exports__";
-  ctx.state[EXPORT_KEY] = null;
   try {
-    const wrapCode = `${EXPORT_KEY} = (function(){${patchedCode};}())`;
-    const script = new vm.Script(wrapCode);
-    _.merge(ctx.state, ctx.jslib);
-    script.runInNewContext(ctx.state);
-    return ctx.state[EXPORT_KEY];
+    const script = new vm.Script(code);
+    const state = _.merge({}, ctx.state, ctx.jslib);
+    return script.runInNewContext(state);
   } catch (err) {
     throw new RunCaseError(paths, anno, `throw err, ${err.message}`);
   }
