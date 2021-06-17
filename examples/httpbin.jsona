@@ -1,5 +1,78 @@
 {
-  test1: { @describe('test json')
+  get: { @describe("simple get")
+    req: {
+      url: "https://httpbin.org/get",
+      query: {
+        k1: "v1",
+      }
+    },
+    res: {
+      body: { @partial
+        args: {
+          k1: "v1",
+        },
+        url: "https://httpbin.org/get?k1=v1"
+      }
+    }
+  },
+  withParams: { @describe("with path params")
+    req: {
+      url: "https://httpbin.org/anything/{id}/comments/{commentId}",
+      params: {
+        id: 3,
+        commentId: 12,
+      }
+    },
+    res: {
+      body: { @partial
+        url: "https://httpbin.org/anything/3/comments/12",
+      }
+    }
+  },
+  statusCode: { @describe("check status code")
+    req: {
+      url: "https://httpbin.org/status/403",
+    },
+    res: {
+      status: 403,
+    }
+  },
+  setCookies: { @describe("response with set-cookies header")
+    req: {
+      url: "https://httpbin.org/cookies/set",
+      query: {
+        k1: "v1",
+        k2: "v2",
+      },
+    },
+    res: {
+      status: 302,
+      headers: { @partial
+        'set-cookie': [
+          "k1=v1; Path=/",
+          "k2=v2; Path=/",
+        ], 
+      },
+      body: "", @type
+    }
+  },
+  useCookies: { @describe("request with cookie header")
+    req: {
+      url: "https://httpbin.org/cookies",
+      headers: {
+        Cookie: `setCookies.res.headers["set-cookie"]`, @eval
+      }
+    },
+    res: {
+      body: { @partial
+        cookies: {
+          k1: "v1",
+          k2: "v2",
+        }
+      }
+    },
+  },
+  json: { @describe('content-type: json')
     req: {
       url: "https://httpbin.org/post",
       method: "post",
@@ -21,7 +94,7 @@
       }
     }
   },
-  test2: { @describe('test form')
+  form: { @describe('conetnt-type: x-www-form-urlencoded')
     req: {
       url: "https://httpbin.org/post",
       method: "post",
@@ -43,7 +116,7 @@
       }
     }
   },
-  test3: { @describe('test multi-part')
+  multiPart: { @describe('content-type: multi-part')
     req: {
       url: "https://httpbin.org/post",
       method: "post",
@@ -64,5 +137,5 @@
         }
       }
     }
-  }
+  },
 }

@@ -20,9 +20,6 @@
       username: 'username(3)', @mock
       email: `req.username + "@gmail.com"`, @eval
       password: 'string(12)', @mock
-    },
-    run: {
-      dump: true,
     }
   }
 }
