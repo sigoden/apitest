@@ -59,9 +59,22 @@ Read this in other languages: [中文](./README.zh-CN.md)
 
 ## Installation
 
- Binaries are available in [Github Releases](https://github.com/sigoden/apitest/releases). Make sure to put the path to the binary into your `PATH`.
+Binaries are available in [Github Releases](https://github.com/sigoden/apitest/releases). Make sure to put the path to the binary into your `PATH`.
 
- If you use `node`, you can install it by running `npm install -g @sigodenjs/apitest`
+```
+# linux
+curl -L -o apitest https://github.com/sigoden/apitest/releases/latest/download/apitest-linux 
+chmod +x apitest
+sudo mv apitest /usr/local/bin/
+
+# macos
+curl -L -o apitest https://github.com/sigoden/apitest/releases/latest/download/apitest-macos
+chmod +x apitest
+sudo mv apitest /usr/local/bin/
+
+# npm
+npm install -g @sigodenjs/apitest
+```
 
 ## Get Started
 
