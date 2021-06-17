@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import axiosCookieJarSupport from "axios-cookiejar-support";
 import * as _ from "lodash";
 import * as qs from "querystring";
+import { HttpsProxyAgent, HttpProxyAgent } from "hpagent";
 import * as FormData from "form-data";
 import { Client } from ".";
 import { Unit } from "../Cases";
@@ -16,6 +17,7 @@ export interface HttpClientOptions {
   withCredentials?: boolean;
   maxRedirects?: number;
   headers?: Record<string, string>;
+  proxy?: string;
 }
 
 export const HTTP_OPTIONS_SCHEMA = {
@@ -39,6 +41,9 @@ export const HTTP_OPTIONS_SCHEMA = {
         type: "string",
       },
     },
+    proxy: {
+      type: "string",
+    },
   },
 };
 
@@ -55,7 +60,7 @@ export default class HttpClient implements Client {
     if (options) {
       try {
         schemaValidate(options, [], HTTP_OPTIONS_SCHEMA, true);
-        this.options = _.pick(options, ["baseURL", "timeout", "withCredentials", "maxRedirects", "headers"]);
+        this.options = _.pick(options, ["baseURL", "timeout", "withCredentials", "maxRedirects", "headers", "proxy"]);
         this.options = _.merge({}, DEFAULT_OPTIONS, this.options);
       } catch (err) {
         throw new Error(`[main@client(${name})[${err.paths.join(".")}] ${err.message}`);
@@ -116,6 +121,7 @@ export default class HttpClient implements Client {
         opts.data = req.body;
       }
     }
+    setProxy(opts);
     try {
       const { headers, status, data } = await axios(opts);
       return { headers, status, body: data };
@@ -176,5 +182,33 @@ export default class HttpClient implements Client {
       { paths: ["headers"], type: "Object" },
       { paths: ["headers", "*"], type: "Header", required: true },
     ]);
+  }
+}
+
+function setProxy(opts: AxiosRequestConfig) {
+  let useHttps = false;
+  if (opts.url && opts.url.startsWith("https://")) {
+    useHttps = true;
+  }
+  if (!useHttps && opts.baseURL && opts.baseURL.startsWith("https://")) {
+    useHttps = true;
+  }
+  let proxy: string;
+  if (typeof opts.proxy === "undefined") {
+    if (process.env["NO_PROXY"] || process.env["no_proxy"]) return;
+    if (useHttps) {
+      proxy = process.env["HTTPS_PROXY"] || process.env["https_proxy"];
+    } else {
+      proxy = process.env["HTTP_PROXY"] || process.env["http_proxy"];
+    }
+  } else {
+    proxy = opts.proxy as any;
+  }
+  if (!proxy) return;
+  opts.proxy = false;
+  if (useHttps) {
+    opts.httpsAgent = new HttpsProxyAgent({ proxy });
+  } else {
+    opts.httpAgent = new HttpProxyAgent({ proxy });
   }
 }

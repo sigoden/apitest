@@ -952,7 +952,9 @@ Apitest 提供两种客户端。
   // `maxRedirects` 最大重定向数。如果设置为 0，则不会遵循重定向。
   maxRedirects: 0, 
   // `headers` 默认请求头
-  headers: {}
+  headers: {},
+  // `proxy` 配置http(s)代理, 也可以使用 HTTP_PROXY, HTTPS_PROXY 环境变量
+  proxy: "http://user:pass@localhost:8080"
 }
 ```
 

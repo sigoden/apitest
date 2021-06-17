@@ -963,7 +963,9 @@ The `echo` client does not send any request, and directly returns the data in th
   maxRedirects: 0,
   // `headers` is default request headers
   headers: {
-  }
+  },
+  // `proxy` configures http(s) proxy, you can also use HTTP_PROXY, HTTPS_PROXY environment variables
+  proxy: "http://user:pass@localhost:8080"
 }
 ```
 
