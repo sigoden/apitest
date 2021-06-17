@@ -48,7 +48,7 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
     - [Echo](#echo)
     - [Http](#http)
       - [配置](#配置)
-      - [cookie](#cookie)
+      - [Cookies](#cookies)
       - [x-www-form-urlencoded](#x-www-form-urlencoded)
       - [multipart/form-data](#multipartform-data)
       - [graphql](#graphql)
@@ -958,42 +958,42 @@ Apitest 提供两种客户端。
 }
 ```
 
-#### cookie
+#### Cookies
 
 ```
 {
-	test1: {
-		req: {
-			url: "https://httpbin.org/cookies/set",
-			query: {
-				k1: "v1",
-				k2: "v2",
-			},
-		},
-		res: {
-			status: 302,
-			headers: { @partial
-				'set-cookie': [], @type
-			},
-			body: "", @type
-		}
-	},
-	test2: {
-		req: {
-			url: "https://httpbin.org/cookies",
-			headers: {
-				Cookie: `test1.res.headers["set-cookie"]`, @eval
-			}
-		},
-		res: {
-			body: { @partial
-				cookies: {
-					k1: "v1",
-					k2: "v2",
-				}
-			}
-		},
-	},
+  test1: {
+    req: {
+      url: "https://httpbin.org/cookies/set",
+      query: {
+        k1: "v1",
+        k2: "v2",
+      },
+    },
+    res: {
+      status: 302,
+      headers: { @partial
+        'set-cookie': [], @type
+      },
+      body: "", @type
+    }
+  },
+  test2: {
+    req: {
+      url: "https://httpbin.org/cookies",
+      headers: {
+        Cookie: `test1.res.headers["set-cookie"]`, @eval
+      }
+    },
+    res: {
+      body: { @partial
+        cookies: {
+          k1: "v1",
+          k2: "v2",
+        }
+      }
+    },
+  },
 }
 ```
 

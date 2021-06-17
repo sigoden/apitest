@@ -48,7 +48,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [Echo](#echo)
     - [Http](#http)
       - [Options](#options)
-      - [cookie](#cookie)
+      - [Cookies](#cookies)
       - [x-www-form-urlencoded](#x-www-form-urlencoded)
       - [multipart/form-data](#multipartform-data)
       - [graphql](#graphql)
@@ -959,52 +959,54 @@ The `echo` client does not send any request, and directly returns the data in th
   timeout: 0,
   // `withCredentials` Whether to provide credentials
   withCredentials: true,
-  // `maxRedirects` defines the maximum number of redirects to follow in node.js. If set to 0, no redirects will be followed.
+  // `maxRedirects` defines the maximum number of redirects to follow in node.js. 
+  // If set to 0, no redirects will be followed.
   maxRedirects: 0,
   // `headers` is default request headers
   headers: {
   },
-  // `proxy` configures http(s) proxy, you can also use HTTP_PROXY, HTTPS_PROXY environment variables
+  // `proxy` configures http(s) proxy, you can also use HTTP_PROXY, HTTPS_PROXY 
+  // environment variables
   proxy: "http://user:pass@localhost:8080"
 }
 ```
 
-#### cookie
+#### Cookies
 
 ```js
 {
-	test1: {
-		req: {
-			url: "https://httpbin.org/cookies/set",
-			query: {
-				k1: "v1",
-				k2: "v2",
-			},
-		},
-		res: {
-			status: 302,
-			headers: { @partial
-				'set-cookie': [], @type
-			},
-			body: "", @type
-		}
-	},
-	test2: {
-		req: {
-			url: "https://httpbin.org/cookies",
-			headers: {
-				Cookie: `test1.res.headers["set-cookie"]`, @eval
-			}
-		},
-		res: {
-			body: { @partial
-				cookies: {
-					k1: "v1",
-					k2: "v2",
-				}
-			}
-		},
-	},
+  test1: {
+    req: {
+      url: "https://httpbin.org/cookies/set",
+      query: {
+        k1: "v1",
+        k2: "v2",
+      },
+    },
+    res: {
+      status: 302,
+      headers: { @partial
+        'set-cookie': [], @type
+      },
+      body: "", @type
+    }
+  },
+  test2: {
+    req: {
+      url: "https://httpbin.org/cookies",
+      headers: {
+        Cookie: `test1.res.headers["set-cookie"]`, @eval
+      }
+    },
+    res: {
+      body: { @partial
+        cookies: {
+          k1: "v1",
+          k2: "v2",
+        }
+      }
+    },
+  },
 }
 ```
 
