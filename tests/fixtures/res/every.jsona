@@ -2,13 +2,21 @@
   @client({name:"default",kind:"echo"})
   test1: { @describe("@every") 
     req: {
-      v1: "integer(1, 10)", @mock
+      arr: [
+        {name: "v1"},
+        {name: "v2"},
+        {name: "v3"},
+      ]
     },
     res: {
-      v1: [ @every
-        "$ > -1", @eval
-        "$ > 0", @eval
-      ]
+      arr: [ @every
+        [ @partial
+            {
+              name: "", @type
+            }
+        ],
+        `$.length === 3`, @eval
+      ],
     }
   },
   test2: { @describe("fail# @every")

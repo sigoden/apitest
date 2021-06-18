@@ -44,7 +44,7 @@ async function createValue(paths: string[], ctx: VmContext, jsa: JsonaValue) {
       _.set(ctx.state, paths, _.get(ctx.state, paths, []));
       const output = _.get(ctx.state, paths);
       for (const [i, ele] of jsa.elements.entries()) {
-        output.push(await createValue(paths.concat([String(i)]), ctx, ele));
+        output[i] = await createValue(paths.concat([String(i)]), ctx, ele);
       }
       result = output;
     } else if (jsa.type === "Object") {
