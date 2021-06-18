@@ -12,8 +12,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
   - [Installation](#installation)
   - [Get Started](#get-started)
   - [Features](#features)
-    - [Cross Platform, Programming Language Agnostic](#cross-platform-programming-language-agnostic)
-    - [JSON-like DSL](#json-like-dsl)
+    - [JSONA DSL](#jsona-dsl)
     - [Data Is Assertion](#data-is-assertion)
     - [Data Is Accessable](#data-is-accessable)
     - [Support Mock](#support-mock)
@@ -134,11 +133,7 @@ main
 
 ## Features
 
-### Cross Platform, Programming Language Agnostic
-
-Apitest is a command line tool that supports linux, windows, mac systems. Its own test cases are written using DSL and do not rely on specific language experience.
-
-### JSON-like DSL
+### JSONA DSL
 
 Use JSON-like DSL to write tests. The document is the test.
 
@@ -174,6 +169,13 @@ Please don't be scared by DSL. In fact, it is JSON, which loosens some grammatic
 Click [jsona/spec](https://github.com/jsona/spec) to view the JSONA specification
 
 > By the way, there is a vscode extension supports DSL (jsona) format.
+
+Why use JSONA?
+
+The essence of api testing is to construct and send `req` data, and receive and verify `res` data. Data is both the main body and the core, and JSON is the most readable and universal data description format.
+Api testing also requires some specific logic. For example, a random number is constructed in the request, and only part of the data given in the response is checked.
+
+JSONA = JSON + Annotation. JSON is responsible for the data part, and annotations are responsible for the logic part. Perfectly fit the interface test requirements.
 
 ### Data Is Assertion
 
