@@ -78,8 +78,10 @@ async function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2:
       throw new RunCaseError(paths, "", `${v1Value} ≠ ${v2}`);
     }
     if (v1.type === "Object") {
+      const optionalFields = v1.properties.filter(v => !!v.value.annotations.find(v => v.name === "optional")).map(v => v.key);
       if (!existAnno(paths, v1, "partial", "object")) {
-        const v1Keys = v1.properties.map(v => v.key);
+        let v1Keys = v1.properties.map(v => v.key);
+        v1Keys = _.difference(v1Keys, optionalFields);
         const v2Keys = Object.keys(v2);
         if (v1Keys.length !== v2Keys.length) {
           const v1x = _.difference(v1Keys, v2Keys);
@@ -88,6 +90,7 @@ async function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2:
         }
       }
       for (const prop of v1.properties) {
+        if (optionalFields.indexOf(prop.key) > -1 && typeof v2[prop.key] === "undefined") continue;
         await compareValue(paths.concat([prop.key]), ctx, prop.value, v2[prop.key]);
       }
     } else if (v1.type === "Array") {

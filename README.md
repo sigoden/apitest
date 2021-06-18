@@ -38,6 +38,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [@some](#some)
     - [@partial](#partial)
     - [@type](#type)
+    - [@optional](#optional)
   - [Run](#run)
     - [Skip](#skip)
     - [Delay](#delay)
@@ -784,6 +785,27 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [fake-js](ht
   },
 }
 ```
+
+### @optional
+
+**Marker field is optional**
+> scope: unit res block
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: 3,
+      // v2: 4, optional field
+    },
+    res: {
+      v1: 3,
+      v2: 4, @optional
+    }
+  }
+}
+```
+
 
 ## Run
 

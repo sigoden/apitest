@@ -35,4 +35,9 @@ describe("res", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("optional", async () => {
+    const { stdout, code } = await spwanTest("res/optional.jsona", ["--ci"]);
+    expect(code).toEqual(1);
+    expect(stdout).toMatchSnapshot();
+  });
 });

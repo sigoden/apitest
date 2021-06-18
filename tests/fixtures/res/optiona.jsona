@@ -1,0 +1,23 @@
+{
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@optional")
+    req: {
+      v1: 3,
+      // v2: 4, optional field
+    },
+    res: {
+      v1: 3,
+      v2: 4, @optional
+    }
+  },
+  test2: { @describe("@optional with other anno")
+    req: {
+      v1: 3,
+      // v2: 4, optional filed
+    },
+    res: {
+      v1: 3,
+      v2: 0, @type @optional
+    }
+  }
+}
