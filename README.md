@@ -970,8 +970,6 @@ The `echo` client does not send any request, and directly returns the data in th
   // `timeout` specifies the number of milliseconds before the request times out.
   // If the request takes longer than `timeout`, the request will be aborted.
   timeout: 0,
-  // `withCredentials` Whether to provide credentials
-  withCredentials: true,
   // `maxRedirects` defines the maximum number of redirects to follow in node.js. 
   // If set to 0, no redirects will be followed.
   maxRedirects: 0,

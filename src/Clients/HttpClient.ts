@@ -14,7 +14,6 @@ axiosCookieJarSupport(axios);
 export interface HttpClientOptions {
   baseUrl?: string;
   timeout?: number;
-  withCredentials?: boolean;
   maxRedirects?: number;
   headers?: Record<string, string>;
   proxy?: string;
@@ -28,9 +27,6 @@ export const HTTP_OPTIONS_SCHEMA = {
     },
     timeout: {
       type: "integer",
-    },
-    withCredentials: {
-      type: "boolean",
     },
     maxRedirects: {
       type: "integer",
@@ -49,7 +45,6 @@ export const HTTP_OPTIONS_SCHEMA = {
 
 export const DEFAULT_OPTIONS: HttpClientOptions = {
   timeout: 0,
-  withCredentials: true,
   maxRedirects: 0,
 };
 
@@ -60,7 +55,7 @@ export default class HttpClient implements Client {
     if (options) {
       try {
         schemaValidate(options, [], HTTP_OPTIONS_SCHEMA, true);
-        this.options = _.pick(options, ["baseURL", "timeout", "withCredentials", "maxRedirects", "headers", "proxy"]);
+        this.options = _.pick(options, ["baseURL", "timeout", "maxRedirects", "headers", "proxy"]);
         this.options = _.merge({}, DEFAULT_OPTIONS, this.options);
       } catch (err) {
         throw new Error(`[main@client(${name})[${err.paths.join(".")}] ${err.message}`);
@@ -87,6 +82,7 @@ export default class HttpClient implements Client {
       method: req.method,
       validateStatus: () => true,
       jar: true,
+      withCredentials: true,
       ignoreCookieErrors: true,
     };
     if (req.query) {

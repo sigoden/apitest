@@ -960,8 +960,6 @@ Apitest 提供两种客户端。
   baseURL: '',
   // `timeout` 指定请求超时前的毫秒数。 如果请求时间超过`timeout`，请求将被中止。
   timeout: 0,
-  // `withCredentials` 是否提供凭据信息 
-  withCredentials: true,
   // `maxRedirects` 最大重定向数。如果设置为 0，则不会遵循重定向。
   maxRedirects: 0, 
   // `headers` 默认请求头

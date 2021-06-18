@@ -71,7 +71,8 @@ test("validate", () => {
       {
         baseURL: "abc",
         timeout: 5000,
-        withCredentials: false,
+        maxRedirects: 0,
+        proxy: "http://localhost:8080",
         headers: {
           "x-key": "abc",
         },
