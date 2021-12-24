@@ -1165,6 +1165,7 @@ Options:
       --dry-run  Check syntax then print all cases                     [boolean]
       --env      Specific test enviroment like prod, dev                [string]
       --only     Run specific module/case                               [string]
+      --dump     Force print req/res data                              [boolean]
 ```
 
 ### Multiple Test Environments
