@@ -27,6 +27,10 @@ const argv = require("yargs/yargs")(process.argv.slice(2)) // eslint-disable-lin
       type: "string",
       describe: "Run specific module/case",
     },
+    dump: {
+      type: "boolean",
+      describe: "Force print req/res data",
+    },
   })
   .argv;
 
@@ -55,6 +59,9 @@ async function main(argv) {
         dryRun: false,
         reset: argv.reset, 
       };
+    }
+    if (argv.dump) {
+      runOptions.dump = true;
     }
     const exitCode = await runner.run(runOptions);
     process.exit(exitCode);

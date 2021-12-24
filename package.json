@@ -34,7 +34,7 @@
     "dev": "ts-node src/bin.ts",
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist",
-    "test": "yarn build && jest",
+    "test": "jest",
     "prepublish": "npm run -s clean && npm run -s build"
   },
   "dependencies": {

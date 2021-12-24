@@ -224,6 +224,20 @@ mod1
 "
 `;
 
+exports[`cli with options --only --dump 1`] = `
+"main
+  test4 ✔
+  {
+    \\"req\\": {
+      \\"v1\\": \\"a\\"
+    },
+    \\"res\\": {
+      \\"v1\\": \\"a\\"
+    }
+  }
+"
+`;
+
 exports[`cli with options --only 1`] = `
 "main
   test4 ✔

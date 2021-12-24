@@ -31,6 +31,11 @@ describe("cli", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("with options --only --dump", async () => {
+    const { stdout, code } = await spwanTest("cli/main.jsona", ["--only", "main.test4", "--dump"]);
+    expect(code).toEqual(0);
+    expect(stdout).toMatchSnapshot();
+  });
   test("still start from last failed", async () => {
     const { stdout, code } = await spwanTest("cli/main.jsona");
     expect(code).toEqual(1);

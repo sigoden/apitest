@@ -46,7 +46,7 @@ export default class Reporter {
     if (args.timeMs > 0) {
       timeStr = " (" + (args.timeMs / 1000).toFixed(3) + ")";
     }
-    const dump = _.get(args.state, "run.dump");
+    const dump = _.get(args.state, "run.dump") || this.options.dump;
     if (!args.err) {
       process.stdout.write(chalk.green(`${timeStr} ✔\n`));
       if (dump) {

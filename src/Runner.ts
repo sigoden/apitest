@@ -13,6 +13,7 @@ export interface RunOptions {
   ci?: boolean;
   reset?: boolean;
   dryRun?: boolean;
+  dump?: boolean;
   only?: string;
 }
 
