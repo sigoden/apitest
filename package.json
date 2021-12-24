@@ -1,7 +1,7 @@
 {
   "name": "@sigodenjs/apitest",
   "description": "Apitest is declarative api testing tool with JSON-like DSL.",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "bin": {
     "apitest": "dist/bin.js"
   },
@@ -35,7 +35,7 @@
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist",
     "test": "jest",
-    "prepublish": "npm run -s clean && npm run -s build"
+    "prepublishOnly": "npm run -s clean && npm run -s build"
   },
   "dependencies": {
     "@sigodenjs/fake": "^0.2.0",
