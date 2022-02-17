@@ -32,7 +32,7 @@ describe("cli", () => {
     expect(stdout).toMatchSnapshot();
   });
   test("with options --only --dump", async () => {
-    const { stdout, code } = await spwanTest("cli/main.jsona", ["--only", "main.test4", "--dump"]);
+    const { stdout, code } = await spwanTest("cli/main.jsona", ["--only", "main.test1", "--dump"]);
     expect(code).toEqual(0);
     expect(stdout).toMatchSnapshot();
   });
