@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
-import axiosCookieJarSupport from "axios-cookiejar-support";
+import { wrapper } from "axios-cookiejar-support";
+import { CookieJar } from "tough-cookie";
 import * as _ from "lodash";
 import * as qs from "querystring";
 import { HttpsProxyAgent, HttpProxyAgent } from "hpagent";
@@ -9,7 +10,8 @@ import { Unit } from "../Cases";
 import { checkValue, createAnno, existAnno, schemaValidate, toPosString } from "../utils";
 import { JsonaObject, JsonaString, JsonaValue } from "jsona-js";
 
-axiosCookieJarSupport(axios);
+const jar = new CookieJar();
+const client = wrapper(axios.create({ jar }));
 
 export interface HttpClientOptions {
   baseUrl?: string;
@@ -81,7 +83,7 @@ export default class HttpClient implements Client {
       url: req.url,
       method: req.method,
       validateStatus: () => true,
-      jar: true,
+      jar,
       withCredentials: true,
       ignoreCookieErrors: true,
     };
@@ -99,7 +101,7 @@ export default class HttpClient implements Client {
     if (req.body) {
       if (!opts.method) opts.method = "post";
       let reqContentType: string = _.get(req, ["headers", "content-type"], _.get(req, ["headers", "Content-Type"]));
-      if (!reqContentType) reqContentType =  _.get(opts, ["headers", "content-type"], _.get(opts, ["headers", "Content-Type"]));
+      if (!reqContentType) reqContentType =  _.get(opts, ["headers", "content-type"], _.get(opts, ["headers", "Content-Type"])) as string;
       if (!reqContentType) reqContentType = "application/json";
       _.set(opts, ["headers", "content-type"], reqContentType);
       delete opts.headers["Content-Type"];
@@ -119,7 +121,7 @@ export default class HttpClient implements Client {
     }
     setProxy(opts);
     try {
-      const { headers, status, data } = await axios(opts);
+      const { headers, status, data } = await client(opts);
       return { headers, status, body: data };
     } catch (err) {
       throw err;
