@@ -13,10 +13,10 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-node@v2
       with:
-        node-version: '14.x'
+        node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: yarn 
-    - run: yarn build && mkdir release && yarn pkg .
+    - run: npm install 
+    - run: npm run build && mkdir release && yarn pkg .
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
