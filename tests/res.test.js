@@ -40,4 +40,9 @@ describe("res", () => {
     expect(code).toEqual(1);
     expect(stdout).toMatchSnapshot();
   });
+  test("nullable", async () => {
+    const { stdout, code } = await spwanTest("res/nullable.jsona", ["--ci"]);
+    expect(code).toEqual(0);
+    expect(stdout).toMatchSnapshot();
+  });
 });
