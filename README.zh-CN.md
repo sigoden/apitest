@@ -38,6 +38,7 @@ Apitest 是一款使用类JSON的DSL编写测试用例的自动化测试工具�
     - [@partial](#partial)
     - [@type](#type)
     - [@optional](#optional)
+    - [@nullable](#nullable)
   - [执行控制](#执行控制)
     - [跳过](#跳过)
     - [延时](#延时)
@@ -797,6 +798,25 @@ Apitest 支持近40个mock函数。详细清单见[fake-js](https://github.com/s
     res: {
       v1: 3,
       v2: 4, @optional
+    }
+  }
+}
+```
+
+### @nullable
+
+- 功能: 标记字段可为`null`值
+- 使用范围: 用例`res`数据块
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: null,
+      // v1: 3,
+    },
+    res: {
+      v1: 3, @nullable
     }
   }
 }

@@ -811,7 +811,7 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [fake-js](ht
 
 ### @nullable
 
-**Field maybe null**
+**Marker field can be null**
 > scope: unit res block
 
 ```
