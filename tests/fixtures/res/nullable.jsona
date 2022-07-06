@@ -1,0 +1,11 @@
+{
+  @client({name:"default",kind:"echo"})
+  test1: { @describe("@nullable") 
+    req: {
+      v1: null,
+    },
+    res: {
+      v1: 3, @nullable
+    }
+  },
+}

@@ -54,6 +54,12 @@ exports[`res every 1`] = `
 "
 `;
 
+exports[`res nullable 1`] = `
+"main
+  @nullable ✔
+"
+`;
+
 exports[`res optional 1`] = `
 "not found main jsona file
 "

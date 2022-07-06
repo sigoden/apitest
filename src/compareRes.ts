@@ -18,6 +18,9 @@ async function compareValue(paths: string[], ctx: VmContext, v1: JsonaValue, v2:
     v2 = evalValue(paths, ctx, transAnno.value, "trans");
     _.set(ctx.state, "$", null);
   }
+
+  if (existAnno(paths, v1, "nullable", "any") && v2 == null) return;
+
   if (existAnno(paths, v1, "eval", "string")) {
     ctx.state.$ = v2;
     const value = evalValue(paths, ctx, (v1 as JsonaString).value);

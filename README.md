@@ -38,6 +38,7 @@ Read this in other languages: [中文](./README.zh-CN.md)
     - [@partial](#partial)
     - [@type](#type)
     - [@optional](#optional)
+    - [@nullable](#nullable)
   - [Run](#run)
     - [Skip](#skip)
     - [Delay](#delay)
@@ -803,6 +804,25 @@ Apitest supports nearly 40 mock functions. For a detailed list, see [fake-js](ht
     res: {
       v1: 3,
       v2: 4, @optional
+    }
+  }
+}
+```
+
+### @nullable
+
+**Field maybe null**
+> scope: unit res block
+
+```
+{
+  test1: { @client("echo")
+    req: {
+      v1: null,
+      // v1: 3,
+    },
+    res: {
+      v1: 3, @nullable
     }
   }
 }
