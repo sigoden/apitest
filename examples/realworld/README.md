@@ -1,6 +1,6 @@
 # Realworld
 
-Take a moment to familiarize yourself with [RealWorld API Spec](https://github.com/gothinkster/realworld/tree/master/api)
+Take a moment to familiarize yourself with [RealWorld API Spec](https://github.com/gothinkster/realworld/tree/main/api)
 
 ```
 apitest examples/realworld --ci

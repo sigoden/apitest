@@ -1,6 +1,6 @@
 # Apitest
 
-[![build](https://github.com/sigoden/apitest/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/sigoden/apitest/actions/workflows/ci.yaml)
+[![build](https://github.com/sigoden/apitest/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/sigoden/apitest/actions/workflows/ci.yaml)
 [![release](https://img.shields.io/github/v/release/sigoden/apitest)](https://github.com/sigoden/apitest/releases)
 [![npm](https://img.shields.io/npm/v/@sigodenjs/apitest)](https://www.npmjs.com/package/@sigodenjs/apitest)
 
